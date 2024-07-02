@@ -62,6 +62,13 @@ public static class DependencyInjection
             httpclient.BaseAddress = new Uri(keycloakOptions.TokenUrl);
         });
         
+        services.AddHttpClient<IRefreshService, RefreshService>((serviceProvider, httpclient) =>
+        {
+            var keycloakOptions = serviceProvider.GetRequiredService<IOptions<KeycloakOptions>>().Value;
+            
+            httpclient.BaseAddress = new Uri(keycloakOptions.TokenUrl);
+        });
+        
         return services;
     }
     

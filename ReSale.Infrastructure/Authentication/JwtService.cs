@@ -22,7 +22,7 @@ internal sealed class JwtService : IJwtService
         _keycloakOptions = keycloakOptions.Value;
     }
 
-    public async Task<Result<string>> GetAccessTokenAsync(
+    public async Task<Result<Token>> GetAccessTokenAsync(
         string email,
         string password,
         CancellationToken cancellationToken = default)
@@ -49,14 +49,25 @@ internal sealed class JwtService : IJwtService
 
             if (authorizationToken is null)
             {
-                return Result.Failure<string>(AuthenticationFailed);
+                return Result.Failure<Token>(AuthenticationFailed);
             }
 
-            return authorizationToken.AccessToken;
+            return new Token
+            {
+                AccessToken = authorizationToken.AccessToken,
+                RefreshToken = authorizationToken.RefreshToken,
+                ExpiresIn = authorizationToken.ExpiresIn,
+                RefreshExpiresIn = authorizationToken.RefreshExpiresIn,
+                TokenType = authorizationToken.TokenType,
+                Scope = authorizationToken.Scope,
+                IdToken = authorizationToken.IdToken,
+                SessionState = authorizationToken.SessionState,
+                NotBeforePolicy = authorizationToken.NotBeforePolicy
+            };
         }
         catch (HttpRequestException)
         {
-            return Result.Failure<string>(AuthenticationFailed);
+            return Result.Failure<Token>(AuthenticationFailed);
         }
     }
 }

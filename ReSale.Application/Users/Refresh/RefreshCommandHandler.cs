@@ -4,18 +4,18 @@ using ReSale.Application.Users.Shared;
 using ReSale.Domain.Common;
 using ReSale.Domain.Users;
 
-namespace ReSale.Application.Users.Login;
+namespace ReSale.Application.Users.Refresh;
 
-public class LoginCommandHandler(IJwtService jwtService) 
-    : ICommandHandler<LoginCommand, AccessTokenResponse>
+public class RefreshCommandHandler(
+    IRefreshService refreshService) 
+    : ICommandHandler<RefreshCommand, AccessTokenResponse>
 {
-    public async Task<Result<AccessTokenResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)
+    public async Task<Result<AccessTokenResponse>> Handle(RefreshCommand request, CancellationToken cancellationToken)
     {
-        var result = await jwtService.GetAccessTokenAsync(
-            request.Email,
-            request.Password,
+        var result = await refreshService.RefreshAccessTokenAsync(
+            request.RefreshToken,
             cancellationToken);
-
+        
         if (result.IsFailure)
         {
             return Result.Failure<AccessTokenResponse>(UserErrors.InvalidCredentials);

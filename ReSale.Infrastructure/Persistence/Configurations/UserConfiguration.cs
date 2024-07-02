@@ -18,13 +18,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasMaxLength(200)
             .IsRequired();
         
-        builder.Property(u => u.Password)
-            .HasConversion(e => e.Value,
-                v => Password.Create(v).Value)
-            .HasColumnName(nameof(Password))
-            .HasMaxLength(255)
-            .IsRequired();
-        
         builder.Property(u => u.FirstName)
             .HasConversion(e => e.Value,
                 v => new FirstName(v))
@@ -38,8 +31,10 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasColumnName(nameof(LastName))
             .HasMaxLength(100)
             .IsRequired();
-
+        
         builder.HasIndex(u => u.Email)
             .IsUnique();
+
+        builder.HasIndex(user => user.IdentityId).IsUnique();
     }
 }

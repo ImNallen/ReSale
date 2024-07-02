@@ -33,7 +33,7 @@ public class UserRepository : IUserRepository
         return !await _context.Users.AnyAsync(u => u.Email == email);
     }
 
-    public async Task CreateAsync(
+    public async Task AddAsync(
         User user, 
         CancellationToken cancellationToken = default)
     {

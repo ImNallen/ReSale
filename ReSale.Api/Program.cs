@@ -56,6 +56,10 @@ app.UseSerilogRequestLogging();
 
 app.UseExceptionHandler();
 
+app.UseAuthentication();
+
+app.UseAuthorization();
+
 app.Run();
 
 // REMARK: Required for functional and integration tests to work.

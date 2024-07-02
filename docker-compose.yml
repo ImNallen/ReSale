@@ -38,3 +38,16 @@
     restart: always
     ports:
       - '6379:6379'
+  
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    command: start-dev --import-realm
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    volumes:
+      - ./.containers/identity:/opt/keycloak/data
+      - ./.files/resale-realm-export.json:/opt/keycloak/data/import/realm.json
+    ports:
+      - 18080:8080

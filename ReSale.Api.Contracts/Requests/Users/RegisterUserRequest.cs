@@ -1,6 +1,6 @@
 ﻿namespace ReSale.Api.Contracts.Requests.Users;
 
-public sealed record CreateUserRequest(
+public sealed record RegisterUserRequest(
     string Email,
     string Password,
     string FirstName,

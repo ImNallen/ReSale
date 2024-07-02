@@ -1,13 +1,17 @@
 ﻿using Dapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Npgsql;
+using ReSale.Application.Abstractions.Authentication;
 using ReSale.Application.Abstractions.Caching;
 using ReSale.Application.Abstractions.Persistence;
 using ReSale.Application.Abstractions.Persistence.Repositories;
 using ReSale.Domain.Common;
+using ReSale.Infrastructure.Authentication;
 using ReSale.Infrastructure.Caching;
 using ReSale.Infrastructure.Persistence;
 using ReSale.Infrastructure.Persistence.Repositories;
@@ -24,7 +28,42 @@ public static class DependencyInjection
             .AddServices()
             .AddDatabase(configuration)
             .AddCaching(configuration)
+            .AddAuthentication(configuration)
             .AddHealthChecks(configuration);
+
+    private static IServiceCollection AddAuthentication(
+        this IServiceCollection services,
+        IConfiguration configuration)
+    {
+        services
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer();
+        
+        services.Configure<AuthenticationOptions>(configuration.GetSection("Authentication"));
+
+        services.Configure<KeycloakOptions>(configuration.GetSection("Keycloak"));
+        
+        services.ConfigureOptions<JwtBearerOptionsSetup>();
+
+        services.AddTransient<AdminAuthorizationDelegatingHandler>();
+        
+        services.AddHttpClient<IAuthenticationService, AuthenticationService>((serviceProvider, httpClient) =>
+        {
+            var keycloakOptions = serviceProvider.GetRequiredService<IOptions<KeycloakOptions>>().Value;
+            
+            httpClient.BaseAddress = new Uri(keycloakOptions.AdminUrl);
+        })
+        .AddHttpMessageHandler<AdminAuthorizationDelegatingHandler>();
+
+        services.AddHttpClient<IJwtService, JwtService>((serviceProvider, httpclient) =>
+        {
+            var keycloakOptions = serviceProvider.GetRequiredService<IOptions<KeycloakOptions>>().Value;
+            
+            httpclient.BaseAddress = new Uri(keycloakOptions.TokenUrl);
+        });
+        
+        return services;
+    }
     
     private static IServiceCollection AddServices(this IServiceCollection services)
     {

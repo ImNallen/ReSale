@@ -1,5 +1,6 @@
 ﻿using ReSale.Domain.Common;
 using ReSale.Domain.Shared;
+using ReSale.Domain.Users.Events;
 
 namespace ReSale.Domain.Users;
 
@@ -32,6 +33,8 @@ public sealed class User : Entity
             email, 
             firstName, 
             lastName);
+        
+        user.Raise(new UserCreatedDomainEvent(user.Id));
 
         return user;
     }

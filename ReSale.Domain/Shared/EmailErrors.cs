@@ -9,5 +9,5 @@ public static class EmailErrors
     public static readonly Error InvalidFormat = Error.Problem(
         "Email.InvalidFormat", "Email format is invalid");
     
-    public static readonly Error NotUnique = Error.Problem("Email.NotUnique", "Provided email is not unique");
+    public static readonly Error NotUnique = Error.Conflict("Email.NotUnique", "Provided email is not unique");
 }

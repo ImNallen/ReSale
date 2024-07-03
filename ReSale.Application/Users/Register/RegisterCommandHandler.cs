@@ -19,12 +19,18 @@ internal sealed class RegisterCommandHandler(
         CancellationToken cancellationToken)
     {
         var email = Email.Create(request.Email);
-
-        // TODO: return error if email is not valid
         
-        var existingUser = await userRepository.IsEmailUniqueAsync(email.Value);
+        if (email.IsFailure)
+        {
+            return Result.Failure<Guid>(email.Error);
+        }
         
-        // TODO: Return error if email is not unique
+        var isEmailUnique = await userRepository.IsEmailUniqueAsync(email.Value);
+        
+        if (!isEmailUnique)
+        {
+            return Result.Failure<Guid>(EmailErrors.NotUnique);
+        }
         
         var user = User.Create(
             email.Value,

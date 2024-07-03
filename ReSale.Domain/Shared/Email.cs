@@ -7,6 +7,8 @@ public sealed record Email
     private Email(string value) => Value = value;
 
     public string Value { get; }
+    
+    public static explicit operator string(Email email) => email.Value;
 
     public static Result<Email> Create(string? email)
     {

@@ -9,6 +9,7 @@ public interface ICustomerRepository
 {
     Task<bool> IsEmailUniqueAsync(Email email);
     Task AddAsync(Customer customer, CancellationToken cancellationToken = default);
+    Task<CustomerResponse?> GetCustomerByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<PagedList<CustomerResponse>> GetCustomersAsync(
         string? searchTerm,
         string? sortColumn,
@@ -16,4 +17,8 @@ public interface ICustomerRepository
         int page,
         int pageSize,
         CancellationToken cancellationToken = default);
+
+    Task<CustomerResponse?> GetCustomerByEmailAsync(
+        string email, 
+        CancellationToken cancellationToken);
 }

@@ -22,6 +22,23 @@ public class CustomerRepository(ReSaleDbContext context) : ICustomerRepository
         await context.Customers.AddAsync(customer, cancellationToken);
     }
 
+    public async Task<CustomerResponse?> GetCustomerByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await context.Customers
+            .Where(x => x.Id == id)
+            .Select(c => new CustomerResponse(
+                c.Id,
+                c.Email.Value,
+                c.FirstName.Value,
+                c.LastName.Value,
+                c.Address.Street,
+                c.Address.City,
+                c.Address.ZipCode,
+                c.Address.Country,
+                c.Address.State))
+            .SingleOrDefaultAsync(cancellationToken);
+    }
+
     public async Task<PagedList<CustomerResponse>> GetCustomersAsync(
         string? searchTerm,
         string? sortColumn,
@@ -72,5 +89,24 @@ public class CustomerRepository(ReSaleDbContext context) : ICustomerRepository
             .ToListAsync(cancellationToken);
 
         return PagedList<CustomerResponse>.Create(customers, page, pageSize, totalCount);
+    }
+
+    public Task<CustomerResponse?> GetCustomerByEmailAsync(
+        string email, 
+        CancellationToken cancellationToken)
+    {
+        return context.Customers
+            .Where(c => ((string)c.Email) == email)
+            .Select(c => new CustomerResponse(
+                c.Id,
+                c.Email.Value,
+                c.FirstName.Value,
+                c.LastName.Value,
+                c.Address.Street,
+                c.Address.City,
+                c.Address.ZipCode,
+                c.Address.Country,
+                c.Address.State))
+            .SingleOrDefaultAsync(cancellationToken);
     }
 }

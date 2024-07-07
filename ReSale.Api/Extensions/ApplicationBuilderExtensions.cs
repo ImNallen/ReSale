@@ -19,13 +19,6 @@ public static class ApplicationBuilderExtensions
                 options.SwaggerEndpoint(url, name);
             }
         });
-        
-        app.UseReDoc(options =>
-        {
-            options.RoutePrefix = "redoc";
-            options.SpecUrl = "/swagger/v1/swagger.json";
-            options.DocumentTitle = "ReSale API Documentation";
-        });
 
         return app;
     }

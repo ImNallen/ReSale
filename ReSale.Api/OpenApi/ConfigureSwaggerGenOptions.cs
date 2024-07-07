@@ -60,7 +60,22 @@ public class ConfigureSwaggerGenOptions : IConfigureNamedOptions<SwaggerGenOptio
         var openApiInfo = new OpenApiInfo
         {
             Title = $"ReSale Api v{apiVersionDescription.ApiVersion}",
-            Version = apiVersionDescription.ApiVersion.ToString()
+            Version = apiVersionDescription.ApiVersion.ToString(),
+            Description = """
+                          Welcome to ReSale API
+                          
+                          ## Introduction
+                          This API allows you to interact with the ReSale application. You
+                          can create, read, update, and delete customers, products, and much
+                          much more.
+                          
+                          ## Authentication
+                          This API uses JWT authentication. To authenticate, make a POST
+                          request to the /api/v{version}/identity/login endpoint with a JSON
+                          body containing the email and password. The response will contain a
+                          JWT token that should be included in the Authorization header of
+                          subsequent requests.
+                          """,
         };
 
         if (apiVersionDescription.IsDeprecated)

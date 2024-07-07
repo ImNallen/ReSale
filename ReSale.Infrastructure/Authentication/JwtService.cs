@@ -57,12 +57,7 @@ internal sealed class JwtService : IJwtService
                 AccessToken = authorizationToken.AccessToken,
                 RefreshToken = authorizationToken.RefreshToken,
                 ExpiresIn = authorizationToken.ExpiresIn,
-                RefreshExpiresIn = authorizationToken.RefreshExpiresIn,
-                TokenType = authorizationToken.TokenType,
-                Scope = authorizationToken.Scope,
-                IdToken = authorizationToken.IdToken,
-                SessionState = authorizationToken.SessionState,
-                NotBeforePolicy = authorizationToken.NotBeforePolicy
+                RefreshExpiresIn = authorizationToken.RefreshExpiresIn
             };
         }
         catch (HttpRequestException)

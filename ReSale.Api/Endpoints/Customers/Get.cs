@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using ReSale.Api.Extensions;
 using ReSale.Api.Infrastructure;
 using ReSale.Application.Customers.Get;
+using ReSale.Application.Customers.Shared;
+using ReSale.Domain.Common;
 
 namespace ReSale.Api.Endpoints.Customers;
 
@@ -30,6 +32,9 @@ public class Get : IEndpoint
             
             return result.Match(Results.Ok, CustomResults.Problem);
         }).WithTags(Tags.Customers)
+        .WithDescription("Get a list of customers.")
+        .WithName("Get Customers")
+        .Produces(StatusCodes.Status200OK, typeof(PagedList<CustomerResponse>))
         .RequireAuthorization();
     }
 }

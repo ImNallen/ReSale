@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using ReSale.Application.Abstractions.Persistence;
 using ReSale.Domain.Customers;
+using ReSale.Domain.Employees;
 using ReSale.Domain.Users;
 
 namespace ReSale.Infrastructure.Persistence;
@@ -12,6 +13,7 @@ public class ReSaleDbContext(DbContextOptions<ReSaleDbContext> options)
 {
     public DbSet<User> Users => Set<User>();
     public DbSet<Customer> Customers => Set<Customer>();
+    public DbSet<Employee> Employees => Set<Employee>();
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

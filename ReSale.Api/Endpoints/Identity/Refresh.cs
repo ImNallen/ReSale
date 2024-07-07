@@ -3,14 +3,15 @@ using ReSale.Api.Contracts.Requests.Users;
 using ReSale.Api.Extensions;
 using ReSale.Api.Infrastructure;
 using ReSale.Application.Users.Refresh;
+using ReSale.Application.Users.Shared;
 
-namespace ReSale.Api.Endpoints.Users;
+namespace ReSale.Api.Endpoints.Identity;
 
 public class Refresh : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("users/refresh", async (
+        app.MapPost("identity/refresh", async (
                 RefreshTokenRequest request,
                 ISender sender,
                 CancellationToken cancellationToken) =>
@@ -21,7 +22,10 @@ public class Refresh : IEndpoint
                 var result = await sender.Send(command, cancellationToken);
         
                 return result.Match(Results.Ok, CustomResults.Problem);
-            }).WithTags(Tags.Users)
+            }).WithTags(Tags.Identity)
+            .WithDescription("Refreshes an access token.")
+            .WithName("Refresh")
+            .Produces(StatusCodes.Status200OK, typeof(AccessTokenResponse))
             .AllowAnonymous();
     }
 }

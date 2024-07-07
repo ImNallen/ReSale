@@ -25,11 +25,6 @@ public class LoginCommandHandler(IJwtService jwtService)
             result.Value.AccessToken, 
             result.Value.RefreshToken,
             result.Value.ExpiresIn,
-            result.Value.RefreshExpiresIn,
-            result.Value.TokenType,
-            result.Value.IdToken,
-            result.Value.NotBeforePolicy,
-            result.Value.SessionState,
-            result.Value.Scope);
+            result.Value.RefreshExpiresIn);
     }
 }

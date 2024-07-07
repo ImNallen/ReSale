@@ -1,6 +1,7 @@
 ﻿using ReSale.Application.Abstractions.Messaging;
 using ReSale.Application.Abstractions.Persistence;
 using ReSale.Application.Abstractions.Persistence.Repositories;
+using ReSale.Application.Customers.Shared;
 using ReSale.Domain.Common;
 using ReSale.Domain.Customers;
 using ReSale.Domain.Shared;
@@ -10,22 +11,22 @@ namespace ReSale.Application.Customers.Create;
 internal sealed class CreateCustomerCommandHandler(
     ICustomerRepository customerRepository,
     IUnitOfWork unitOfWork)
-    : ICommandHandler<CreateCustomerCommand, Guid>
+    : ICommandHandler<CreateCustomerCommand, CustomerResponse>
 {
-    public async Task<Result<Guid>> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
+    public async Task<Result<CustomerResponse>> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
     {
         var email = Email.Create(request.Email);
         
         if (email.IsFailure)
         {
-            return Result.Failure<Guid>(email.Error);
+            return Result.Failure<CustomerResponse>(email.Error);
         }
         
         var isEmailUnique = await customerRepository.IsEmailUniqueAsync(email.Value);
         
         if (!isEmailUnique)
         {
-            return Result.Failure<Guid>(EmailErrors.NotUnique);
+            return Result.Failure<CustomerResponse>(EmailErrors.NotUnique);
         }
         
         var customer = Customer.Create(
@@ -43,6 +44,15 @@ internal sealed class CreateCustomerCommandHandler(
         
         await unitOfWork.SaveChangesAsync(cancellationToken);
         
-        return customer.Id;
+        return new CustomerResponse(
+            customer.Id,
+            customer.Email.Value,
+            customer.FirstName.Value,
+            customer.LastName.Value,
+            customer.Address.Street,
+            customer.Address.City,
+            customer.Address.ZipCode,
+            customer.Address.Country,
+            customer.Address.State);
     }
 }

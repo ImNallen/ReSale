@@ -28,6 +28,6 @@ public class Register : IEndpoint
         .WithDescription("Registers a new user.")
         .WithName("Register")
         .Produces(StatusCodes.Status200OK, typeof(Guid))
-            .AllowAnonymous();
+        .RequireAuthorization();
     }
 }

@@ -2,8 +2,8 @@
 using ReSale.Api.Contracts.Requests.Users;
 using ReSale.Api.Extensions;
 using ReSale.Api.Infrastructure;
-using ReSale.Application.Users.Refresh;
-using ReSale.Application.Users.Shared;
+using ReSale.Application.Identity.Refresh;
+using ReSale.Application.Identity.Shared;
 
 namespace ReSale.Api.Endpoints.Identity;
 
@@ -23,7 +23,7 @@ public class Refresh : IEndpoint
         
                 return result.Match(Results.Ok, CustomResults.Problem);
             }).WithTags(Tags.Identity)
-            .WithDescription("Refreshes an access token.")
+            .WithDescription("Generates a new access token using a refresh token.")
             .WithName("Refresh")
             .Produces(StatusCodes.Status200OK, typeof(AccessTokenResponse))
             .AllowAnonymous();

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace ReSale.Application.Users.Refresh;
+namespace ReSale.Application.Identity.Refresh;
 
 public class RefreshCommandValidator : AbstractValidator<RefreshCommand>
 {

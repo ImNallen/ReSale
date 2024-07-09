@@ -1,10 +1,10 @@
 ﻿using ReSale.Application.Abstractions.Authentication;
 using ReSale.Application.Abstractions.Messaging;
-using ReSale.Application.Users.Shared;
+using ReSale.Application.Identity.Shared;
 using ReSale.Domain.Common;
 using ReSale.Domain.Users;
 
-namespace ReSale.Application.Users.Refresh;
+namespace ReSale.Application.Identity.Refresh;
 
 public class RefreshCommandHandler(
     IRefreshService refreshService) 

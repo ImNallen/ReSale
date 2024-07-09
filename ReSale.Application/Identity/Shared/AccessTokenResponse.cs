@@ -1,4 +1,4 @@
-﻿namespace ReSale.Application.Users.Shared;
+﻿namespace ReSale.Application.Identity.Shared;
 
 public sealed record AccessTokenResponse(
     string AccessToken, 

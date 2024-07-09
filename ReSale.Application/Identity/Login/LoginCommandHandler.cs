@@ -1,10 +1,10 @@
 ﻿using ReSale.Application.Abstractions.Authentication;
 using ReSale.Application.Abstractions.Messaging;
-using ReSale.Application.Users.Shared;
+using ReSale.Application.Identity.Shared;
 using ReSale.Domain.Common;
 using ReSale.Domain.Users;
 
-namespace ReSale.Application.Users.Login;
+namespace ReSale.Application.Identity.Login;
 
 public class LoginCommandHandler(IJwtService jwtService) 
     : ICommandHandler<LoginCommand, AccessTokenResponse>

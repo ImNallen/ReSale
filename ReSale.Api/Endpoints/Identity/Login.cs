@@ -2,8 +2,8 @@
 using ReSale.Api.Contracts.Requests.Users;
 using ReSale.Api.Extensions;
 using ReSale.Api.Infrastructure;
-using ReSale.Application.Users.Login;
-using ReSale.Application.Users.Shared;
+using ReSale.Application.Identity.Login;
+using ReSale.Application.Identity.Shared;
 
 namespace ReSale.Api.Endpoints.Identity;
 

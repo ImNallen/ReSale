@@ -9,7 +9,6 @@ using ReSale.Domain.Shared;
 namespace ReSale.Application.Customers.Create;
 
 internal sealed class CreateCustomerCommandHandler(
-    ICustomerRepository customerRepository,
     IUnitOfWork unitOfWork)
     : ICommandHandler<CreateCustomerCommand, CustomerResponse>
 {
@@ -22,7 +21,7 @@ internal sealed class CreateCustomerCommandHandler(
             return Result.Failure<CustomerResponse>(email.Error);
         }
         
-        var isEmailUnique = await customerRepository.IsEmailUniqueAsync(email.Value);
+        var isEmailUnique = await unitOfWork.Customers.IsEmailUniqueAsync(email.Value);
         
         if (!isEmailUnique)
         {
@@ -40,7 +39,7 @@ internal sealed class CreateCustomerCommandHandler(
                 request.Country, 
                 request.State));
         
-        await customerRepository.AddAsync(customer, cancellationToken);
+        await unitOfWork.Customers.AddAsync(customer, cancellationToken);
         
         await unitOfWork.SaveChangesAsync(cancellationToken);
         

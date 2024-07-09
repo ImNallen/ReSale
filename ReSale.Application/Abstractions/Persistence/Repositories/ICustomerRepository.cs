@@ -5,12 +5,12 @@ using ReSale.Domain.Shared;
 
 namespace ReSale.Application.Abstractions.Persistence.Repositories;
 
-public interface ICustomerRepository
+public interface ICustomerRepository : IRepository<Customer>
 {
     Task<bool> IsEmailUniqueAsync(Email email);
     Task AddAsync(Customer customer, CancellationToken cancellationToken = default);
     Task<CustomerResponse?> GetCustomerByIdAsync(Guid id, CancellationToken cancellationToken = default);
-    Task<PagedList<CustomerResponse>> GetCustomersAsync(
+    Task<PagedList<CustomerResponse>> SearchCustomersAsync(
         string? searchTerm,
         string? sortColumn,
         string? sortOrder,

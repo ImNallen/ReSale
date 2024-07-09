@@ -1,16 +1,14 @@
 ﻿using ReSale.Application.Abstractions.Authentication;
 using ReSale.Application.Abstractions.Messaging;
 using ReSale.Application.Abstractions.Persistence;
-using ReSale.Application.Abstractions.Persistence.Repositories;
 using ReSale.Domain.Common;
 using ReSale.Domain.Shared;
 using ReSale.Domain.Users;
 
-namespace ReSale.Application.Users.Register;
+namespace ReSale.Application.Identity.Register;
 
 internal sealed class RegisterCommandHandler(
     IAuthenticationService authenticationService,
-    IUserRepository userRepository,
     IUnitOfWork unitOfWork)
     : ICommandHandler<RegisterCommand, Guid>
 {
@@ -25,7 +23,7 @@ internal sealed class RegisterCommandHandler(
             return Result.Failure<Guid>(email.Error);
         }
         
-        var isEmailUnique = await userRepository.IsEmailUniqueAsync(email.Value);
+        var isEmailUnique = await unitOfWork.Users.IsEmailUniqueAsync(email.Value);
         
         if (!isEmailUnique)
         {
@@ -44,7 +42,7 @@ internal sealed class RegisterCommandHandler(
         
         user.SetIdentityId(identityId);
 
-        await userRepository.AddAsync(user, cancellationToken);
+        await unitOfWork.Users.AddAsync(user, cancellationToken);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 

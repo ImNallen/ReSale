@@ -1,13 +1,11 @@
-﻿using ReSale.Application.Abstractions.Messaging;
+﻿using ReSale.Application.Abstractions.Caching;
 using ReSale.Application.Customers.Shared;
-using ReSale.Domain.Common;
 
 namespace ReSale.Application.Customers.Get;
 
-public sealed record GetCustomersQuery(
-    string? SearchTerm,
-    string? SortColumn,
-    string? SortOrder,
-    int Page,
-    int PageSize) 
-    : IQuery<PagedList<CustomerResponse>>;
+public record GetCustomersQuery() : ICachedQuery<List<CustomerResponse>>
+{
+    public string CacheKey => $"customers";
+
+    public TimeSpan? Expiration => TimeSpan.FromMinutes(2);
+}

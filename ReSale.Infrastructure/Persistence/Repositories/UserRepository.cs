@@ -5,38 +5,38 @@ using ReSale.Domain.Users;
 
 namespace ReSale.Infrastructure.Persistence.Repositories;
 
-public class UserRepository : IUserRepository
+public class UserRepository : Repository<User>, IUserRepository
 {
-    private readonly ReSaleDbContext _context;
-
-    public UserRepository(ReSaleDbContext context)
+    public UserRepository(ReSaleDbContext context) 
+        : base(context)
     {
-        _context = context;
     }
-
+    
     public async Task<User?> GetByIdAsync(
         Guid id, 
         CancellationToken cancellationToken = default)
     {
-        return await _context.Users.FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
+        return await Context.Users.FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
     }
 
     public async Task<User?> GetByEmailAsync(
         Email email, 
         CancellationToken cancellationToken = default)
     {
-        return await _context.Users.FirstOrDefaultAsync(u => u.Email == email, cancellationToken: cancellationToken);
+        return await Context.Users.FirstOrDefaultAsync(u => u.Email == email, cancellationToken: cancellationToken);
     }
     
     public async Task<bool> IsEmailUniqueAsync(Email email)
     {
-        return !await _context.Users.AnyAsync(u => u.Email == email);
+        return !await Context.Users.AnyAsync(u => u.Email == email);
     }
 
     public async Task AddAsync(
         User user, 
         CancellationToken cancellationToken = default)
     {
-        await _context.Users.AddAsync(user, cancellationToken);
+        await Context.Users.AddAsync(user, cancellationToken);
     }
+
+    public ReSaleDbContext ReSaleDbContext => Context;
 }

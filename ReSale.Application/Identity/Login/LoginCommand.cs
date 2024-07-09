@@ -1,7 +1,7 @@
 ﻿using ReSale.Application.Abstractions.Messaging;
-using ReSale.Application.Users.Shared;
+using ReSale.Application.Identity.Shared;
 
-namespace ReSale.Application.Users.Login;
+namespace ReSale.Application.Identity.Login;
 
 public sealed record LoginCommand(
     string Email,

@@ -1,7 +1,4 @@
-﻿using System.Data;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
-using ReSale.Application.Abstractions.Persistence;
+﻿using Microsoft.EntityFrameworkCore;
 using ReSale.Domain.Customers;
 using ReSale.Domain.Employees;
 using ReSale.Domain.Users;
@@ -9,7 +6,7 @@ using ReSale.Domain.Users;
 namespace ReSale.Infrastructure.Persistence;
 
 public class ReSaleDbContext(DbContextOptions<ReSaleDbContext> options) 
-    : DbContext(options), IUnitOfWork
+    : DbContext(options)
 {
     public DbSet<User> Users => Set<User>();
     public DbSet<Customer> Customers => Set<Customer>();
@@ -20,10 +17,5 @@ public class ReSaleDbContext(DbContextOptions<ReSaleDbContext> options)
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ReSaleDbContext).Assembly);
         
         modelBuilder.HasDefaultSchema(Schemas.Default);
-    }
-    
-    public async Task<IDbTransaction> BeginTransactionAsync()
-    {
-        return (await Database.BeginTransactionAsync()).GetDbTransaction();
     }
 }

@@ -8,23 +8,21 @@ using ReSale.Domain.Shared;
 
 namespace ReSale.Infrastructure.Persistence.Repositories;
 
-public class CustomerRepository(ReSaleDbContext context) : ICustomerRepository
+public class CustomerRepository : Repository<Customer>, ICustomerRepository
 {
+    public CustomerRepository(ReSaleDbContext context) 
+        : base(context)
+    {
+    }
+    
     public async Task<bool> IsEmailUniqueAsync(Email email)
     {
-        return !await context.Customers.AnyAsync(u => u.Email == email);
-    }
-
-    public async Task AddAsync(
-        Customer customer, 
-        CancellationToken cancellationToken = default)
-    {
-        await context.Customers.AddAsync(customer, cancellationToken);
+        return !await Context.Customers.AnyAsync(u => u.Email == email);
     }
 
     public async Task<CustomerResponse?> GetCustomerByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await context.Customers
+        return await Context.Customers
             .Where(x => x.Id == id)
             .Select(c => new CustomerResponse(
                 c.Id,
@@ -39,7 +37,7 @@ public class CustomerRepository(ReSaleDbContext context) : ICustomerRepository
             .SingleOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<PagedList<CustomerResponse>> GetCustomersAsync(
+    public async Task<PagedList<CustomerResponse>> SearchCustomersAsync(
         string? searchTerm,
         string? sortColumn,
         string? sortOrder,
@@ -47,7 +45,7 @@ public class CustomerRepository(ReSaleDbContext context) : ICustomerRepository
         int pageSize,
         CancellationToken cancellationToken = default)
     {
-        var customersQuery = context.Customers.AsQueryable();
+        var customersQuery = Context.Customers.AsQueryable();
         
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
@@ -95,7 +93,7 @@ public class CustomerRepository(ReSaleDbContext context) : ICustomerRepository
         string email, 
         CancellationToken cancellationToken)
     {
-        return context.Customers
+        return Context.Customers
             .Where(c => ((string)c.Email) == email)
             .Select(c => new CustomerResponse(
                 c.Id,
@@ -109,4 +107,6 @@ public class CustomerRepository(ReSaleDbContext context) : ICustomerRepository
                 c.Address.State))
             .SingleOrDefaultAsync(cancellationToken);
     }
+    
+    public ReSaleDbContext ReSaleDbContext => Context;
 }

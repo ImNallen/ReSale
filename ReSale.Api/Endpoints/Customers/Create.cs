@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using MapsterMapper;
+using MediatR;
 using ReSale.Api.Contracts.Requests.Customers;
 using ReSale.Api.Contracts.Responses;
 using ReSale.Api.Extensions;
@@ -14,6 +15,7 @@ public class Create : IEndpoint
         app.MapPost("customers", async (
                 CreateCustomerRequest request,
                 ISender sender,
+                IMapper mapper,
                 CancellationToken cancellationToken) =>
             {
                 var command = new CreateCustomerCommand(
@@ -30,19 +32,10 @@ public class Create : IEndpoint
 
                 if (result.IsFailure)
                     return CustomResults.Problem(result);
-        
-                // TODO: Add Mapper
-                return Results.Ok(new CustomerResponse(
-                    result.Value.Id,
-                    result.Value.Email,
-                    result.Value.FirstName,
-                    result.Value.LastName,
-                    result.Value.Street,
-                    result.Value.City,
-                    result.Value.ZipCode,
-                    result.Value.Country,
-                    result.Value.State));
-            }).WithTags(Tags.Customers)
+                
+                return Results.Ok(mapper.Map<CustomerResponse>(result.Value));
+            })
+            .WithTags(Tags.Customers)
             .WithDescription("Creates a new customer.")
             .WithName("Create Customer")
             .Produces(StatusCodes.Status200OK, typeof(CustomerResponse))

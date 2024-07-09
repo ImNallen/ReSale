@@ -1,4 +1,5 @@
-﻿using ReSale.Application.Abstractions.Messaging;
+﻿using MapsterMapper;
+using ReSale.Application.Abstractions.Messaging;
 using ReSale.Application.Abstractions.Persistence;
 using ReSale.Application.Customers.Results;
 using ReSale.Domain.Common;
@@ -8,7 +9,8 @@ using ReSale.Domain.Shared;
 namespace ReSale.Application.Customers.Create;
 
 internal sealed class CreateCustomerCommandHandler(
-    IUnitOfWork unitOfWork)
+    IUnitOfWork unitOfWork,
+    IMapper mapper)
     : ICommandHandler<CreateCustomerCommand, CustomerResult>
 {
     public async Task<Result<CustomerResult>> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
@@ -42,15 +44,6 @@ internal sealed class CreateCustomerCommandHandler(
         
         await unitOfWork.SaveChangesAsync(cancellationToken);
         
-        return new CustomerResult(
-            customer.Id,
-            customer.Email.Value,
-            customer.FirstName.Value,
-            customer.LastName.Value,
-            customer.Address.Street,
-            customer.Address.City,
-            customer.Address.ZipCode,
-            customer.Address.Country,
-            customer.Address.State);
+        return mapper.Map<CustomerResult>(customer);
     }
 }

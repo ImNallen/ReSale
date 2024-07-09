@@ -1,6 +1,6 @@
-﻿using MediatR;
+﻿using MapsterMapper;
+using MediatR;
 using ReSale.Api.Contracts.Responses;
-using ReSale.Api.Extensions;
 using ReSale.Api.Infrastructure;
 using ReSale.Application.Customers.GetByEmail;
 
@@ -13,6 +13,7 @@ public class GetByEmail : IEndpoint
         app.MapGet("customers/{email}", async (
                 string email,
                 ISender sender,
+                IMapper mapper,
                 CancellationToken cancellationToken) =>
             {
                 var query = new GetCustomerByEmailQuery(email);
@@ -21,18 +22,8 @@ public class GetByEmail : IEndpoint
             
                 if (result.IsFailure)
                     return CustomResults.Problem(result);
-        
-                // TODO: Add Mapper
-                return Results.Ok(new CustomerResponse(
-                    result.Value.Id,
-                    result.Value.Email,
-                    result.Value.FirstName,
-                    result.Value.LastName,
-                    result.Value.Street,
-                    result.Value.City,
-                    result.Value.ZipCode,
-                    result.Value.Country,
-                    result.Value.State));
+                
+                return Results.Ok(mapper.Map<CustomerResponse>(result.Value));
             })
             .WithTags(Tags.Customers)
             .WithDescription("Retrieves a customer by email address.")

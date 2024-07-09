@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using MapsterMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using ReSale.Api.Contracts.Responses;
 using ReSale.Api.Extensions;
@@ -19,6 +20,7 @@ public class Search : IEndpoint
             int page,
             int pageSize,
             ISender sender,
+            IMapper mapper,
             CancellationToken cancellationToken) =>
         {
             var query = new SearchCustomersQuery(
@@ -34,20 +36,12 @@ public class Search : IEndpoint
                 return CustomResults.Problem(result);
             
             // TODO: Add Mapper
-            return Results.Ok(PagedList<CustomerResponse>.Create(result.Value.Items.Select(c => new CustomerResponse(
-                        c.Id,
-                        c.Email,
-                        c.FirstName,
-                        c.LastName,
-                        c.Street,
-                        c.City,
-                        c.ZipCode,
-                        c.Country,
-                        c.State)).ToList(),
+            return Results.Ok(PagedList<CustomerResponse>.Create(result.Value.Items.Select(mapper.Map<CustomerResponse>).ToList(),
                 result.Value.Page,
                 result.Value.PageSize,
                 result.Value.TotalCount));
-        }).WithTags(Tags.Customers)
+        })
+        .WithTags(Tags.Customers)
         .WithDescription("Get a paginated list of customers with the possibility of searching and sorting.")
         .WithName("Search Customers")
         .Produces(StatusCodes.Status200OK, typeof(PagedList<CustomerResponse>))

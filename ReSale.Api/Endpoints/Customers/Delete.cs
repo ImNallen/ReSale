@@ -20,7 +20,8 @@ public class Delete : IEndpoint
             return result.IsFailure 
                 ? CustomResults.Problem(result) 
                 : Results.NoContent();
-        }).WithTags(Tags.Customers)
+        })
+        .WithTags(Tags.Customers)
         .WithDescription("Deletes a customer by id")
         .WithName("Delete Customer")
         .Produces(StatusCodes.Status204NoContent)

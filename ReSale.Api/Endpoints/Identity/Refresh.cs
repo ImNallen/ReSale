@@ -26,6 +26,7 @@ public class Refresh : IEndpoint
             }).WithTags(Tags.Identity)
             .WithDescription("Generates a new access token using a refresh token.")
             .WithName("Refresh")
+            .WithSummary("Refresh")
             .Produces(StatusCodes.Status200OK, typeof(AccessTokenResponse))
             .AllowAnonymous();
     }

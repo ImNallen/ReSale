@@ -38,8 +38,9 @@ public class Update : IEndpoint
         .WithTags(Tags.Customers)
         .WithDescription("Updates a customer.")
         .WithName("Update Customer")
+        .WithSummary("Update Customer")
         .Produces(StatusCodes.Status200OK, typeof(CustomerResponse))
-        .Produces(StatusCodes.Status400BadRequest)
+        .Produces(StatusCodes.Status404NotFound)
         .RequireAuthorization();
     }
 }

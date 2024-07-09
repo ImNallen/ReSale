@@ -39,6 +39,7 @@ public class Create : IEndpoint
             .WithTags(Tags.Customers)
             .WithDescription("Creates a new customer.")
             .WithName("Create Customer")
+            .WithSummary("Create Customer")
             .Produces(StatusCodes.Status200OK, typeof(CustomerResponse))
             .Produces(StatusCodes.Status400BadRequest)
             .RequireAuthorization();

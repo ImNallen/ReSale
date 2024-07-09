@@ -23,10 +23,13 @@ public class Create : IEndpoint
             var result = await sender.Send(command, cancellationToken);
             
             return result.Match(Results.Ok, CustomResults.Problem);
-        }).WithTags(Tags.Employees)
+        })
+        .WithTags(Tags.Employees)
         .WithDescription("Creates a new employee.")
         .WithName("Create Employee")
+        .WithSummary("Create Employee")
         .Produces(StatusCodes.Status200OK, typeof(Guid))
+        .Produces(StatusCodes.Status400BadRequest)
         .RequireAuthorization();
     }
 }

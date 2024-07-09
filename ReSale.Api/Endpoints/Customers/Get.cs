@@ -4,6 +4,7 @@ using ReSale.Api.Contracts.Responses;
 using ReSale.Api.Contracts.Responses.Customers;
 using ReSale.Api.Infrastructure;
 using ReSale.Application.Customers.Get;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace ReSale.Api.Endpoints.Customers;
 
@@ -28,6 +29,7 @@ public class Get : IEndpoint
         .WithTags(Tags.Customers)
         .WithDescription("Retrieves a list of all customers.")
         .WithName("Get Customers")
+        .WithSummary("Get Customers")
         .Produces(StatusCodes.Status200OK, typeof(List<CustomerResponse>))
         .RequireAuthorization();
     }

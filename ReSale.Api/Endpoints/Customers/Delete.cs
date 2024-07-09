@@ -24,8 +24,9 @@ public class Delete : IEndpoint
         .WithTags(Tags.Customers)
         .WithDescription("Deletes a customer by id")
         .WithName("Delete Customer")
+        .WithSummary("Delete Customer")
         .Produces(StatusCodes.Status204NoContent)
-        .Produces(StatusCodes.Status400BadRequest)
+        .Produces(StatusCodes.Status404NotFound)
         .RequireAuthorization();
     }
 }

@@ -1,8 +1,6 @@
 ﻿using MapsterMapper;
 using MediatR;
-using ReSale.Api.Contracts.Responses;
 using ReSale.Api.Contracts.Responses.Customers;
-using ReSale.Api.Extensions;
 using ReSale.Api.Infrastructure;
 using ReSale.Application.Customers.GetById;
 
@@ -30,7 +28,9 @@ public class GetById : IEndpoint
         .WithTags(Tags.Customers)
         .WithDescription("Retrieves a customer by ID.")
         .WithName("Get Customer By Id")
+        .WithSummary("Get Customer By Id")
         .Produces(StatusCodes.Status200OK, typeof(CustomerResponse))
+        .Produces(StatusCodes.Status404NotFound)
         .RequireAuthorization();
     }
 }

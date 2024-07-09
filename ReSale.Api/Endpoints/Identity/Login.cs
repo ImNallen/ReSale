@@ -27,6 +27,7 @@ public class Login : IEndpoint
             }).WithTags(Tags.Identity)
             .WithDescription("Retrieves an access token for a user.")
             .WithName("Login")
+            .WithSummary("Login")
             .Produces(StatusCodes.Status200OK, typeof(AccessTokenResponse))
             .AllowAnonymous();
     }

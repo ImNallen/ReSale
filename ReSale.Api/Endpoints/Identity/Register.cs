@@ -27,6 +27,7 @@ public class Register : IEndpoint
         }).WithTags(Tags.Identity)
         .WithDescription("Registers a new user.")
         .WithName("Register")
+        .WithSummary("Register")
         .Produces(StatusCodes.Status200OK, typeof(Guid))
         .RequireAuthorization();
     }

@@ -45,6 +45,7 @@ public class Search : IEndpoint
         .WithTags(Tags.Customers)
         .WithDescription("Get a paginated list of customers with the possibility of searching and sorting.")
         .WithName("Search Customers")
+        .WithSummary("Search Customers")
         .Produces(StatusCodes.Status200OK, typeof(PagedList<CustomerResponse>))
         .RequireAuthorization();
     }

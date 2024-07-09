@@ -20,9 +20,11 @@ public class Get : IEndpoint
             var result = await sender.Send(query, cancellationToken);
             
             return result.Match(Results.Ok, CustomResults.Problem);
-        }).WithTags(Tags.Employees)
+        })
+        .WithTags(Tags.Employees)
         .WithDescription("Get a list of all employees.")
         .WithName("Get Employees")
+        .WithSummary("Get Employees")
         .Produces(StatusCodes.Status200OK, typeof(List<EmployeeResponse>))
         .RequireAuthorization();
     }

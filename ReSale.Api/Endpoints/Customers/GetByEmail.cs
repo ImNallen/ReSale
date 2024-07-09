@@ -29,7 +29,9 @@ public class GetByEmail : IEndpoint
             .WithTags(Tags.Customers)
             .WithDescription("Retrieves a customer by email address.")
             .WithName("Get Customer By Email")
+            .WithSummary("Get Customer By Email")
             .Produces(StatusCodes.Status200OK, typeof(CustomerResponse))
+            .Produces(StatusCodes.Status404NotFound)
             .RequireAuthorization();
     }
 }

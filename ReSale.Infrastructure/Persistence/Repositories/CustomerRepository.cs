@@ -10,7 +10,8 @@ namespace ReSale.Infrastructure.Persistence.Repositories;
 
 public class CustomerRepository : Repository<Customer>, ICustomerRepository
 {
-    public CustomerRepository(ReSaleDbContext context) 
+    public CustomerRepository(
+        ReSaleDbContext context) 
         : base(context)
     {
     }

@@ -1,4 +1,5 @@
-﻿using ReSale.Application.Abstractions.Messaging;
+﻿using MapsterMapper;
+using ReSale.Application.Abstractions.Messaging;
 using ReSale.Application.Abstractions.Persistence;
 using ReSale.Application.Customers.Results;
 using ReSale.Domain.Common;
@@ -7,7 +8,8 @@ using ReSale.Domain.Customers;
 namespace ReSale.Application.Customers.GetById;
 
 public class GetCustomerByIdQueryHandler(
-    IUnitOfWork unitOfWork) 
+    IUnitOfWork unitOfWork,
+    IMapper mapper) 
     : IQueryHandler<GetCustomerByIdQuery, CustomerResult>
 {
     public async Task<Result<CustomerResult>> Handle(
@@ -21,15 +23,6 @@ public class GetCustomerByIdQueryHandler(
             return Result.Failure<CustomerResult>(CustomerErrors.NotFound);
         }
 
-        return new CustomerResult(
-            customer.Id,
-            customer.Email.Value,
-            customer.FirstName.Value,
-            customer.LastName.Value,
-            customer.Address.Street,
-            customer.Address.City,
-            customer.Address.ZipCode,
-            customer.Address.Country,
-            customer.Address.State);
+        return mapper.Map<CustomerResult>(customer);
     }
 }

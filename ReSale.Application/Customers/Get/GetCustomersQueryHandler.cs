@@ -1,30 +1,22 @@
-﻿using ReSale.Application.Abstractions.Messaging;
+﻿using MapsterMapper;
+using ReSale.Application.Abstractions.Messaging;
 using ReSale.Application.Abstractions.Persistence;
 using ReSale.Application.Customers.Results;
 using ReSale.Domain.Common;
 
 namespace ReSale.Application.Customers.Get;
 
-public class GetCustomersQueryHandler(IUnitOfWork unitOfWork) 
+public class GetCustomersQueryHandler(
+    IUnitOfWork unitOfWork,
+    IMapper mapper) 
     : IQueryHandler<GetCustomersQuery, List<CustomerResult>>
 {
     public async Task<Result<List<CustomerResult>>> Handle(
-        GetCustomersQuery request, 
+        GetCustomersQuery request,
         CancellationToken cancellationToken)
     {
         var customers = await unitOfWork.Customers.GetAllAsync(cancellationToken);
         
-        return customers.Select(c => new CustomerResult
-        (
-            c.Id,
-            c.Email.Value,
-            c.FirstName.Value,
-            c.LastName.Value,
-            c.Address.Street,
-            c.Address.City,
-            c.Address.ZipCode,
-            c.Address.Country,
-            c.Address.State
-        )).ToList();
+        return customers.Select(mapper.Map<CustomerResult>).ToList();
     }
 }

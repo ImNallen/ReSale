@@ -1,6 +1,7 @@
 ﻿using MapsterMapper;
 using MediatR;
 using ReSale.Api.Contracts.Responses;
+using ReSale.Api.Contracts.Responses.Customers;
 using ReSale.Api.Infrastructure;
 using ReSale.Application.Customers.GetByEmail;
 

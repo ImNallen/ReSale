@@ -1,5 +1,6 @@
 ﻿using Mapster;
 using ReSale.Api.Contracts.Responses;
+using ReSale.Api.Contracts.Responses.Customers;
 using ReSale.Application.Customers.Results;
 
 namespace ReSale.Api.Mappings;

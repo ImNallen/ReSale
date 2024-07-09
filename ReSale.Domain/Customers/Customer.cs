@@ -42,4 +42,16 @@ public sealed class Customer : Entity
 
         return customer;
     }
+
+    public Customer Update(
+        FirstName firstName,
+        LastName lastName,
+        Address address)
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        Address = address;
+
+        return this;
+    }
 }

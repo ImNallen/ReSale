@@ -1,4 +1,4 @@
-﻿namespace ReSale.Api.Contracts.Responses;
+﻿namespace ReSale.Api.Contracts.Responses.Identity;
 
 public sealed record AccessTokenResponse(
     string AccessToken, 

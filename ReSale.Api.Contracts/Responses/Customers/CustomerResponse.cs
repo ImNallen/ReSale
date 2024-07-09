@@ -1,4 +1,4 @@
-﻿namespace ReSale.Api.Contracts.Responses;
+﻿namespace ReSale.Api.Contracts.Responses.Customers;
 
 public record CustomerResponse(
     Guid Id,

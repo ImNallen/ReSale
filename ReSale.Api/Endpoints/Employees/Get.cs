@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using ReSale.Api.Contracts.Responses;
+using ReSale.Api.Contracts.Responses.Employees;
 using ReSale.Api.Extensions;
 using ReSale.Api.Infrastructure;
 using ReSale.Application.Employees.Get;

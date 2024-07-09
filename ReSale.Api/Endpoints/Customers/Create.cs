@@ -2,6 +2,7 @@
 using MediatR;
 using ReSale.Api.Contracts.Requests.Customers;
 using ReSale.Api.Contracts.Responses;
+using ReSale.Api.Contracts.Responses.Customers;
 using ReSale.Api.Extensions;
 using ReSale.Api.Infrastructure;
 using ReSale.Application.Customers.Create;

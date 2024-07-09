@@ -1,6 +1,6 @@
 ﻿using ReSale.Application.Abstractions.Messaging;
 using ReSale.Application.Abstractions.Persistence;
-using ReSale.Application.Employees.Shared;
+using ReSale.Application.Employees.Results;
 using ReSale.Domain.Common;
 using ReSale.Domain.Employees;
 using ReSale.Domain.Shared;
@@ -9,9 +9,9 @@ namespace ReSale.Application.Employees.Create;
 
 public class CreateEmployeeCommandHandler(
     IUnitOfWork unitOfWork) 
-    : ICommandHandler<CreateEmployeeCommand, Guid>
+    : ICommandHandler<CreateEmployeeCommand, EmployeeResult>
 {
-    public async Task<Result<Guid>> Handle(
+    public async Task<Result<EmployeeResult>> Handle(
         CreateEmployeeCommand request, 
         CancellationToken cancellationToken)
     {
@@ -19,14 +19,14 @@ public class CreateEmployeeCommandHandler(
         
         if (email.IsFailure)
         {
-            return Result.Failure<Guid>(email.Error);
+            return Result.Failure<EmployeeResult>(email.Error);
         }
         
         var isEmailUnique = await unitOfWork.Employees.IsEmailUniqueAsync(email.Value);
         
         if (!isEmailUnique)
         {
-            return Result.Failure<Guid>(EmailErrors.NotUnique);
+            return Result.Failure<EmployeeResult>(EmailErrors.NotUnique);
         }
 
         var employee = Employee.Create(
@@ -38,6 +38,10 @@ public class CreateEmployeeCommandHandler(
         
         await unitOfWork.SaveChangesAsync(cancellationToken);
         
-        return employee.Id;
+        return new EmployeeResult(
+            employee.Id,
+            employee.Email.Value,
+            employee.FirstName.Value,
+            employee.LastName.Value);
     }
 }

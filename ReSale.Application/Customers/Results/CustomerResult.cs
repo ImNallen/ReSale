@@ -1,6 +1,6 @@
-﻿namespace ReSale.Application.Customers.Shared;
+﻿namespace ReSale.Application.Customers.Results;
 
-public record CustomerResponse(
+public record CustomerResult(
     Guid Id,
     string Email,
     string FirstName,

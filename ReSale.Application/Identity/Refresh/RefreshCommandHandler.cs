@@ -1,6 +1,6 @@
 ﻿using ReSale.Application.Abstractions.Authentication;
 using ReSale.Application.Abstractions.Messaging;
-using ReSale.Application.Identity.Shared;
+using ReSale.Application.Identity.Results;
 using ReSale.Domain.Common;
 using ReSale.Domain.Users;
 
@@ -8,9 +8,9 @@ namespace ReSale.Application.Identity.Refresh;
 
 public class RefreshCommandHandler(
     IRefreshService refreshService) 
-    : ICommandHandler<RefreshCommand, AccessTokenResponse>
+    : ICommandHandler<RefreshCommand, AccessTokenResult>
 {
-    public async Task<Result<AccessTokenResponse>> Handle(RefreshCommand request, CancellationToken cancellationToken)
+    public async Task<Result<AccessTokenResult>> Handle(RefreshCommand request, CancellationToken cancellationToken)
     {
         var result = await refreshService.RefreshAccessTokenAsync(
             request.RefreshToken,
@@ -18,10 +18,10 @@ public class RefreshCommandHandler(
         
         if (result.IsFailure)
         {
-            return Result.Failure<AccessTokenResponse>(UserErrors.InvalidCredentials);
+            return Result.Failure<AccessTokenResult>(UserErrors.InvalidCredentials);
         }
         
-        return new AccessTokenResponse(
+        return new AccessTokenResult(
             result.Value.AccessToken, 
             result.Value.RefreshToken,
             result.Value.ExpiresIn,

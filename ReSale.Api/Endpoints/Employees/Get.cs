@@ -1,8 +1,8 @@
 ﻿using MediatR;
+using ReSale.Api.Contracts.Responses;
 using ReSale.Api.Extensions;
 using ReSale.Api.Infrastructure;
 using ReSale.Application.Employees.Get;
-using ReSale.Application.Employees.Shared;
 
 namespace ReSale.Api.Endpoints.Employees;
 

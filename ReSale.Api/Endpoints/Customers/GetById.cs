@@ -1,8 +1,8 @@
 ﻿using MediatR;
+using ReSale.Api.Contracts.Responses;
 using ReSale.Api.Extensions;
 using ReSale.Api.Infrastructure;
 using ReSale.Application.Customers.GetById;
-using ReSale.Application.Customers.Shared;
 
 namespace ReSale.Api.Endpoints.Customers;
 
@@ -19,7 +19,20 @@ public class GetById : IEndpoint
             
             var result = await sender.Send(query, cancellationToken);
             
-            return result.Match(Results.Ok, CustomResults.Problem);
+            if (result.IsFailure)
+                return CustomResults.Problem(result);
+        
+            // TODO: Add Mapper
+            return Results.Ok(new CustomerResponse(
+                result.Value.Id,
+                result.Value.Email,
+                result.Value.FirstName,
+                result.Value.LastName,
+                result.Value.Street,
+                result.Value.City,
+                result.Value.ZipCode,
+                result.Value.Country,
+                result.Value.State));
         })
         .WithTags(Tags.Customers)
         .WithDescription("Retrieves a customer by ID.")

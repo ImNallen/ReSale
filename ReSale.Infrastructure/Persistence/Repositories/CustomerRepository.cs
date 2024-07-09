@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using ReSale.Application.Abstractions.Persistence.Repositories;
-using ReSale.Application.Customers.Shared;
+using ReSale.Application.Customers.Results;
 using ReSale.Domain.Common;
 using ReSale.Domain.Customers;
 using ReSale.Domain.Shared;
@@ -20,11 +20,11 @@ public class CustomerRepository : Repository<Customer>, ICustomerRepository
         return !await Context.Customers.AnyAsync(u => u.Email == email);
     }
 
-    public async Task<CustomerResponse?> GetCustomerByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<CustomerResult?> GetCustomerByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await Context.Customers
             .Where(x => x.Id == id)
-            .Select(c => new CustomerResponse(
+            .Select(c => new CustomerResult(
                 c.Id,
                 c.Email.Value,
                 c.FirstName.Value,
@@ -37,7 +37,7 @@ public class CustomerRepository : Repository<Customer>, ICustomerRepository
             .SingleOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<PagedList<CustomerResponse>> SearchCustomersAsync(
+    public async Task<PagedList<CustomerResult>> SearchCustomersAsync(
         string? searchTerm,
         string? sortColumn,
         string? sortOrder,
@@ -74,7 +74,7 @@ public class CustomerRepository : Repository<Customer>, ICustomerRepository
         var customers = await customersQuery
             .Skip((page - 1) * pageSize) 
             .Take(pageSize)
-            .Select(c => new CustomerResponse(
+            .Select(c => new CustomerResult(
                 c.Id,
                 c.Email.Value,
                 c.FirstName.Value,
@@ -86,16 +86,16 @@ public class CustomerRepository : Repository<Customer>, ICustomerRepository
                 c.Address.State))
             .ToListAsync(cancellationToken);
 
-        return PagedList<CustomerResponse>.Create(customers, page, pageSize, totalCount);
+        return PagedList<CustomerResult>.Create(customers, page, pageSize, totalCount);
     }
 
-    public Task<CustomerResponse?> GetCustomerByEmailAsync(
+    public Task<CustomerResult?> GetCustomerByEmailAsync(
         string email, 
         CancellationToken cancellationToken)
     {
         return Context.Customers
             .Where(c => ((string)c.Email) == email)
-            .Select(c => new CustomerResponse(
+            .Select(c => new CustomerResult(
                 c.Id,
                 c.Email.Value,
                 c.FirstName.Value,

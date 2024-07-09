@@ -1,6 +1,6 @@
-﻿namespace ReSale.Application.Identity.Shared;
+﻿namespace ReSale.Application.Identity.Results;
 
-public sealed record AccessTokenResponse(
+public record AccessTokenResult(
     string AccessToken, 
     string RefreshToken,
     int ExpiresIn,

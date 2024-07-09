@@ -1,5 +1,5 @@
 ﻿using ReSale.Application.Abstractions.Messaging;
-using ReSale.Application.Customers.Shared;
+using ReSale.Application.Customers.Results;
 
 namespace ReSale.Application.Customers.Create;
 
@@ -11,4 +11,4 @@ public record CreateCustomerCommand(
     string City,
     string State,
     string ZipCode,
-    string Country) : ICommand<CustomerResponse>;
+    string Country) : ICommand<CustomerResult>;

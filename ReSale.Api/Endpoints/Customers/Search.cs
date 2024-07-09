@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using ReSale.Api.Contracts.Responses;
 using ReSale.Api.Extensions;
 using ReSale.Api.Infrastructure;
 using ReSale.Application.Customers.Search;
-using ReSale.Application.Customers.Shared;
 using ReSale.Domain.Common;
 
 namespace ReSale.Api.Endpoints.Customers;
@@ -30,7 +30,23 @@ public class Search : IEndpoint
             
             var result = await sender.Send(query, cancellationToken);
             
-            return result.Match(Results.Ok, CustomResults.Problem);
+            if (result.IsFailure)
+                return CustomResults.Problem(result);
+            
+            // TODO: Add Mapper
+            return Results.Ok(PagedList<CustomerResponse>.Create(result.Value.Items.Select(c => new CustomerResponse(
+                        c.Id,
+                        c.Email,
+                        c.FirstName,
+                        c.LastName,
+                        c.Street,
+                        c.City,
+                        c.ZipCode,
+                        c.Country,
+                        c.State)).ToList(),
+                result.Value.Page,
+                result.Value.PageSize,
+                result.Value.TotalCount));
         }).WithTags(Tags.Customers)
         .WithDescription("Get a paginated list of customers with the possibility of searching and sorting.")
         .WithName("Search Customers")

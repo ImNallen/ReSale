@@ -63,4 +63,7 @@ app.UseAuthorization();
 app.Run();
 
 // REMARK: Required for functional and integration tests to work.
-public partial class Program;
+namespace ReSale.Api
+{
+    public partial class Program;
+}

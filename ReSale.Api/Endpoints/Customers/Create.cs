@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using ReSale.Api.Contracts.Requests.Customers;
+using ReSale.Api.Contracts.Responses;
 using ReSale.Api.Extensions;
 using ReSale.Api.Infrastructure;
 using ReSale.Application.Customers.Create;
-using ReSale.Application.Customers.Shared;
 
 namespace ReSale.Api.Endpoints.Customers;
 
@@ -27,8 +27,21 @@ public class Create : IEndpoint
                     request.Country);
         
                 var result = await sender.Send(command, cancellationToken);
+
+                if (result.IsFailure)
+                    return CustomResults.Problem(result);
         
-                return result.Match(Results.Ok, CustomResults.Problem);
+                // TODO: Add Mapper
+                return Results.Ok(new CustomerResponse(
+                    result.Value.Id,
+                    result.Value.Email,
+                    result.Value.FirstName,
+                    result.Value.LastName,
+                    result.Value.Street,
+                    result.Value.City,
+                    result.Value.ZipCode,
+                    result.Value.Country,
+                    result.Value.State));
             }).WithTags(Tags.Customers)
             .WithDescription("Creates a new customer.")
             .WithName("Create Customer")

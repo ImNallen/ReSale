@@ -1,7 +1,6 @@
 ﻿using ReSale.Application.Abstractions.Messaging;
 using ReSale.Application.Abstractions.Persistence;
-using ReSale.Application.Abstractions.Persistence.Repositories;
-using ReSale.Application.Customers.Shared;
+using ReSale.Application.Customers.Results;
 using ReSale.Domain.Common;
 using ReSale.Domain.Customers;
 
@@ -9,9 +8,9 @@ namespace ReSale.Application.Customers.GetById;
 
 public class GetCustomerByIdQueryHandler(
     IUnitOfWork unitOfWork) 
-    : IQueryHandler<GetCustomerByIdQuery, CustomerResponse>
+    : IQueryHandler<GetCustomerByIdQuery, CustomerResult>
 {
-    public async Task<Result<CustomerResponse>> Handle(
+    public async Task<Result<CustomerResult>> Handle(
         GetCustomerByIdQuery request, 
         CancellationToken cancellationToken)
     {
@@ -19,10 +18,10 @@ public class GetCustomerByIdQueryHandler(
 
         if (customer is null)
         {
-            return Result.Failure<CustomerResponse>(CustomerErrors.NotFound);
+            return Result.Failure<CustomerResult>(CustomerErrors.NotFound);
         }
 
-        return new CustomerResponse(
+        return new CustomerResult(
             customer.Id,
             customer.Email.Value,
             customer.FirstName.Value,

@@ -1,0 +1,28 @@
+﻿<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(App).Assembly">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)"/>
+            <FocusOnNavigate RouteData="@routeData" Selector="h1"/>
+        </Found>
+        <NotFound>
+            <PageTitle>Not found</PageTitle>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <div class="flex items-center justify-center mt-40">
+                    <div>
+                        <div class="text-center">
+                            <h1 class="text-6xl font-bold text-red-primary">404</h1>
+                            <p class="text-4xl mt-4 text-light-gray">This page does not exist</p>
+                            <p class="text-sm mt-4 text-light-gray">Sorry, we couldn't find the page you're looking for.</p>
+                            <a href="/" class="mt-6 inline-block text-blue-primary hover:text-blue-secondary">
+                                <div class="flex">
+                                    <i class="fas fa-arrow-left mt-1 mr-2"></i>
+                                    <p>Back to home</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </LayoutView>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>

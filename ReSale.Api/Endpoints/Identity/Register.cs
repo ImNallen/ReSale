@@ -29,6 +29,6 @@ public class Register : IEndpoint
         .WithName("Register")
         .WithSummary("Register")
         .Produces(StatusCodes.Status200OK, typeof(Guid))
-        .RequireAuthorization();
+        .AllowAnonymous();
     }
 }

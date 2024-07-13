@@ -1,0 +1,227 @@
+﻿@inject NavigationManager NavigationManager
+@inject ILocalStorageService LocalStorage
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<div class="flex flex-col text-white justify-between h-full">
+    <div>
+        <button class="@(NavigationManager.Uri.EndsWith("/") ? 
+                           "bg-blue-primary hover:bg-blue-secondary" : 
+                           "hover:bg-blue-primary") h-[60px] w-full"
+                @onclick="@(() => NavigationManager.NavigateTo("/"))">
+            <div class="flex">
+                <div>
+                    <i class="fas fa-home w-[50px]"></i>
+                </div>
+                <div>
+                    <p>Home</p>
+                </div>
+            </div>
+        </button>
+        
+        <button class="@(NavigationManager.Uri.Contains("/customers") ? 
+                           "bg-blue-primary hover:bg-blue-secondary" : 
+                           "hover:bg-blue-primary") h-[60px] w-full"
+                @onclick="@(() => NavigationManager.NavigateTo("/customers"))">
+            <div class="flex">
+                <div>
+                    <i class="fa-solid fa-user w-[50px]"></i>
+                </div>
+                <div>
+                    <p>Customers</p>
+                </div>
+            </div>
+        </button>
+
+        <button class="h-[60px] w-full hover:bg-blue-primary" @onclick="ToggleProductsMenu">
+            <div class="flex justify-between items-center w-full">
+                <div class="flex">
+                    <i class="fa-solid fa-boxes-stacked w-[50px] mt-1"></i>
+                    <p>Items</p>
+                </div>
+                <div class="mr-2">
+                    <i class="fa-solid @( _isProductsMenuOpen ? "fa-chevron-down" : "fa-chevron-up" ) w-[20px]"></i>
+                </div>
+            </div>
+        </button>
+
+        <!-- Nested Menu Items -->
+        @if (_isProductsMenuOpen)
+        {
+            <div class="bg-table-gray">
+                <button class="@(NavigationManager.Uri.Contains("/products") ?
+                                   "bg-blue-primary hover:bg-blue-secondary" :
+                                   "hover:bg-blue-primary") h-[60px] w-full"
+                        @onclick="@(() => NavigationManager.NavigateTo("/products"))">
+                    <div class="flex">
+                        <div>
+                            <i class="fa-solid fa-box w-[50px]"></i>
+                        </div>
+                        <div>
+                            <p>Products</p>
+                        </div>
+                    </div>
+                </button>
+
+                <button class="@(NavigationManager.Uri.Contains("/suppliers") ?
+                "bg-blue-primary hover:bg-blue-secondary" :
+                "hover:bg-blue-primary") h-[60px] w-full"
+                        @onclick="@(() => NavigationManager.NavigateTo("/suppliers"))">
+                    <div class="flex">
+                        <div>
+                            <i class="fa-solid fa-truck w-[50px]"></i>
+                        </div>
+                        <div>
+                            <p>Suppliers</p>
+                        </div>
+                    </div>
+                </button>
+            </div>
+        }
+
+        <button class="h-[60px] w-full hover:bg-blue-primary" @onclick="ToggleSalesMenu">
+            <div class="flex justify-between items-center w-full">
+                <div class="flex">
+                    <i class="fa-solid fa-clipboard w-[50px] mt-1"></i>
+                    <p>Sales</p>
+                </div>
+                <div class="mr-2">
+                    <i class="fa-solid @( _isSalesMenuOpen ? "fa-chevron-down" : "fa-chevron-up" ) w-[20px]"></i>
+                </div>
+            </div>
+        </button>
+
+        <!-- Nested Menu Items -->
+        @if (_isSalesMenuOpen)
+        {
+        <div class="bg-table-gray">
+            <button class="@(NavigationManager.Uri.Contains("/orders") ?
+            "bg-blue-primary hover:bg-blue-secondary" :
+            "hover:bg-blue-primary") h-[60px] w-full"
+                    @onclick="@(() => NavigationManager.NavigateTo("/orders"))">
+                <div class="flex">
+                    <div>
+                        <i class="fa-solid fa-dolly w-[50px]"></i>
+                    </div>
+                    <div>
+                        <p>Orders</p>
+                    </div>
+                </div>
+            </button>
+
+            <button class="@(NavigationManager.Uri.Contains("/purchaseorders") ?
+            "bg-blue-primary hover:bg-blue-secondary" :
+            "hover:bg-blue-primary") h-[60px] w-full"
+                    @onclick="@(() => NavigationManager.NavigateTo("/purchaseorders"))">
+                <div class="flex">
+                    <div>
+                        <i class="fa-solid fa-truck-ramp-box w-[50px]"></i>
+                    </div>
+                    <div>
+                        <p>Purchase orders</p>
+                    </div>
+                </div>
+            </button>
+        </div>
+        }
+
+        <button class="@(NavigationManager.Uri.Contains("/invoices") ?
+                           "bg-blue-primary hover:bg-blue-secondary" :
+                           "hover:bg-blue-primary") h-[60px] w-full"
+                @onclick="@(() => NavigationManager.NavigateTo("/invoices"))">
+            <div class="flex">
+                <div>
+                    <i class="fa-solid fa-receipt w-[50px]"></i>
+                </div>
+                <div>
+                    <p>Invoices</p>
+                </div>
+            </div>
+        </button>
+
+        <button class="@(NavigationManager.Uri.Contains("/statistics") ?
+        "bg-blue-primary hover:bg-blue-secondary" :
+        "hover:bg-blue-primary") h-[60px] w-full"
+                @onclick="@(() => NavigationManager.NavigateTo("/statistics"))">
+            <div class="flex">
+                <div>
+                    <i class="fa-solid fa-chart-bar w-[50px]"></i>
+                </div>
+                <div>
+                    <p>Statistics</p>
+                </div>
+            </div>
+        </button>
+    </div>
+    
+    <div>
+        <button class="@(NavigationManager.Uri.Contains("/settings") ? 
+                           "bg-blue-primary hover:bg-blue-secondary" : 
+                           "hover:bg-blue-primary") h-[60px] w-full"
+                @onclick="@(() => NavigationManager.NavigateTo("/settings"))">
+            <div class="flex">
+                <div>
+                    <i class="fa-solid fa-gear w-[50px]"></i>
+                </div>
+                <div>
+                    <p>Settings</p>
+                </div>
+            </div>
+        </button>
+
+        <button class="w-full h-[60px] hover:bg-red-secondary" @onclick="Logout">
+            <div class="flex">
+                <div>
+                    <i class="fa-solid fa-right-from-bracket w-[50px]"></i>
+                </div>
+                <div>
+                    <p>Log out</p>
+                </div>
+            </div>
+        </button>
+    </div>
+</div>
+
+@code {
+    private string? _currentUri;
+    private bool _isSalesMenuOpen;
+    private bool _isProductsMenuOpen;
+
+    protected override void OnInitialized()
+    {
+        _currentUri = NavigationManager.Uri;
+        
+        NavigationManager.LocationChanged += HandleLocationChanged!;
+    }
+
+    private void HandleLocationChanged(object sender, LocationChangedEventArgs e)
+    {
+        if (_currentUri == NavigationManager.Uri) return;
+        _currentUri = NavigationManager.Uri;
+        StateHasChanged();
+    }
+    
+    private void ToggleSalesMenu()
+    {
+        _isSalesMenuOpen = !_isSalesMenuOpen;
+    }
+    
+    private void ToggleProductsMenu()
+    {
+        _isProductsMenuOpen = !_isProductsMenuOpen;
+    }
+
+    private async Task Logout()
+    {
+        await LocalStorage.RemoveItemAsync("accessToken");
+        await LocalStorage.RemoveItemAsync("refreshToken");
+        
+        await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        
+        NavigationManager.NavigateTo("/");
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= HandleLocationChanged!;
+    }
+}

@@ -1,0 +1,74 @@
+﻿@inject IIdentityClient IdentityClient
+@inject ILocalStorageService LocalStorage
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<PageTitle>ReSale | Login</PageTitle>
+
+<div class="flex items-center justify-center h-screen bg-darker-gray">
+    <div class="bg-dark-gray p-8 rounded shadow-md w-full max-w-md">
+        <h2 class="text-2xl mb-6 text-center text-white">ReSale</h2>
+        <EditForm Model="@_loginModel" OnValidSubmit="HandleLogin">
+            <DataAnnotationsValidator />
+
+            <div class="mb-4">
+                <label for="email" class="block text-white">Email</label>
+                <InputText id="email" class="w-full p-2 mt-2 rounded bg-table-gray text-white" @bind-Value="_loginModel.Email" />
+                <div class="text-red-primary">
+                    <ValidationMessage For="@(() => _loginModel.Email)" />
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <label for="password" class="block text-white">Password</label>
+                <InputText id="password" type="password" class="w-full p-2 mt-2 rounded bg-table-gray text-white" @bind-Value="_loginModel.Password" />
+                <div class="text-red-primary">
+                    <ValidationMessage For="@(() => _loginModel.Password)" />
+                </div>
+                <p class="text-red-primary">@_errorMessage</p>
+            </div>
+
+            <button type="submit" disabled="@_isBusy" class="w-full bg-blue-primary hover:bg-blue-secondary text-white p-2 rounded">Login</button>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private LoginModel _loginModel = new();
+    private string _errorMessage = string.Empty;
+    private bool _isBusy = false;
+
+    private async Task HandleLogin()
+    {
+        _errorMessage = string.Empty;
+        _isBusy = true;
+        
+        try
+        {
+            var result = await IdentityClient.Login(new LoginUserRequest(_loginModel.Email, _loginModel.Password));
+        
+            await LocalStorage.SetItemAsync("accessToken", result.AccessToken);
+            await LocalStorage.SetItemAsync("refreshToken", result.RefreshToken);
+        
+            await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        
+            _isBusy = false;
+            Navigation.NavigateTo("/");
+        }
+        catch (Exception)
+        {
+            _errorMessage = "Invalid email or password. Please try again.";
+            _isBusy = false;
+        }
+    }
+
+    public class LoginModel
+    {
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; } = string.Empty;
+
+        [Required]
+        public string Password { get; set; } = string.Empty;
+    }
+}

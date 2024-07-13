@@ -1,0 +1,217 @@
+﻿@page "/customers"
+
+@using ReSale.Web.Models
+
+@inject ICustomerClient CustomerClient
+@inject IJSRuntime JsRuntime
+@inject NavigationManager NavigationManager
+
+<PageTitle>ReSale | Customers</PageTitle>
+
+<div class="flex flex-col h-full">
+    <div class="flex justify-between">
+        <div></div>
+        <div class="flex">
+            <button class="bg-table-gray hover:bg-green-primary p-[10px] rounded-l" title="Create" @onclick="@(() => NavigationManager.NavigateTo("/customers/create"))">
+                <i class="fas fa-plus p-2"></i>
+            </button>
+            @if (Customers.Count(c => c.IsSelected) == 1)
+            {
+                <button class="bg-table-gray hover:bg-blue-primary p-[10px]" @onclick="CopyIdToClipboard" title="Copy ID">
+                    <i class="fas fa-id-badge p-2"></i>
+                </button>
+                <button class="bg-table-gray hover:bg-blue-primary p-[10px]" title="Edit">
+                    <i class="fas fa-pen-to-square p-2"></i>
+                </button>
+                <button class="bg-table-gray hover:bg-red-primary p-[10px]" @onclick="Delete" title="Delete">
+                    <i class="fas fa-minus p-2"></i>
+                </button>
+            }
+            <input type="text" placeholder="Search..." @bind="_searchTerm" class="bg-table-gray p-2 focus:outline-0"/>
+            <button class="bg-table-gray hover:bg-blue-primary p-[10px] rounded-r" title="Search" @onclick="Search">
+                <i class="fas fa-magnifying-glass p-2"></i>
+            </button>
+        </div>
+        <div></div>
+    </div>
+
+    @if (!Customers.Any())
+    {
+    <div class="mt-4 bg-darker-gray rounded p-4">
+        <div class="flex items-center justify-center h-[440px]">
+            <p class="text-2xl">No customers found</p>
+        </div>
+    </div>
+    }
+    else
+    {
+    <div class="mt-4 rounded-t flex-grow bg-table-gray overflow-x-auto overflow-y-auto">
+        <table class="w-full">
+            <thead class="sticky top-0">
+            <tr>
+                <th scope="col" class="py-2 font-semibold">Select</th>
+                <th scope="col" class="text-left font-semibold">
+                    <button @onclick="SortByName">Name</button>
+                </th>
+                <th scope="col" class="text-left font-semibold">Email</th>
+                <th scope="col" class="text-left font-semibold">Street</th>
+                <th scope="col" class="text-left font-semibold">Zip Code</th>
+                <th scope="col" class="text-left font-semibold">City</th>
+                <th scope="col" class="text-left font-semibold">Country</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach(var customer in Customers)
+            {
+            <tr class="border-0">
+                <td>
+                    <div class="flex py-2 items-center justify-center h-full">
+                        <input type="checkbox" @bind="@customer.IsSelected" class="p-[10px] rounded border-darker-gray bg-dark-gray text-blue-primary focus:border-none focus:ring-offset-0 focus:ring-0"/>
+                    </div>
+                </td>
+                <td class="text-sm">@customer.FullName</td>
+                <td class="text-sm">
+                    @customer.Email
+                </td>
+                <td class="text-sm">
+                    @customer.Street
+                </td>
+                <td class="text-sm">
+                    @customer.ZipCode
+                </td>
+                <td class="text-sm">
+                    @customer.City
+                </td>
+                <td class="text-sm">
+                    @customer.Country
+                </td>
+            </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <div class="flex justify-between bg-table-gray h-[40px]">
+        <div class="flex items-center ml-4">
+            <p>Showing @((_page - 1) * _pageSize + 1) to @Math.Min(_page * _pageSize, _total) of @_total results</p>
+            <p class="ml-8">Count</p>
+            <select class="ml-2 h-[40px] bg-table-gray" @onchange="OnPageSizeChanged">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+            </select>
+        </div>
+        <div class="flex items-center justify-center">
+            <button class="hover:bg-blue-primary w-[100px] h-[40px] disabled:bg-light-gray disabled:text-dark-gray" @onclick="PreviousPage" disabled="@(!_hasPreviousPage)">Previous</button>
+            <button class="hover:bg-blue-primary w-[100px] h-[40px] rounded-br disabled:bg-light-gray disabled:text-dark-gray" @onclick="NextPage" disabled="@(!_hasNextPage)">Next</button>
+        </div>
+    </div>
+    }
+</div>
+
+@code {
+    private List<Customer> Customers { get; set; } = [];
+    private bool IsSortedByName { get; set; }
+    private string _searchTerm = string.Empty;
+    private int _page = 1;
+    private int _pageSize = 5;
+    private int _total = 0;
+    private bool _hasNextPage;
+    private bool _hasPreviousPage;
+    private bool _isMenuOpen;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var customerResponses = await CustomerClient.SearchCustomers(_searchTerm, _page, _pageSize);
+
+        _total = customerResponses.TotalCount;
+        _hasNextPage = customerResponses.HasNextPage;
+        _hasPreviousPage = customerResponses.HasPreviousPage;
+        
+        Customers = [];
+        
+        // TODO: Add mapster to map the response to the model
+        foreach (var customer in customerResponses.Items)
+        {
+            Customers.Add(new Customer
+            {
+                Id = customer.Id,
+                FirstName = customer.FirstName,
+                LastName = customer.LastName,
+                Email = customer.Email,
+                Street = customer.Street,
+                City = customer.City,
+                ZipCode = customer.ZipCode,
+                Country = customer.Country,
+                State = customer.State,
+            });
+        }
+    }
+
+    void ToggleMenu()
+    {
+        _isMenuOpen = !_isMenuOpen;
+    }
+    
+    private async Task CopyIdToClipboard()
+    {
+        var selectedCustomer = Customers.FirstOrDefault(c => c.IsSelected);
+        
+        if (selectedCustomer != null)
+        {
+            await JsRuntime.InvokeAsync<bool>("copyToClipboard", selectedCustomer.Id);
+        }
+    }
+
+    private async Task Delete()
+    {
+        var selectedCustomer = Customers.FirstOrDefault(c => c.IsSelected);
+
+        if (selectedCustomer is not null)
+        {
+            await CustomerClient.DeleteCustomer(selectedCustomer.Id);
+        }
+        
+        await OnInitializedAsync();
+    }
+    
+    void SortByName()
+    {
+        Customers = IsSortedByName ? Customers.OrderByDescending(c => c.FullName).ToList() : Customers.OrderBy(c => c.FullName).ToList();
+
+        IsSortedByName = !IsSortedByName;
+    }
+    
+    private async Task PreviousPage()
+    {
+        if (_page > 1)
+        {
+            _page--;
+            await OnInitializedAsync();
+        }
+    }
+
+    private async Task NextPage()
+    {
+        if (_page * _pageSize < _total)
+        {
+            _page++;
+            await OnInitializedAsync();
+        }
+    }
+    
+    private async Task OnPageSizeChanged(ChangeEventArgs e)
+    {
+        _pageSize = int.Parse(e.Value!.ToString()!);
+        _page = 1; // Reset to first page
+        await OnInitializedAsync();
+    }
+    
+    private async Task Search()
+    {
+        _page = 1; // Reset to first page
+        await OnInitializedAsync();
+    }
+}

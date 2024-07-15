@@ -23,9 +23,22 @@ public class UpdateCustomerCommandHandler(
         if (customer is null) 
             return Result.Failure<CustomerResult>(CustomerErrors.NotFound);
         
+        var firstNameResult = FirstName.Create(request.FirstName);
+        var lastNameResult = LastName.Create(request.LastName);
+        
+        if (firstNameResult.IsFailure)
+        {
+            return Result.Failure<CustomerResult>(firstNameResult.Error);
+        }
+        
+        if (lastNameResult.IsFailure)
+        {
+            return Result.Failure<CustomerResult>(lastNameResult.Error);
+        }
+        
         customer.Update(
-            new FirstName(request.FirstName),
-            new LastName(request.LastName),
+            firstNameResult.Value,
+            lastNameResult.Value,
             new Address(
                 request.Street,
                 request.City,

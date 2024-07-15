@@ -15,14 +15,26 @@ public class CreateEmployeeCommandHandler(
         CreateEmployeeCommand request, 
         CancellationToken cancellationToken)
     {
-        var email = Email.Create(request.Email);
+        var emailResult = Email.Create(request.Email);
+        var firstNameResult = FirstName.Create(request.FirstName);
+        var lastNameResult = LastName.Create(request.LastName);
         
-        if (email.IsFailure)
+        if (emailResult.IsFailure)
         {
-            return Result.Failure<EmployeeResult>(email.Error);
+            return Result.Failure<EmployeeResult>(emailResult.Error);
+        }
+
+        if (firstNameResult.IsFailure)
+        {
+            return Result.Failure<EmployeeResult>(firstNameResult.Error);
         }
         
-        var isEmailUnique = await unitOfWork.Employees.IsEmailUniqueAsync(email.Value);
+        if (lastNameResult.IsFailure)
+        {
+            return Result.Failure<EmployeeResult>(lastNameResult.Error);
+        }
+        
+        var isEmailUnique = await unitOfWork.Employees.IsEmailUniqueAsync(emailResult.Value);
         
         if (!isEmailUnique)
         {
@@ -30,9 +42,9 @@ public class CreateEmployeeCommandHandler(
         }
 
         var employee = Employee.Create(
-            email.Value,
-            new FirstName(request.FirstName),
-            new LastName(request.LastName));
+            emailResult.Value,
+            firstNameResult.Value,
+            lastNameResult.Value);
         
         await unitOfWork.Employees.AddAsync(employee, cancellationToken);
         

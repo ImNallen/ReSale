@@ -27,7 +27,8 @@ public class Create : IEndpoint
                     request.City,
                     request.State,
                     request.ZipCode,
-                    request.Country);
+                    request.Country,
+                    request.PhoneNumber);
         
                 var result = await sender.Send(command, cancellationToken);
 

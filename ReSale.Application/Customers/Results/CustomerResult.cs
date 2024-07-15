@@ -9,4 +9,5 @@ public record CustomerResult(
     string City,
     string ZipCode,
     string Country,
-    string State);
+    string State,
+    string PhoneNumber);

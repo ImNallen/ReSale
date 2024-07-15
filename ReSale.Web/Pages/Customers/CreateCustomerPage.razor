@@ -18,6 +18,14 @@
                 <ValidationMessage For="@(() => _customer.Email)"/>
             </div>
         </div>
+
+        <div class="mb-4">
+            <label for="phoneNumber" class="block">PhoneNumber</label>
+            <InputText id="phoneNumber" @bind-Value="_customer.PhoneNumber" class="bg-dark-gray p-2 w-[210px]"/>
+            <div class="text-red-primary">
+                <ValidationMessage For="@(() => _customer.PhoneNumber)"/>
+            </div>
+        </div>
         
         <div class="mb-4">
             <label for="firstName" class="block">First Name</label>
@@ -96,7 +104,8 @@
             City = _customer.City,
             State = _customer.State,
             ZipCode = _customer.ZipCode,
-            Country = _customer.Country
+            Country = _customer.Country,
+            PhoneNumber = _customer.PhoneNumber
         };
         
         await CustomerClient.CreateCustomer(request);
@@ -129,5 +138,8 @@
         public string Country { get; set; } = string.Empty;
     
         public string State { get; set; } = string.Empty;
+        
+        [Required]
+        public string PhoneNumber { get; set; } = string.Empty;
     }
 }

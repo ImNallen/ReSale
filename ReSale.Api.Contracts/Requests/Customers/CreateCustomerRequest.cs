@@ -9,5 +9,6 @@ public record CreateCustomerRequest
     public required string City { get; set; } 
     public string State { get; set; } = string.Empty;
     public required string ZipCode { get; set; } 
-    public required string Country { get; set; } 
+    public required string Country { get; set; }
+    public required string PhoneNumber { get; set; }
 }

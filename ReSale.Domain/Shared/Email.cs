@@ -17,6 +17,8 @@ public sealed record Email
             return Result.Failure<Email>(EmailErrors.Empty);
         }
 
+        email = email.ToLower();
+
         if (email.Split('@').Length != 2)
         {
             return Result.Failure<Email>(EmailErrors.InvalidFormat);

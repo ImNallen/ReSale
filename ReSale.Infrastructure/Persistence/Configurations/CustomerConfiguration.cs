@@ -20,16 +20,23 @@ public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
         
         builder.Property(u => u.FirstName)
             .HasConversion(e => e.Value,
-                v => new FirstName(v))
+                v => FirstName.Create(v).Value)
             .HasColumnName(nameof(FirstName))
             .HasMaxLength(100)
             .IsRequired();
         
         builder.Property(u => u.LastName)
             .HasConversion(e => e.Value,
-                v => new LastName(v))
+                v => LastName.Create(v).Value)
             .HasColumnName(nameof(LastName))
             .HasMaxLength(100)
+            .IsRequired();
+        
+        builder.Property(u => u.PhoneNumber)
+            .HasConversion(e => e.Value,
+                v => PhoneNumber.Create(v).Value)
+            .HasColumnName(nameof(PhoneNumber))
+            .HasMaxLength(20)
             .IsRequired();
 
         builder.OwnsOne(c => c.Address);

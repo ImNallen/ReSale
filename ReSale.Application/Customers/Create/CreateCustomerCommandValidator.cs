@@ -27,5 +27,8 @@ public class CreateCustomerCommandValidator : AbstractValidator<CreateCustomerCo
         
         RuleFor(x => x.ZipCode)
             .NotEmpty();
+        
+        RuleFor(x => x.PhoneNumber)
+            .NotEmpty();
     }
 }

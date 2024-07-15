@@ -11,4 +11,5 @@ public record CreateCustomerCommand(
     string City,
     string State,
     string ZipCode,
-    string Country) : ICommand<CustomerResult>;
+    string Country,
+    string PhoneNumber) : ICommand<CustomerResult>;

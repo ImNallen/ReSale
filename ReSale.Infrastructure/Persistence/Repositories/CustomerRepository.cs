@@ -34,7 +34,8 @@ public class CustomerRepository : Repository<Customer>, ICustomerRepository
                 c.Address.City,
                 c.Address.ZipCode,
                 c.Address.Country,
-                c.Address.State))
+                c.Address.State,
+                c.PhoneNumber.Value))
             .SingleOrDefaultAsync(cancellationToken);
     }
 
@@ -84,7 +85,8 @@ public class CustomerRepository : Repository<Customer>, ICustomerRepository
                 c.Address.City,
                 c.Address.ZipCode,
                 c.Address.Country,
-                c.Address.State))
+                c.Address.State,
+                c.PhoneNumber.Value))
             .ToListAsync(cancellationToken);
 
         return PagedList<CustomerResult>.Create(customers, page, pageSize, totalCount);
@@ -105,7 +107,8 @@ public class CustomerRepository : Repository<Customer>, ICustomerRepository
                 c.Address.City,
                 c.Address.ZipCode,
                 c.Address.Country,
-                c.Address.State))
+                c.Address.State,
+                c.PhoneNumber.Value))
             .SingleOrDefaultAsync(cancellationToken);
     }
     

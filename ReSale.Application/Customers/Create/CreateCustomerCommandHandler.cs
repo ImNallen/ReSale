@@ -15,14 +15,32 @@ internal sealed class CreateCustomerCommandHandler(
 {
     public async Task<Result<CustomerResult>> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
     {
-        var email = Email.Create(request.Email);
+        var emailResult = Email.Create(request.Email);
+        var firstNameResult = FirstName.Create(request.FirstName);
+        var lastNameResult = LastName.Create(request.LastName);
+        var phoneNumberResult = PhoneNumber.Create(request.PhoneNumber);
         
-        if (email.IsFailure)
+        if (emailResult.IsFailure)
         {
-            return Result.Failure<CustomerResult>(email.Error);
+            return Result.Failure<CustomerResult>(emailResult.Error);
+        }
+
+        if (firstNameResult.IsFailure)
+        {
+            return Result.Failure<CustomerResult>(firstNameResult.Error);
         }
         
-        var isEmailUnique = await unitOfWork.Customers.IsEmailUniqueAsync(email.Value);
+        if (lastNameResult.IsFailure)
+        {
+            return Result.Failure<CustomerResult>(lastNameResult.Error);
+        }
+        
+        if (phoneNumberResult.IsFailure)
+        {
+            return Result.Failure<CustomerResult>(phoneNumberResult.Error);
+        }
+        
+        var isEmailUnique = await unitOfWork.Customers.IsEmailUniqueAsync(emailResult.Value);
         
         if (!isEmailUnique)
         {
@@ -30,15 +48,16 @@ internal sealed class CreateCustomerCommandHandler(
         }
         
         var customer = Customer.Create(
-            email.Value,
-            new FirstName(request.FirstName),
-            new LastName(request.LastName),
+            emailResult.Value,
+            firstNameResult.Value,
+            lastNameResult.Value,
             new Address(
                 request.Street, 
                 request.City, 
                 request.ZipCode, 
                 request.Country, 
-                request.State));
+                request.State),
+            phoneNumberResult.Value);
         
         await unitOfWork.Customers.AddAsync(customer, cancellationToken);
         

@@ -16,14 +16,26 @@ internal sealed class RegisterCommandHandler(
         RegisterCommand request, 
         CancellationToken cancellationToken)
     {
-        var email = Email.Create(request.Email);
+        var emailResult = Email.Create(request.Email);
+        var firstNameResult = FirstName.Create(request.FirstName);
+        var lastNameResult = LastName.Create(request.LastName);
         
-        if (email.IsFailure)
+        if (emailResult.IsFailure)
         {
-            return Result.Failure<Guid>(email.Error);
+            return Result.Failure<Guid>(emailResult.Error);
         }
         
-        var isEmailUnique = await unitOfWork.Users.IsEmailUniqueAsync(email.Value);
+        if (firstNameResult.IsFailure)
+        {
+            return Result.Failure<Guid>(firstNameResult.Error);
+        }
+        
+        if (lastNameResult.IsFailure)
+        {
+            return Result.Failure<Guid>(lastNameResult.Error);
+        }
+        
+        var isEmailUnique = await unitOfWork.Users.IsEmailUniqueAsync(emailResult.Value);
         
         if (!isEmailUnique)
         {
@@ -31,9 +43,9 @@ internal sealed class RegisterCommandHandler(
         }
         
         var user = User.Create(
-            email.Value,
-            new FirstName(request.FirstName),
-            new LastName(request.LastName));
+            emailResult.Value,
+            firstNameResult.Value,
+            lastNameResult.Value);
         
         var identityId = await authenticationService.RegisterAsync(
             user,

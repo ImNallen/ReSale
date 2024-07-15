@@ -40,6 +40,10 @@
                 <label for="email" class="block">Email</label>
                 <InputText id="email" @bind-Value="Customer.Email" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
             </div>
+            <div class="mb-4 md:mt-0 mt-4">
+                <label for="phoneNumber" class="block">Phone number</label>
+                <InputText id="phoneNumber" @bind-Value="Customer.PhoneNumber" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+            </div>
         </div>
         <div class="mt-4 md:ml-4 ml-0 p-4 flex-grow bg-table-gray rounded">
             <h3>Address</h3>
@@ -100,6 +104,7 @@
             ZipCode = customer.ZipCode,
             Country = customer.Country,
             State = customer.State,
+            PhoneNumber = customer.PhoneNumber,
             IdAsString = customer.Id.ToString()
         };
     }
@@ -123,5 +128,6 @@
         public string Country { get; set; } = string.Empty;
         public string State { get; set; } = string.Empty;
         public string IdAsString { get; set; } = string.Empty;
+        public string PhoneNumber { get; set; } = string.Empty;
     }
 }

@@ -7,6 +7,7 @@ namespace ReSale.Domain.Customers;
 public sealed class Customer : Entity
 {
     public Email Email { get; private set; }
+    public PhoneNumber PhoneNumber { get; private set; }
     public FirstName FirstName { get; private set; }
     public LastName LastName { get; private set; }
     public Address Address { get; private set; }
@@ -16,27 +17,35 @@ public sealed class Customer : Entity
         Email email,
         FirstName firstName, 
         LastName lastName, 
-        Address address)
+        Address address, 
+        PhoneNumber phoneNumber)
         : base(id)
     {
         Email = email;
         FirstName = firstName;
         LastName = lastName;
         Address = address;
+        PhoneNumber = phoneNumber;
     }
 
     private Customer()
     {
     }
     
-    public static Customer Create(Email email, FirstName firstName, LastName lastName, Address address)
+    public static Customer Create(
+        Email email, 
+        FirstName firstName, 
+        LastName lastName, 
+        Address address,
+        PhoneNumber phoneNumber)
     {
         var customer = new Customer(
             Guid.NewGuid(),
             email,
             firstName,
             lastName,
-            address);
+            address,
+            phoneNumber);
         
         customer.Raise(new CustomerCreatedDomainEvent(customer.Id));
 

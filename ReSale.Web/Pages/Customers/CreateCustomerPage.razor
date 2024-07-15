@@ -1,7 +1,6 @@
 ﻿@page "/customers/create"
 
 @using ReSale.Api.Contracts.Requests.Customers
-@using ReSale.Web.Models
 
 @inject ICustomerClient CustomerClient
 @inject NavigationManager NavigationManager
@@ -103,5 +102,32 @@
         await CustomerClient.CreateCustomer(request);
         
         NavigationManager.NavigateTo("/customers");
+    }
+    
+    private class CreateCustomer
+    {
+        [Required]
+        public string FirstName { get; set; } = string.Empty;
+    
+        [Required]
+        public string LastName { get; set; } = string.Empty;
+    
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; } = string.Empty;
+    
+        [Required]
+        public string Street { get; set; } = string.Empty;
+    
+        [Required]
+        public string City { get; set; } = string.Empty;
+    
+        [Required]
+        public string ZipCode { get; set; } = string.Empty;
+    
+        [Required]
+        public string Country { get; set; } = string.Empty;
+    
+        public string State { get; set; } = string.Empty;
     }
 }

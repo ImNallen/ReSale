@@ -36,4 +36,9 @@
       <UpToDateCheckInput Remove="Pages\Identity\Register.razor" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Pages\Products\" />
+      <Folder Include="Pages\Settings\" />
+    </ItemGroup>
+
 </Project>

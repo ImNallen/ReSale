@@ -1,0 +1,127 @@
+﻿@page "/customers/{id:guid}"
+
+@inject ICustomerClient CustomerClient
+@inject NavigationManager NavigationManager
+
+<div class="h-full flex flex-col">
+    <div class="flex justify-between">
+        <h3 class="p-4 bg-table-gray rounded">Customer</h3>
+        
+        <div>
+            <button class="bg-table-gray hover:bg-blue-primary p-[10px] rounded" @onclick="@(() => NavigationManager.NavigateTo($"/customers/edit/{Customer.Id}"))" title="Edit">
+                <i class="fas fa-pen-to-square p-2"></i>
+            </button>
+            <button class="bg-table-gray hover:bg-red-primary p-[10px] rounded" @onclick="Delete" title="Delete">
+                <i class="fas fa-minus p-2"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="md:flex w-full block">
+        <div class="mt-4 p-4 flex-grow bg-table-gray rounded">
+            <h3>Contact</h3>
+            <div class="mb-4 mt-4">
+                <label for="id" class="block">ID</label>
+                <InputText id="id" @bind-Value="Customer.IdAsString" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+            </div>
+            <div class="md:flex block mt-4">
+                <div class="flex-grow">
+                    <div class="mb-4">
+                        <label for="firstName" class="block">First Name</label>
+                        <InputText id="firstName" @bind-Value="Customer.FirstName" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+                    </div>
+                </div>
+                <div class="flex-grow md:ml-4">
+                    <label for="lastName" class="block">Last Name</label>
+                    <InputText id="lastName" @bind-Value="Customer.LastName" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+                </div>
+            </div>
+            <div class="mb-4 md:mt-0 mt-4">
+                <label for="email" class="block">Email</label>
+                <InputText id="email" @bind-Value="Customer.Email" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+            </div>
+        </div>
+        <div class="mt-4 md:ml-4 ml-0 p-4 flex-grow bg-table-gray rounded">
+            <h3>Address</h3>
+
+            <div class="mt-4">
+                <label for="street" class="block">Street</label>
+                <InputText id="street" @bind-Value="Customer.Street" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+            </div>
+
+            <div class="mt-4">
+                <label for="city" class="block">City</label>
+                <InputText id="city" @bind-Value="Customer.City" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+            </div>
+
+            <div class="mt-4">
+                <label for="zipCode" class="block">Zip Code</label>
+                <InputText id="zipCode" @bind-Value="Customer.ZipCode" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+            </div>
+
+            <div class="mt-4">
+                <label for="country" class="block">Country</label>
+                <InputText id="country" @bind-Value="Customer.Country" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(Customer.State))
+            {
+                <div class="mt-4">
+                    <label for="state" class="block">State</label>
+                    <InputText id="state" @bind-Value="Customer.State" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+    private CustomerModel Customer { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var customer = await CustomerClient.GetCustomer(Id);
+
+        if (customer is null)
+        {
+            NavigationManager.NavigateTo("/customers");
+        }
+        
+        Customer = new CustomerModel
+        {
+            Id = customer!.Id,
+            FirstName = customer.FirstName,
+            LastName = customer.LastName,
+            Email = customer.Email,
+            Street = customer.Street,
+            City = customer.City,
+            ZipCode = customer.ZipCode,
+            Country = customer.Country,
+            State = customer.State,
+            IdAsString = customer.Id.ToString()
+        };
+    }
+    
+    private async Task Delete()
+    {
+        await CustomerClient.DeleteCustomer(Customer.Id);
+        
+        NavigationManager.NavigateTo("/customers");
+    }
+    
+    private class CustomerModel
+    {
+        public Guid Id { get; set; }
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Street { get; set; } = string.Empty;
+        public string City { get; set; } = string.Empty;
+        public string ZipCode { get; set; } = string.Empty;
+        public string Country { get; set; } = string.Empty;
+        public string State { get; set; } = string.Empty;
+        public string IdAsString { get; set; } = string.Empty;
+    }
+}

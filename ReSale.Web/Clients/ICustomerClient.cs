@@ -14,9 +14,15 @@ public interface ICustomerClient
         [Query] int page,
         [Query] int pageSize);
     
+    [Get("/api/v1/customers/{id}")]
+    Task<CustomerResponse?> GetCustomer(Guid id);
+    
     [Delete("/api/v1/customers/{id}")]
     Task DeleteCustomer(Guid id);
     
     [Post("/api/v1/customers")]
     Task<CustomerResponse> CreateCustomer(CreateCustomerRequest customerRequest);
+    
+    [Put("/api/v1/customers/{id}")]
+    Task<CustomerResponse> UpdateCustomer(Guid id, UpdateCustomerRequest customerRequest);
 }

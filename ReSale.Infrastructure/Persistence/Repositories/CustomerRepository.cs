@@ -30,12 +30,17 @@ public class CustomerRepository : Repository<Customer>, ICustomerRepository
                 c.Email.Value,
                 c.FirstName.Value,
                 c.LastName.Value,
-                c.Address.Street,
-                c.Address.City,
-                c.Address.ZipCode,
-                c.Address.Country,
-                c.Address.State,
-                c.PhoneNumber.Value))
+                c.ShippingAddress.Street,
+                c.ShippingAddress.City,
+                c.ShippingAddress.ZipCode,
+                c.ShippingAddress.Country,
+                c.ShippingAddress.State,
+                c.PhoneNumber.Value,
+                c.BillingAddress!.Street,
+                c.BillingAddress.City,
+                c.BillingAddress.ZipCode,
+                c.BillingAddress.Country,
+                c.BillingAddress.State))
             .SingleOrDefaultAsync(cancellationToken);
     }
 
@@ -63,7 +68,6 @@ public class CustomerRepository : Repository<Customer>, ICustomerRepository
             "email" => c => c.Email,
             "firstName" => c => c.FirstName,
             "lastName" => c => c.LastName,
-            "country" => c => c.Address.Country,
             _ => c => c.Id
         };
 
@@ -81,12 +85,17 @@ public class CustomerRepository : Repository<Customer>, ICustomerRepository
                 c.Email.Value,
                 c.FirstName.Value,
                 c.LastName.Value,
-                c.Address.Street,
-                c.Address.City,
-                c.Address.ZipCode,
-                c.Address.Country,
-                c.Address.State,
-                c.PhoneNumber.Value))
+                c.ShippingAddress.Street,
+                c.ShippingAddress.City,
+                c.ShippingAddress.ZipCode,
+                c.ShippingAddress.Country,
+                c.ShippingAddress.State,
+                c.PhoneNumber.Value,
+                c.BillingAddress!.Street,
+                c.BillingAddress.City,
+                c.BillingAddress.ZipCode,
+                c.BillingAddress.Country,
+                c.BillingAddress.State))
             .ToListAsync(cancellationToken);
 
         return PagedList<CustomerResult>.Create(customers, page, pageSize, totalCount);
@@ -103,12 +112,17 @@ public class CustomerRepository : Repository<Customer>, ICustomerRepository
                 c.Email.Value,
                 c.FirstName.Value,
                 c.LastName.Value,
-                c.Address.Street,
-                c.Address.City,
-                c.Address.ZipCode,
-                c.Address.Country,
-                c.Address.State,
-                c.PhoneNumber.Value))
+                c.ShippingAddress.Street,
+                c.ShippingAddress.City,
+                c.ShippingAddress.ZipCode,
+                c.ShippingAddress.Country,
+                c.ShippingAddress.State,
+                c.PhoneNumber.Value,
+                c.BillingAddress!.Street,
+                c.BillingAddress.City,
+                c.BillingAddress.ZipCode,
+                c.BillingAddress.Country,
+                c.BillingAddress.State))
             .SingleOrDefaultAsync(cancellationToken);
     }
     

@@ -1,0 +1,46 @@
+﻿@if (IsVisible)
+{
+    <div class="fixed top-5 right-5 p-4 rounded-md text-white z-50 @_notificationTypeClass">
+        <h3>@Title</h3>
+        <p class="mt-4">@Message</p>
+    </div>
+}
+
+@code {
+    private bool IsVisible { get; set; }
+    private string Title { get; set; } = string.Empty;
+    private string Message { get; set; } = string.Empty;
+    private string _notificationTypeClass = "bg-darker-gray";
+
+    public async Task Show(string title, string message, NotificationType notificationType, int duration = 5000)
+    {
+        Title = title;
+        Message = message;
+        await SetBackground(notificationType);
+        IsVisible = true;
+        StateHasChanged();
+        await Task.Delay(duration);
+        IsVisible = false;
+        StateHasChanged();
+    }
+    
+    public enum NotificationType
+    {
+        Success,
+        Error,
+        Info
+    }
+
+    private Task SetBackground(NotificationType notificationType)
+    {
+        _notificationTypeClass = notificationType switch
+        {
+            NotificationType.Success => "bg-green-primary",
+            NotificationType.Error => "bg-red-primary",
+            NotificationType.Info => "bg-blue-primary",
+            _ => "bg-darker-gray"
+        };
+
+        return Task.CompletedTask;
+    }
+}

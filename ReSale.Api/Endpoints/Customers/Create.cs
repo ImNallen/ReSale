@@ -23,12 +23,17 @@ public class Create : IEndpoint
                     request.Email,
                     request.FirstName,
                     request.LastName,
-                    request.Street,
-                    request.City,
-                    request.State,
-                    request.ZipCode,
-                    request.Country,
-                    request.PhoneNumber);
+                    request.ShippingStreet,
+                    request.ShippingCity,
+                    request.ShippingState,
+                    request.ShippingZipCode,
+                    request.ShippingCountry,
+                    request.PhoneNumber,
+                    request.BillingStreet,
+                    request.BillingCity,
+                    request.BillingZipCode,
+                    request.BillingCountry,
+                    request.BillingState);
         
                 var result = await sender.Send(command, cancellationToken);
 

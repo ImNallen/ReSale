@@ -31,12 +31,5 @@ public class UserRepository : Repository<User>, IUserRepository
         return !await Context.Users.AnyAsync(u => u.Email == email);
     }
 
-    public async Task AddAsync(
-        User user, 
-        CancellationToken cancellationToken = default)
-    {
-        await Context.Users.AddAsync(user, cancellationToken);
-    }
-
     public ReSaleDbContext ReSaleDbContext => Context;
 }

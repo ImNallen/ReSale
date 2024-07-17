@@ -13,11 +13,16 @@ public class CustomerMappingConfig : IRegister
             .Map(dest => dest.Email, src => src.Email.Value)
             .Map(dest => dest.FirstName, src => src.FirstName.Value)
             .Map(dest => dest.LastName, src => src.LastName.Value)
-            .Map(dest => dest.Street, src => src.Address.Street)
-            .Map(dest => dest.City, src => src.Address.City)
-            .Map(dest => dest.ZipCode, src => src.Address.ZipCode)
-            .Map(dest => dest.Country, src => src.Address.Country)
-            .Map(dest => dest.State, src => src.Address.State)
-            .Map(dest => dest.PhoneNumber, src => src.PhoneNumber.Value);
+            .Map(dest => dest.ShippingStreet, src => src.ShippingAddress.Street)
+            .Map(dest => dest.ShippingCity, src => src.ShippingAddress.City)
+            .Map(dest => dest.ShippingZipCode, src => src.ShippingAddress.ZipCode)
+            .Map(dest => dest.ShippingCountry, src => src.ShippingAddress.Country)
+            .Map(dest => dest.ShippingState, src => src.ShippingAddress.State)
+            .Map(dest => dest.PhoneNumber, src => src.PhoneNumber.Value)
+            .Map(dest => dest.BillingStreet, src => src.BillingAddress!.Street)
+            .Map(dest => dest.BillingCity, src => src.BillingAddress!.City)
+            .Map(dest => dest.BillingZipCode, src => src.BillingAddress!.ZipCode)
+            .Map(dest => dest.BillingCountry, src => src.BillingAddress!.Country)
+            .Map(dest => dest.BillingState, src => src.BillingAddress!.State);
     }
 }

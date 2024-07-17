@@ -1,10 +1,10 @@
 ﻿namespace ReSale.Web.Models;
 
-public class PagedList<T>
+public abstract class PagedList<T>
 {
     public List<T> Items { get; }
-    public int Page { get; }
-    public int PageSize { get; }
+    private int Page { get; }
+    private int PageSize { get; }
     public int TotalCount { get; }
     public bool HasNextPage => Page * PageSize < TotalCount;
     public bool HasPreviousPage => Page > 1;

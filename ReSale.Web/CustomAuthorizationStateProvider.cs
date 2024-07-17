@@ -2,7 +2,6 @@
 using System.Security.Claims;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.JSInterop;
 
 namespace ReSale.Web;
 
@@ -52,7 +51,7 @@ public class CustomAuthorizationStateProvider(
         return state;
     }
     
-    private bool IsTokenExpired(JwtSecurityToken token)
+    private static bool IsTokenExpired(JwtSecurityToken token)
     {
         return token.ValidTo < DateTime.UtcNow;
     }

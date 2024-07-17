@@ -8,8 +8,13 @@ public record UpdateCustomerCommand(
     Guid Id,
     string FirstName,
     string LastName,
-    string Street,
-    string City,
-    string ZipCode,
-    string Country,
-    string State) : ICommand<CustomerResult>;
+    string ShippingStreet,
+    string ShippingCity,
+    string ShippingZipCode,
+    string ShippingCountry,
+    string ShippingState,
+    string? BillingStreet,
+    string? BillingCity,
+    string? BillingZipCode,
+    string? BillingCountry,
+    string? BillingState) : ICommand<CustomerResult>;

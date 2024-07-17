@@ -8,7 +8,6 @@ namespace ReSale.Application.Abstractions.Persistence.Repositories;
 public interface ICustomerRepository : IRepository<Customer>
 {
     Task<bool> IsEmailUniqueAsync(Email email);
-    Task AddAsync(Customer customer, CancellationToken cancellationToken = default);
     Task<CustomerResult?> GetCustomerByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<PagedList<CustomerResult>> SearchCustomersAsync(
         string? searchTerm,

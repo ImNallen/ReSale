@@ -24,7 +24,7 @@
                 @onclick="@(() => NavigationManager.NavigateTo("/customers"))">
             <div class="flex">
                 <div>
-                    <i class="fa-solid fa-user w-[50px]"></i>
+                    <i class="fa-solid fa-users w-[50px]"></i>
                 </div>
                 <div>
                     <p>Customers</p>
@@ -138,6 +138,20 @@
             </div>
         </button>
 
+        <button class="@(NavigationManager.Uri.Contains("/employees") ?
+        "bg-blue-primary hover:bg-blue-secondary" :
+        "hover:bg-blue-primary") h-[60px] w-full"
+                @onclick="@(() => NavigationManager.NavigateTo("/employees"))">
+            <div class="flex">
+                <div>
+                    <i class="fa-solid fa-address-book w-[50px]"></i>
+                </div>
+                <div>
+                    <p>Employees</p>
+                </div>
+            </div>
+        </button>
+
         <button class="@(NavigationManager.Uri.Contains("/statistics") ?
         "bg-blue-primary hover:bg-blue-secondary" :
         "hover:bg-blue-primary") h-[60px] w-full"
@@ -218,10 +232,5 @@
         await AuthenticationStateProvider.GetAuthenticationStateAsync();
         
         NavigationManager.NavigateTo("/");
-    }
-
-    public void Dispose()
-    {
-        NavigationManager.LocationChanged -= HandleLocationChanged!;
     }
 }

@@ -1,13 +1,15 @@
 ﻿@page "/customers"
 
-@inject ICustomerClient CustomerClient
+@inject ICustomersClient CustomersClient
 @inject NavigationManager NavigationManager
 
 <PageTitle>ReSale | Customers</PageTitle>
 
 <div class="flex flex-col h-full">
     <div class="flex justify-between">
-        <div></div>
+        <div>
+            <h3 class="p-4 bg-table-gray rounded">Customers</h3>
+        </div>
         <div class="flex">
             <button class="bg-table-gray hover:bg-green-primary p-[10px] rounded-l" title="Create" @onclick="@(() => NavigationManager.NavigateTo("/customers/create"))">
                 <i class="fas fa-plus p-2"></i>
@@ -58,11 +60,9 @@
             <p class="hidden md:flex">Showing @((_page - 1) * _pageSize + 1) to @Math.Min(_page * _pageSize, _total) of @_total results</p>
             <p class="md:ml-4">Count</p>
             <select class="ml-2 h-[40px] bg-table-gray" @onchange="OnPageSizeChanged">
-                <option value="10">10</option>
-                <option value="15">15</option>
-                <option value="20">20</option>
                 <option value="25">25</option>
                 <option value="50">50</option>
+                <option value="50">100</option>
             </select>
         </div>
         <div class="flex items-center justify-center">
@@ -77,14 +77,14 @@
     private List<CustomerModel> Customers { get; set; } = [];
     private string _searchTerm = string.Empty;
     private int _page = 1;
-    private int _pageSize = 10;
+    private int _pageSize = 25;
     private int _total;
     private bool _hasNextPage;
     private bool _hasPreviousPage;
     
     protected override async Task OnInitializedAsync()
     {
-        var customerResponses = await CustomerClient.SearchCustomers(_searchTerm, _page, _pageSize);
+        var customerResponses = await CustomersClient.SearchCustomers(_searchTerm, _page, _pageSize);
 
         _total = customerResponses.TotalCount;
         _hasNextPage = customerResponses.HasNextPage;
@@ -139,10 +139,10 @@
     
     private class CustomerModel
     {
-        public Guid Id { get; set; }
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string PhoneNumber { get; set; } = string.Empty;
+        public Guid Id { get; init; }
+        public string FirstName { get; init; } = string.Empty;
+        public string LastName { get; init; } = string.Empty;
+        public string Email { get; init; } = string.Empty;
+        public string PhoneNumber { get; init; } = string.Empty;
     }
 }

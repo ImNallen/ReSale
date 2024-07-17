@@ -2,7 +2,7 @@
 
 @using ReSale.Api.Contracts.Requests.Customers
 
-@inject ICustomerClient CustomerClient
+@inject ICustomersClient CustomersClient
 @inject NavigationManager NavigationManager
 
 <div class="h-full flex flex-col">
@@ -28,47 +28,87 @@
         </div>
 
         <div class="mb-4">
-            <label for="street" class="block">Street</label>
-            <InputText id="street" @bind-Value="_customer.Street" class="bg-dark-gray p-2 w-[210px]"/>
+            <label for="shippingStreet" class="block">Street</label>
+            <InputText id="shippingStreet" @bind-Value="_customer.ShippingStreet" class="bg-dark-gray p-2 w-[210px]"/>
             <div class="text-red-primary">
-                <ValidationMessage For="@(() => _customer.Street)"/>
+                <ValidationMessage For="@(() => _customer.ShippingStreet)"/>
             </div>
         </div>
 
         <div class="mb-4">
-            <label for="city" class="block">City</label>
-            <InputText id="city" @bind-Value="_customer.City" class="bg-dark-gray p-2 w-[210px]"/>
+            <label for="shippingCity" class="block">City</label>
+            <InputText id="shippingCity" @bind-Value="_customer.ShippingCity" class="bg-dark-gray p-2 w-[210px]"/>
             <div class="text-red-primary">
-                <ValidationMessage For="@(() => _customer.City)"/>
+                <ValidationMessage For="@(() => _customer.ShippingCity)"/>
             </div>
         </div>
 
         <div class="mb-4">
-            <label for="zipCode" class="block">Zip Code</label>
-            <InputText id="zipCode" @bind-Value="_customer.ZipCode" class="bg-dark-gray p-2 w-[210px]"/>
+            <label for="shippingZipCode" class="block">Zip Code</label>
+            <InputText id="shippingZipCode" @bind-Value="_customer.ShippingZipCode" class="bg-dark-gray p-2 w-[210px]"/>
             <div class="text-red-primary">
-                <ValidationMessage For="@(() => _customer.ZipCode)"/>
+                <ValidationMessage For="@(() => _customer.ShippingZipCode)"/>
             </div>
         </div>
 
         <div class="mb-4">
-            <label for="country" class="block">Country</label>
-            <InputText id="country" @bind-Value="_customer.Country" class="bg-dark-gray p-2 w-[210px]"/>
+            <label for="shippingCountry" class="block">Country</label>
+            <InputText id="shippingCountry" @bind-Value="_customer.ShippingCountry" class="bg-dark-gray p-2 w-[210px]"/>
             <div class="text-red-primary">
-                <ValidationMessage For="@(() => _customer.Country)"/>
+                <ValidationMessage For="@(() => _customer.ShippingCountry)"/>
             </div>
         </div>
 
         <div class="mb-4">
-            <label for="state" class="block">State</label>
-            <InputText id="state" @bind-Value="_customer.State" class="bg-dark-gray p-2 w-[210px]"/>
+            <label for="shippingState" class="block">State (Optional)</label>
+            <InputText id="shippingState" @bind-Value="_customer.ShippingState" class="bg-dark-gray p-2 w-[210px]"/>
             <div class="text-red-primary">
-                <ValidationMessage For="@(() => _customer.State)"/>
+                <ValidationMessage For="@(() => _customer.ShippingState)"/>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label for="billingStreet" class="block">Street</label>
+            <InputText id="billingStreet" @bind-Value="_customer.BillingStreet" class="bg-dark-gray p-2 w-[210px]"/>
+            <div class="text-red-primary">
+                <ValidationMessage For="@(() => _customer.BillingStreet)"/>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label for="billingCity" class="block">City</label>
+            <InputText id="billingCity" @bind-Value="_customer.BillingCity" class="bg-dark-gray p-2 w-[210px]"/>
+            <div class="text-red-primary">
+                <ValidationMessage For="@(() => _customer.BillingCity)"/>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label for="billingZipCode" class="block">Zip Code</label>
+            <InputText id="billingZipCode" @bind-Value="_customer.BillingZipCode" class="bg-dark-gray p-2 w-[210px]"/>
+            <div class="text-red-primary">
+                <ValidationMessage For="@(() => _customer.BillingZipCode)"/>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label for="billingCountry" class="block">Country</label>
+            <InputText id="billingCountry" @bind-Value="_customer.BillingCountry" class="bg-dark-gray p-2 w-[210px]"/>
+            <div class="text-red-primary">
+                <ValidationMessage For="@(() => _customer.BillingCountry)"/>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label for="billingState" class="block">State (Optional)</label>
+            <InputText id="billingState" @bind-Value="_customer.BillingState" class="bg-dark-gray p-2 w-[210px]"/>
+            <div class="text-red-primary">
+                <ValidationMessage For="@(() => _customer.BillingState)"/>
             </div>
         </div>
 
         <div class="flex">
-            <button type="submit" class="hover:bg-green-primary bg-dark-gray w-[100px] h-[40px]">Create</button>
+            <button type="submit" class="hover:bg-green-primary bg-dark-gray w-[100px] h-[40px]">Update</button>
             <button class="hover:bg-red-primary bg-dark-gray w-[100px] h-[40px] ml-2" @onclick="@(() => NavigationManager.NavigateTo("/customers"))">Cancel</button>
         </div>
     </EditForm>
@@ -81,7 +121,7 @@
     
     protected override async Task OnInitializedAsync()
     {
-        var customer = await CustomerClient.GetCustomer(Id);
+        var customer = await CustomersClient.GetCustomer(Id);
         
         if (customer is null)
         {
@@ -92,11 +132,16 @@
         {
             FirstName = customer!.FirstName,
             LastName = customer.LastName,
-            Street = customer.Street,
-            City = customer.City,
-            State = customer.State,
-            ZipCode = customer.ZipCode,
-            Country = customer.Country
+            ShippingStreet = customer.ShippingStreet,
+            ShippingCity = customer.ShippingCity,
+            ShippingState = customer.ShippingState,
+            ShippingZipCode = customer.ShippingZipCode,
+            ShippingCountry = customer.ShippingCountry,
+            BillingStreet = customer.BillingStreet,
+            BillingCity = customer.BillingCity,
+            BillingZipCode = customer.BillingZipCode,
+            BillingCountry = customer.BillingCountry,
+            BillingState = customer.BillingState
         };
     }
     
@@ -106,14 +151,19 @@
         {
             FirstName = _customer.FirstName,
             LastName = _customer.LastName,
-            Street = _customer.Street,
-            City = _customer.City,
-            State = _customer.State,
-            ZipCode = _customer.ZipCode,
-            Country = _customer.Country
+            ShippingStreet = _customer.ShippingStreet,
+            ShippingCity = _customer.ShippingCity,
+            ShippingState = _customer.ShippingState,
+            ShippingZipCode = _customer.ShippingZipCode,
+            ShippingCountry = _customer.ShippingCountry,
+            BillingStreet = _customer.BillingStreet,
+            BillingCity = _customer.BillingCity,
+            BillingZipCode = _customer.BillingZipCode,
+            BillingCountry = _customer.BillingCountry,
+            BillingState = _customer.BillingState
         };
         
-        await CustomerClient.UpdateCustomer(Id, request);
+        await CustomersClient.UpdateCustomer(Id, request);
         
         NavigationManager.NavigateTo("/customers");
     }
@@ -127,17 +177,23 @@
         public string LastName { get; set; } = string.Empty;
     
         [Required]
-        public string Street { get; set; } = string.Empty;
+        public string ShippingStreet { get; set; } = string.Empty;
     
         [Required]
-        public string City { get; set; } = string.Empty;
+        public string ShippingCity { get; set; } = string.Empty;
     
         [Required]
-        public string ZipCode { get; set; } = string.Empty;
+        public string ShippingZipCode { get; set; } = string.Empty;
     
         [Required]
-        public string Country { get; set; } = string.Empty;
+        public string ShippingCountry { get; set; } = string.Empty;
     
-        public string State { get; set; } = string.Empty;
+        public string ShippingState { get; set; } = string.Empty;
+        
+        public string? BillingStreet { get; set; } = string.Empty;
+        public string? BillingCity { get; set; } = string.Empty;
+        public string? BillingZipCode { get; set; } = string.Empty;
+        public string? BillingCountry { get; set; } = string.Empty;
+        public string? BillingState { get; set; } = string.Empty;
     }
 }

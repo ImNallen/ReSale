@@ -1,6 +1,6 @@
 ﻿@page "/customers/{id:guid}"
 
-@inject ICustomerClient CustomerClient
+@inject ICustomersClient CustomersClient
 @inject NavigationManager NavigationManager
 
 <div class="h-full flex flex-col">
@@ -17,7 +17,7 @@
         </div>
     </div>
 
-    <div class="md:flex w-full block">
+    <div class="md:flex w-full block overflow-y-auto">
         <div class="mt-4 p-4 flex-grow bg-table-gray rounded">
             <h3>Contact</h3>
             <div class="mb-4 mt-4">
@@ -45,36 +45,69 @@
                 <InputText id="phoneNumber" @bind-Value="Customer.PhoneNumber" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
             </div>
         </div>
-        <div class="mt-4 md:ml-4 ml-0 p-4 flex-grow bg-table-gray rounded">
-            <h3>Address</h3>
+        <div class="flex-grow">
+            <div class="mt-4 md:ml-4 ml-0 p-4 flex-grow bg-table-gray rounded">
+                <h3>Shipping Address</h3>
 
-            <div class="mt-4">
-                <label for="street" class="block">Street</label>
-                <InputText id="street" @bind-Value="Customer.Street" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
-            </div>
-
-            <div class="mt-4">
-                <label for="city" class="block">City</label>
-                <InputText id="city" @bind-Value="Customer.City" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
-            </div>
-
-            <div class="mt-4">
-                <label for="zipCode" class="block">Zip Code</label>
-                <InputText id="zipCode" @bind-Value="Customer.ZipCode" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
-            </div>
-
-            <div class="mt-4">
-                <label for="country" class="block">Country</label>
-                <InputText id="country" @bind-Value="Customer.Country" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
-            </div>
-
-            @if (!string.IsNullOrWhiteSpace(Customer.State))
-            {
                 <div class="mt-4">
-                    <label for="state" class="block">State</label>
-                    <InputText id="state" @bind-Value="Customer.State" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+                    <label for="shippingStreet" class="block">Street</label>
+                    <InputText id="shippingStreet" @bind-Value="Customer.ShippingStreet" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
                 </div>
-            }
+
+                <div class="mt-4">
+                    <label for="shippingCity" class="block">City</label>
+                    <InputText id="shippingCity" @bind-Value="Customer.ShippingCity" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+                </div>
+
+                <div class="mt-4">
+                    <label for="shippingZipCode" class="block">Zip Code</label>
+                    <InputText id="shippingZipCode" @bind-Value="Customer.ShippingZipCode" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+                </div>
+
+                <div class="mt-4">
+                    <label for="shippingCountry" class="block">Country</label>
+                    <InputText id="shippingCountry" @bind-Value="Customer.ShippingCountry" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(Customer.ShippingState))
+                {
+                    <div class="mt-4">
+                        <label for="shippingState" class="block">State</label>
+                        <InputText id="shippingState" @bind-Value="Customer.ShippingState" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+                    </div>
+                }
+            </div>
+            <div class="mt-4 md:ml-4 ml-0 p-4 flex-grow bg-table-gray rounded">
+                <h3>Billing Address (Optional)</h3>
+
+                <div class="mt-4">
+                    <label for="billingStreet" class="block">Street</label>
+                    <InputText id="billingStreet" @bind-Value="Customer.BillingStreet" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+                </div>
+
+                <div class="mt-4">
+                    <label for="billingCity" class="block">City</label>
+                    <InputText id="billingCity" @bind-Value="Customer.BillingCity" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+                </div>
+
+                <div class="mt-4">
+                    <label for="billingZipCode" class="block">Zip Code</label>
+                    <InputText id="billingZipCode" @bind-Value="Customer.BillingZipCode" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+                </div>
+
+                <div class="mt-4">
+                    <label for="billingCountry" class="block">Country</label>
+                    <InputText id="billingCountry" @bind-Value="Customer.BillingCountry" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(Customer.ShippingState))
+                {
+                    <div class="mt-4">
+                        <label for="billingState" class="block">State</label>
+                        <InputText id="billingState" @bind-Value="Customer.BillingState" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+                    </div>
+                }
+            </div>
         </div>
     </div>
 </div>
@@ -86,7 +119,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var customer = await CustomerClient.GetCustomer(Id);
+        var customer = await CustomersClient.GetCustomer(Id);
 
         if (customer is null)
         {
@@ -99,35 +132,45 @@
             FirstName = customer.FirstName,
             LastName = customer.LastName,
             Email = customer.Email,
-            Street = customer.Street,
-            City = customer.City,
-            ZipCode = customer.ZipCode,
-            Country = customer.Country,
-            State = customer.State,
+            ShippingStreet = customer.ShippingStreet,
+            ShippingCity = customer.ShippingCity,
+            ShippingZipCode = customer.ShippingZipCode,
+            ShippingCountry = customer.ShippingCountry,
+            ShippingState = customer.ShippingState,
             PhoneNumber = customer.PhoneNumber,
-            IdAsString = customer.Id.ToString()
+            IdAsString = customer.Id.ToString(),
+            BillingStreet = customer.BillingStreet,
+            BillingCity = customer.BillingCity,
+            BillingZipCode = customer.BillingZipCode,
+            BillingCountry = customer.BillingCountry,
+            BillingState = customer.BillingState
         };
     }
     
     private async Task Delete()
     {
-        await CustomerClient.DeleteCustomer(Customer.Id);
+        await CustomersClient.DeleteCustomer(Customer.Id);
         
         NavigationManager.NavigateTo("/customers");
     }
     
     private class CustomerModel
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; init; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
-        public string Street { get; set; } = string.Empty;
-        public string City { get; set; } = string.Empty;
-        public string ZipCode { get; set; } = string.Empty;
-        public string Country { get; set; } = string.Empty;
-        public string State { get; set; } = string.Empty;
+        public string ShippingStreet { get; set; } = string.Empty;
+        public string ShippingCity { get; set; } = string.Empty;
+        public string ShippingZipCode { get; set; } = string.Empty;
+        public string ShippingCountry { get; set; } = string.Empty;
+        public string ShippingState { get; set; } = string.Empty;
         public string IdAsString { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
+        public string? BillingStreet { get; set; } = string.Empty;
+        public string? BillingCity { get; set; } = string.Empty;
+        public string? BillingZipCode { get; set; } = string.Empty;
+        public string? BillingCountry { get; set; } = string.Empty;
+        public string? BillingState { get; set; } = string.Empty;
     }
 }

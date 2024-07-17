@@ -39,9 +39,15 @@ public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
             .HasMaxLength(20)
             .IsRequired();
 
-        builder.OwnsOne(c => c.Address);
+        builder.OwnsOne(c => c.ShippingAddress);
+        
+        builder.OwnsOne(c => c.BillingAddress);
         
         builder.HasIndex(u => u.Email)
             .IsUnique();
+        
+        builder.HasMany(u => u.Orders)
+            .WithOne(o => o.Customer)
+            .HasForeignKey(o => o.CustomerId);
     }
 }

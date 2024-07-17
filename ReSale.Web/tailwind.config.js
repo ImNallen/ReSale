@@ -8,6 +8,9 @@ module.exports = {
     './*.razor',
   ],
   theme: {
+    fontFamily: {
+      'body': ['"JetBrains Mono"', 'Roboto', 'sans-serif'],
+    },
     extend: {
       colors: {
         'darker-gray': '#2b2b2b',

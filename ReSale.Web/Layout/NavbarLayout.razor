@@ -2,42 +2,6 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
 <div class="flex">
-    <div class="relative">
-        <button @onclick="ToggleDropdown" class="text-white hover:bg-blue-primary w-[50px] h-[50px]" title="Create">
-            <i class="fas fa-plus"></i>
-        </button>
-        @if (_isDropdownOpen)
-        {
-        <div class="z-20 absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 rounded-md shadow-xl bg-dark-gray ring-1 ring-blue-primary ring-opacity-5" id="dropdown">
-            <div role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                <a href="/customers/create" class="block px-4 py-2 text-sm hover:bg-green-primary rounded-t-md" role="menuitem">
-                    <div class="flex">
-                        <i class="fas fa-plus mt-1 mr-2"></i>
-                        <p>Create customer</p>
-                    </div>
-                </a>
-                <a href="#" class="block px-4 py-2 text-sm hover:bg-green-primary" role="menuitem">
-                    <div class="flex">
-                        <i class="fas fa-plus mt-1 mr-2"></i>
-                        <p>Create order</p>
-                    </div>
-                </a>
-                <a href="#" class="block px-4 py-2 text-sm hover:bg-green-primary" role="menuitem">
-                    <div class="flex">
-                        <i class="fas fa-plus mt-1 mr-2"></i>
-                        <p>Create product</p>
-                    </div>
-                </a>
-                <a href="#" class="block px-4 py-2 text-sm hover:bg-green-primary rounded-b-md" role="menuitem">
-                    <div class="flex">
-                        <i class="fas fa-plus mt-1 mr-2"></i>
-                        <p>Create invoice</p>
-                    </div>
-                </a>
-            </div>
-        </div>
-        }
-    </div>
     <button class="flex items-center bg-table-gray h-[50px] text-white hover:bg-blue-primary px-4">
         <p class="mr-4">@_firstName</p>
         <div class="rounded-full w-[30px] h-[30px] bg-dark-gray flex items-center justify-center">

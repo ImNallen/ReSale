@@ -8,5 +8,4 @@ public interface IUserRepository : IRepository<User>
     Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<User?> GetByEmailAsync(Email email, CancellationToken cancellationToken = default);
     Task<bool> IsEmailUniqueAsync(Email email);
-    Task AddAsync(User user, CancellationToken cancellationToken = default);
 }

@@ -47,16 +47,32 @@ internal sealed class CreateCustomerCommandHandler(
             return Result.Failure<CustomerResult>(EmailErrors.NotUnique);
         }
         
+        Address? billingAddress = null;
+        if (request.BillingStreet is not null &&
+            request.BillingCity is not null &&
+            request.BillingZipCode is not null &&
+            request.BillingCountry is not null &&
+            request.BillingState is not null)
+        {
+            billingAddress = new Address(
+                request.BillingStreet,
+                request.BillingCity,
+                request.BillingZipCode,
+                request.BillingCountry,
+                request.BillingState);
+        }
+        
         var customer = Customer.Create(
             emailResult.Value,
             firstNameResult.Value,
             lastNameResult.Value,
             new Address(
-                request.Street, 
-                request.City, 
-                request.ZipCode, 
-                request.Country, 
-                request.State),
+                request.ShippingStreet, 
+                request.ShippingCity, 
+                request.ShippingZipCode, 
+                request.ShippingCountry, 
+                request.ShippingState),
+            billingAddress,
             phoneNumberResult.Value);
         
         await unitOfWork.Customers.AddAsync(customer, cancellationToken);

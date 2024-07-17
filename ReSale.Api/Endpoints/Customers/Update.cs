@@ -22,11 +22,16 @@ public class Update : IEndpoint
                 id,
                 request.FirstName,
                 request.LastName,
-                request.Street,
-                request.City,
-                request.ZipCode,
-                request.Country,
-                request.State);
+                request.ShippingStreet,
+                request.ShippingCity,
+                request.ShippingZipCode,
+                request.ShippingCountry,
+                request.ShippingState,
+                request.BillingStreet,
+                request.BillingCity,
+                request.BillingZipCode,
+                request.BillingCountry,
+                request.BillingState);
             
             var result = await sender.Send(command, cancellationToken);
             

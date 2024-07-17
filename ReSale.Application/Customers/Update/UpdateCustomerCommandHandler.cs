@@ -35,16 +35,32 @@ public class UpdateCustomerCommandHandler(
         {
             return Result.Failure<CustomerResult>(lastNameResult.Error);
         }
+
+        Address? billingAddress = null;
+        if (request.BillingStreet is not null &&
+            request.BillingCity is not null &&
+            request.BillingZipCode is not null &&
+            request.BillingCountry is not null &&
+            request.BillingState is not null)
+        {
+            billingAddress = new Address(
+                request.BillingStreet,
+                request.BillingCity,
+                request.BillingZipCode,
+                request.BillingCountry,
+                request.BillingState);
+        }
         
         customer.Update(
             firstNameResult.Value,
             lastNameResult.Value,
             new Address(
-                request.Street,
-                request.City,
-                request.ZipCode,
-                request.Country,
-                request.State));
+                request.ShippingStreet,
+                request.ShippingCity,
+                request.ShippingZipCode,
+                request.ShippingCountry,
+                request.ShippingState),
+            billingAddress);
         
         await unitOfWork.SaveChangesAsync(cancellationToken);
         

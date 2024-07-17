@@ -1,5 +1,6 @@
 ﻿using ReSale.Domain.Common;
 using ReSale.Domain.Customers.Events;
+using ReSale.Domain.Orders;
 using ReSale.Domain.Shared;
 
 namespace ReSale.Domain.Customers;
@@ -10,25 +11,33 @@ public sealed class Customer : Entity
     public PhoneNumber PhoneNumber { get; private set; }
     public FirstName FirstName { get; private set; }
     public LastName LastName { get; private set; }
-    public Address Address { get; private set; }
+    public Address ShippingAddress { get; private set; }
+    public Address? BillingAddress { get; private set; }
+    
+    // Navigation properties
+    public ICollection<Order> Orders { get; private set; } = [];
     
     private Customer(
         Guid id, 
         Email email,
         FirstName firstName, 
         LastName lastName, 
-        Address address, 
+        Address shippingAddress,
+        Address? billingAddress,
         PhoneNumber phoneNumber)
         : base(id)
     {
         Email = email;
         FirstName = firstName;
         LastName = lastName;
-        Address = address;
+        ShippingAddress = shippingAddress;
+        BillingAddress = billingAddress;
         PhoneNumber = phoneNumber;
     }
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     private Customer()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     {
     }
     
@@ -36,7 +45,8 @@ public sealed class Customer : Entity
         Email email, 
         FirstName firstName, 
         LastName lastName, 
-        Address address,
+        Address shippingAddress,
+        Address? billingAddress,
         PhoneNumber phoneNumber)
     {
         var customer = new Customer(
@@ -44,7 +54,8 @@ public sealed class Customer : Entity
             email,
             firstName,
             lastName,
-            address,
+            shippingAddress,
+            billingAddress,
             phoneNumber);
         
         customer.Raise(new CustomerCreatedDomainEvent(customer.Id));
@@ -55,11 +66,13 @@ public sealed class Customer : Entity
     public Customer Update(
         FirstName firstName,
         LastName lastName,
-        Address address)
+        Address shippingAddress,
+        Address? billingAddress)
     {
         FirstName = firstName;
         LastName = lastName;
-        Address = address;
+        ShippingAddress = shippingAddress;
+        BillingAddress = billingAddress;
 
         return this;
     }

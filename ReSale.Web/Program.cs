@@ -21,7 +21,12 @@ builder.Services
     .AddHttpMessageHandler<AuthenticationHandler>();
 
 builder.Services
-    .AddRefitClient<ICustomerClient>()
+    .AddRefitClient<ICustomersClient>()
+    .ConfigureHttpClient(c => c.BaseAddress = new Uri("https://localhost:5001"))
+    .AddHttpMessageHandler<AuthenticationHandler>();
+
+builder.Services
+    .AddRefitClient<IEmployeesClient>()
     .ConfigureHttpClient(c => c.BaseAddress = new Uri("https://localhost:5001"))
     .AddHttpMessageHandler<AuthenticationHandler>();
 

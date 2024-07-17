@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Components;
-using Refit;
+﻿using Refit;
 using ReSale.Api.Contracts.Requests.Customers;
 using ReSale.Api.Contracts.Responses.Customers;
 using ReSale.Web.Models;
 
 namespace ReSale.Web.Clients;
 
-public interface ICustomerClient
+public interface ICustomersClient
 {
     [Get("/api/v1/customers/search?searchTerm={searchTerm}&page={page}&pageSize={pageSize}")]
     Task<PagedList<CustomerResponse>> SearchCustomers(

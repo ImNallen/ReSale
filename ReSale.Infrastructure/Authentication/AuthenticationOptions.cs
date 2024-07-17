@@ -2,8 +2,8 @@
 
 public sealed class AuthenticationOptions
 {
-    public string Audience { get; set; } = string.Empty;
-    public string MetadataUrl { get; set; } = string.Empty;
+    public string Audience { get; set; }
+    public string MetadataUrl { get; set; }
     public bool RequireHttpsMetadata { get; set; }
-    public string Issuer { get; set; } = string.Empty;
+    public string Issuer { get; set; }
 }

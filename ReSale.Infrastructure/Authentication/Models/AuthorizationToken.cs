@@ -5,14 +5,14 @@ namespace ReSale.Infrastructure.Authentication.Models;
 public sealed class AuthorizationToken
 {
     [JsonPropertyName("access_token")]
-    public string AccessToken { get; init; } = string.Empty;
+    public string AccessToken { get; set; }
     
     [JsonPropertyName("refresh_token")]
-    public string RefreshToken { get; init; } = string.Empty;
+    public string RefreshToken { get; set; }
     
     [JsonPropertyName("expires_in")]
-    public int ExpiresIn { get; init; }
+    public int ExpiresIn { get; set; }
     
     [JsonPropertyName("refresh_expires_in")]
-    public int RefreshExpiresIn { get; init; }
+    public int RefreshExpiresIn { get; set; }
 }

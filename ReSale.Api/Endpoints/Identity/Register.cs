@@ -2,7 +2,7 @@
 using ReSale.Api.Contracts.Requests.Users;
 using ReSale.Api.Extensions;
 using ReSale.Api.Infrastructure;
-using ReSale.Application.Identity.Register;
+using ReSale.Application.Authentication.Register;
 
 namespace ReSale.Api.Endpoints.Identity;
 

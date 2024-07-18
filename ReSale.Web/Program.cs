@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Refit;
 using ReSale.Web;
+using ReSale.Web.Auth;
 using ReSale.Web.Clients;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);

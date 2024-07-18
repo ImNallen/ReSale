@@ -1,20 +1,22 @@
-﻿using Dapper;
+﻿using System.Text;
+using Dapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Npgsql;
 using ReSale.Application.Abstractions.Authentication;
 using ReSale.Application.Abstractions.Caching;
+using ReSale.Application.Abstractions.Encryption;
 using ReSale.Application.Abstractions.Persistence;
-using ReSale.Application.Abstractions.Persistence.Repositories;
 using ReSale.Domain.Common;
 using ReSale.Infrastructure.Authentication;
 using ReSale.Infrastructure.Caching;
+using ReSale.Infrastructure.Encryption;
 using ReSale.Infrastructure.Persistence;
-using ReSale.Infrastructure.Persistence.Repositories;
 using ReSale.Infrastructure.Time;
 
 namespace ReSale.Infrastructure;
@@ -35,39 +37,24 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services
-            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer();
+        var jwtSettings = new JwtSettings();
+        configuration.Bind(JwtSettings.SectionName, jwtSettings);
         
-        services.Configure<AuthenticationOptions>(configuration.GetSection("Authentication"));
-
-        services.Configure<KeycloakOptions>(configuration.GetSection("Keycloak"));
+        services.AddSingleton(Options.Create(jwtSettings));
+        services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
         
-        services.ConfigureOptions<JwtBearerOptionsSetup>();
-
-        services.AddTransient<AdminAuthorizationDelegatingHandler>();
-        
-        services.AddHttpClient<IAuthenticationService, AuthenticationService>((serviceProvider, httpClient) =>
-        {
-            var keycloakOptions = serviceProvider.GetRequiredService<IOptions<KeycloakOptions>>().Value;
-            
-            httpClient.BaseAddress = new Uri(keycloakOptions.AdminUrl);
-        })
-        .AddHttpMessageHandler<AdminAuthorizationDelegatingHandler>();
-
-        services.AddHttpClient<IJwtService, JwtService>((serviceProvider, httpclient) =>
-        {
-            var keycloakOptions = serviceProvider.GetRequiredService<IOptions<KeycloakOptions>>().Value;
-            
-            httpclient.BaseAddress = new Uri(keycloakOptions.TokenUrl);
-        });
-        
-        services.AddHttpClient<IRefreshService, RefreshService>((serviceProvider, httpclient) =>
-        {
-            var keycloakOptions = serviceProvider.GetRequiredService<IOptions<KeycloakOptions>>().Value;
-            
-            httpclient.BaseAddress = new Uri(keycloakOptions.TokenUrl);
-        });
+        services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = jwtSettings.Issuer,
+                ValidAudience = jwtSettings.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(jwtSettings.Secret))
+            });
         
         return services;
     }
@@ -75,6 +62,7 @@ public static class DependencyInjection
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+        services.AddSingleton<IPasswordHasher, PasswordHasher>();
 
         return services;
     }
@@ -94,12 +82,7 @@ public static class DependencyInjection
                 .UseNpgsql(connectionString, npgsqlOptions =>
                     npgsqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.Default)));
 
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<ICustomerRepository, CustomerRepository>();
-        services.AddScoped<IProductRepository, ProductRepository>();
-        services.AddScoped<IOrderRepository, OrderRepository>();
-        services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+        services.AddScoped<IReSaleDbContext, ReSaleDbContext>();
 
         return services;
     }

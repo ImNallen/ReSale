@@ -6,24 +6,21 @@ using ReSale.Domain.Customers;
 namespace ReSale.Application.Customers.Delete;
 
 public class DeleteCustomerCommandHandler(
-    IUnitOfWork unitOfWork)
+    IReSaleDbContext context)
     : ICommandHandler<DeleteCustomerCommand, bool>
 {
     public async Task<Result<bool>> Handle(
         DeleteCustomerCommand request, 
         CancellationToken cancellationToken)
     {
-        var customer = await unitOfWork
-            .Customers.GetAsync(
-            request.Id, 
-            cancellationToken);
+        var customer = await context.Customers.FindAsync(request.Id, cancellationToken);
         
         if (customer is null)
             return Result.Failure<bool>(CustomerErrors.NotFound);
         
-        unitOfWork.Customers.Remove(customer);
+        context.Customers.Remove(customer);
         
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
         
         return true;
     }

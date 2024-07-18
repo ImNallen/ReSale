@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ReSale.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using ReSale.Infrastructure.Persistence;
 namespace ReSale.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ReSaleDbContext))]
-    partial class ReSaleDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240718121601_Add Password To User")]
+    partial class AddPasswordToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -183,8 +186,7 @@ namespace ReSale.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)")
+                        .HasColumnType("text")
                         .HasColumnName("Password");
 
                     b.HasKey("Id");

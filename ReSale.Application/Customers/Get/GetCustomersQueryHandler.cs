@@ -1,4 +1,5 @@
 ﻿using MapsterMapper;
+using Microsoft.EntityFrameworkCore;
 using ReSale.Application.Abstractions.Messaging;
 using ReSale.Application.Abstractions.Persistence;
 using ReSale.Application.Customers.Results;
@@ -7,7 +8,7 @@ using ReSale.Domain.Common;
 namespace ReSale.Application.Customers.Get;
 
 public class GetCustomersQueryHandler(
-    IUnitOfWork unitOfWork,
+    IReSaleDbContext context,
     IMapper mapper) 
     : IQueryHandler<GetCustomersQuery, List<CustomerResult>>
 {
@@ -15,7 +16,7 @@ public class GetCustomersQueryHandler(
         GetCustomersQuery request,
         CancellationToken cancellationToken)
     {
-        var customers = await unitOfWork.Customers.GetAllAsync(cancellationToken);
+        var customers = await context.Customers.ToListAsync(cancellationToken);
         
         return customers.Select(mapper.Map<CustomerResult>).ToList();
     }

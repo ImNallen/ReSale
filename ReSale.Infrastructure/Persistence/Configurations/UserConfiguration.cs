@@ -17,6 +17,13 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasColumnName(nameof(Email))
             .HasMaxLength(200)
             .IsRequired();
+
+        builder.Property(u => u.Password)
+            .HasConversion(p => p.Value,
+                v => Password.Create(v).Value)
+            .HasColumnName(nameof(Password))
+            .HasMaxLength(250)
+            .IsRequired();
         
         builder.Property(u => u.FirstName)
             .HasConversion(e => e.Value,
@@ -34,7 +41,5 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         
         builder.HasIndex(u => u.Email)
             .IsUnique();
-
-        builder.HasIndex(user => user.IdentityId).IsUnique();
     }
 }

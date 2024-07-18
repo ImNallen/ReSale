@@ -4,7 +4,7 @@ using ReSale.Api.Contracts.Responses;
 using ReSale.Api.Contracts.Responses.Identity;
 using ReSale.Api.Extensions;
 using ReSale.Api.Infrastructure;
-using ReSale.Application.Identity.Login;
+using ReSale.Application.Authentication.Login;
 
 namespace ReSale.Api.Endpoints.Identity;
 

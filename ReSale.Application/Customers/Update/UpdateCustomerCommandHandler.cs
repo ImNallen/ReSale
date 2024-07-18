@@ -1,4 +1,5 @@
 ﻿using MapsterMapper;
+using Microsoft.EntityFrameworkCore;
 using ReSale.Application.Abstractions.Messaging;
 using ReSale.Application.Abstractions.Persistence;
 using ReSale.Application.Customers.Results;
@@ -9,7 +10,7 @@ using ReSale.Domain.Shared;
 namespace ReSale.Application.Customers.Update;
 
 public class UpdateCustomerCommandHandler(
-    IUnitOfWork unitOfWork,
+    IReSaleDbContext context,
     IMapper mapper)
     : ICommandHandler<UpdateCustomerCommand, CustomerResult>
 {
@@ -17,8 +18,9 @@ public class UpdateCustomerCommandHandler(
         UpdateCustomerCommand request, 
         CancellationToken cancellationToken)
     {
-        var customer = await unitOfWork.Customers
-            .GetAsync(request.Id, cancellationToken);
+        var customer = await context.Customers
+            .Where(x => x.Id == request.Id)
+            .FirstOrDefaultAsync(cancellationToken);
         
         if (customer is null) 
             return Result.Failure<CustomerResult>(CustomerErrors.NotFound);
@@ -62,7 +64,7 @@ public class UpdateCustomerCommandHandler(
                 request.ShippingState),
             billingAddress);
         
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
         
         return mapper.Map<CustomerResult>(customer);
     }

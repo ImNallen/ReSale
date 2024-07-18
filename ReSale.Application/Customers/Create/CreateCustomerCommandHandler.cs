@@ -1,4 +1,5 @@
 ﻿using MapsterMapper;
+using Microsoft.EntityFrameworkCore;
 using ReSale.Application.Abstractions.Messaging;
 using ReSale.Application.Abstractions.Persistence;
 using ReSale.Application.Customers.Results;
@@ -9,7 +10,7 @@ using ReSale.Domain.Shared;
 namespace ReSale.Application.Customers.Create;
 
 internal sealed class CreateCustomerCommandHandler(
-    IUnitOfWork unitOfWork,
+    IReSaleDbContext context,
     IMapper mapper)
     : ICommandHandler<CreateCustomerCommand, CustomerResult>
 {
@@ -40,9 +41,10 @@ internal sealed class CreateCustomerCommandHandler(
             return Result.Failure<CustomerResult>(phoneNumberResult.Error);
         }
         
-        var isEmailUnique = await unitOfWork.Customers.IsEmailUniqueAsync(emailResult.Value);
+        var emailExists = await context.Customers
+            .AnyAsync(c => c.Email == emailResult.Value, cancellationToken);
         
-        if (!isEmailUnique)
+        if (emailExists)
         {
             return Result.Failure<CustomerResult>(EmailErrors.NotUnique);
         }
@@ -75,9 +77,9 @@ internal sealed class CreateCustomerCommandHandler(
             billingAddress,
             phoneNumberResult.Value);
         
-        await unitOfWork.Customers.AddAsync(customer, cancellationToken);
+        await context.Customers.AddAsync(customer, cancellationToken);
         
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
         
         return mapper.Map<CustomerResult>(customer);
     }

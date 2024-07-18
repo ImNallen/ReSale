@@ -1,4 +1,6 @@
-﻿using ReSale.Application.Abstractions.Messaging;
+﻿using MapsterMapper;
+using Microsoft.EntityFrameworkCore;
+using ReSale.Application.Abstractions.Messaging;
 using ReSale.Application.Abstractions.Persistence;
 using ReSale.Application.Employees.Results;
 using ReSale.Domain.Common;
@@ -8,7 +10,8 @@ using ReSale.Domain.Shared;
 namespace ReSale.Application.Employees.Create;
 
 public class CreateEmployeeCommandHandler(
-    IUnitOfWork unitOfWork) 
+    IReSaleDbContext context,
+    IMapper mapper) 
     : ICommandHandler<CreateEmployeeCommand, EmployeeResult>
 {
     public async Task<Result<EmployeeResult>> Handle(
@@ -34,9 +37,10 @@ public class CreateEmployeeCommandHandler(
             return Result.Failure<EmployeeResult>(lastNameResult.Error);
         }
         
-        var isEmailUnique = await unitOfWork.Employees.IsEmailUniqueAsync(emailResult.Value);
+        var emailExists = await context.Employees
+            .AnyAsync(x => x.Email == emailResult.Value, cancellationToken);
         
-        if (!isEmailUnique)
+        if (emailExists)
         {
             return Result.Failure<EmployeeResult>(EmailErrors.NotUnique);
         }
@@ -46,14 +50,10 @@ public class CreateEmployeeCommandHandler(
             firstNameResult.Value,
             lastNameResult.Value);
         
-        await unitOfWork.Employees.AddAsync(employee, cancellationToken);
+        await context.Employees.AddAsync(employee, cancellationToken);
         
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
         
-        return new EmployeeResult(
-            employee.Id,
-            employee.Email.Value,
-            employee.FirstName.Value,
-            employee.LastName.Value);
+        return mapper.Map<EmployeeResult>(employee);
     }
 }

@@ -1,4 +1,6 @@
-﻿using ReSale.Application.Abstractions.Messaging;
+﻿using MapsterMapper;
+using Microsoft.EntityFrameworkCore;
+using ReSale.Application.Abstractions.Messaging;
 using ReSale.Application.Abstractions.Persistence;
 using ReSale.Application.Customers.Results;
 using ReSale.Domain.Common;
@@ -7,17 +9,18 @@ using ReSale.Domain.Customers;
 namespace ReSale.Application.Customers.GetByEmail;
 
 public class GetCustomerByEmailQueryHandler(
-    IUnitOfWork unitOfWork)
+    IReSaleDbContext context,
+    IMapper mapper)
     : IQueryHandler<GetCustomerByEmailQuery, CustomerResult>
 {
     public async Task<Result<CustomerResult>> Handle(
-        GetCustomerByEmailQuery request, 
+        GetCustomerByEmailQuery request,
         CancellationToken cancellationToken)
     {
-        var customer = await unitOfWork.Customers
-            .GetCustomerByEmailAsync(
-                request.Email, 
-                cancellationToken);
+        var customer = await context.Customers
+            .Where(c => ((string)c.Email) == request.Email)
+            .Select(c => mapper.Map<CustomerResult>(c))
+            .FirstOrDefaultAsync(cancellationToken);
         
         if (customer is null)
         {

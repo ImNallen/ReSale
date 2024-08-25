@@ -84,7 +84,7 @@
     
     protected override async Task OnInitializedAsync()
     {
-        var customerResponses = await CustomersClient.SearchCustomers(_searchTerm, _page, _pageSize);
+        var customerResponses = await CustomersClient.Get(_searchTerm, _page, _pageSize);
 
         _total = customerResponses.TotalCount;
         _hasNextPage = customerResponses.HasNextPage;

@@ -1,4 +1,5 @@
-﻿@inject IIdentityClient IdentityClient
+﻿@using ReSale.Api.Contracts.Requests.Auth
+@inject IAuthenticationClient AuthenticationClient
 @inject ILocalStorageService LocalStorage
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -48,7 +49,7 @@
         
         try
         {
-            var result = await IdentityClient.Login(new LoginUserRequest(_loginModel.Email, _loginModel.Password));
+            var result = await AuthenticationClient.Login(new LoginUserRequest(_loginModel.Email, _loginModel.Password));
         
             await LocalStorage.SetItemAsync("accessToken", result.AccessToken);
             await LocalStorage.SetItemAsync("refreshToken", result.RefreshToken);

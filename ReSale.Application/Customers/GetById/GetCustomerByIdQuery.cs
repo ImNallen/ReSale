@@ -7,5 +7,5 @@ public sealed record GetCustomerByIdQuery(Guid Id) : ICachedQuery<CustomerResult
 {
     public string CacheKey => $"customer-by-id-{Id}";
 
-    public TimeSpan? Expiration => TimeSpan.FromMinutes(0.5);
+    public TimeSpan? Expiration => TimeSpan.FromMinutes(0.2);
 }

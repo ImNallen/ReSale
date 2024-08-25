@@ -7,7 +7,7 @@ public sealed record Email
     private Email(string value) => Value = value;
 
     public string Value { get; }
-    
+
     public static explicit operator string(Email email) => email.Value;
 
     public static Result<Email> Create(string? email)
@@ -17,7 +17,7 @@ public sealed record Email
             return Result.Failure<Email>(EmailErrors.Empty);
         }
 
-        email = email.ToLower();
+        email = email.ToLower(System.Globalization.CultureInfo.CurrentCulture);
 
         if (email.Split('@').Length != 2)
         {

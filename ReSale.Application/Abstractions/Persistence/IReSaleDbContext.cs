@@ -11,11 +11,16 @@ namespace ReSale.Application.Abstractions.Persistence;
 public interface IReSaleDbContext
 {
     DbSet<User> Users { get; }
+
     DbSet<Customer> Customers { get; }
+
     DbSet<Employee> Employees { get; }
+
     DbSet<Product> Products { get; }
+
     DbSet<Order> Orders { get; }
+
     DbSet<OrderDetail> OrderDetails { get; }
-    
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

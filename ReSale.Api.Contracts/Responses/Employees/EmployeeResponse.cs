@@ -4,4 +4,12 @@ public record EmployeeResponse(
     Guid Id,
     string Email,
     string FirstName,
-    string LastName);
+    string LastName,
+    DateOnly HireDate,
+    string Street,
+    string City,
+    string ZipCode,
+    string Country,
+    string State,
+    decimal Amount,
+    string Currency);

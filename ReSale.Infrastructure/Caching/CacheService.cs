@@ -28,10 +28,7 @@ internal sealed class CacheService(IDistributedCache cache) : ICacheService
     public Task RemoveAsync(string key, CancellationToken cancellationToken = default) =>
         cache.RemoveAsync(key, cancellationToken);
 
-    private static T Deserialize<T>(byte[] bytes)
-    {
-        return JsonSerializer.Deserialize<T>(bytes)!;
-    }
+    private static T Deserialize<T>(byte[] bytes) => JsonSerializer.Deserialize<T>(bytes)!;
 
     private static byte[] Serialize<T>(T value)
     {

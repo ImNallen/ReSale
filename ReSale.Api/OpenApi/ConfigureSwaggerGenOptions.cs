@@ -10,17 +10,14 @@ public class ConfigureSwaggerGenOptions : IConfigureNamedOptions<SwaggerGenOptio
 {
     private readonly IApiVersionDescriptionProvider _provider;
 
-    public ConfigureSwaggerGenOptions(IApiVersionDescriptionProvider provider)
-    {
-        _provider = provider;
-    }
+    public ConfigureSwaggerGenOptions(IApiVersionDescriptionProvider provider) => _provider = provider;
 
     public void Configure(SwaggerGenOptions options)
     {
-        foreach (var description in _provider.ApiVersionDescriptions)
+        foreach (ApiVersionDescription description in _provider.ApiVersionDescriptions)
         {
             options.SwaggerDoc(description.GroupName, CreateVersionInfo(description));
-            
+
             options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 In = ParameterLocation.Header,
@@ -29,7 +26,7 @@ public class ConfigureSwaggerGenOptions : IConfigureNamedOptions<SwaggerGenOptio
                 Type = SecuritySchemeType.ApiKey,
                 Scheme = "Bearer"
             });
-            
+
             options.AddSecurityRequirement(new OpenApiSecurityRequirement()
             {
                 {
@@ -44,16 +41,13 @@ public class ConfigureSwaggerGenOptions : IConfigureNamedOptions<SwaggerGenOptio
                         Name = "Bearer",
                         In = ParameterLocation.Header
                     },
-                    new string[] { }
+                    []
                 }
             });
         }
     }
 
-    public void Configure(string? name, SwaggerGenOptions options)
-    {
-        Configure(options);
-    }
+    public void Configure(string? name, SwaggerGenOptions options) => Configure(options);
 
     private static OpenApiInfo CreateVersionInfo(ApiVersionDescription apiVersionDescription)
     {

@@ -17,16 +17,16 @@ public class GetCustomerByEmailQueryHandler(
         GetCustomerByEmailQuery request,
         CancellationToken cancellationToken)
     {
-        var customer = await context.Customers
-            .Where(c => ((string)c.Email) == request.Email)
+        CustomerResult? customer = await context.Customers
+            .Where(c => (string)c.Email == request.Email)
             .Select(c => mapper.Map<CustomerResult>(c))
             .FirstOrDefaultAsync(cancellationToken);
-        
+
         if (customer is null)
         {
             return Result.Failure<CustomerResult>(CustomerErrors.NotFound);
         }
-        
+
         return customer;
     }
 }

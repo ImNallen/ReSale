@@ -7,21 +7,21 @@ namespace ReSale.Web.Clients;
 
 public interface ICustomersClient
 {
-    [Get("/api/v1/customers/search?searchTerm={searchTerm}&page={page}&pageSize={pageSize}")]
-    Task<PagedList<CustomerResponse>> SearchCustomers(
+    [Get("/api/v1/customers?searchTerm={searchTerm}&page={page}&pageSize={pageSize}")]
+    Task<PagedList<CustomerResponse>> Get(
         [Query] string? searchTerm,
         [Query] int page,
         [Query] int pageSize);
-    
+
     [Get("/api/v1/customers/{id}")]
-    Task<CustomerResponse?> GetCustomer(Guid id);
-    
-    [Delete("/api/v1/customers/{id}")]
-    Task DeleteCustomer(Guid id);
-    
+    Task<CustomerResponse?> GetById(Guid id);
+
     [Post("/api/v1/customers")]
-    Task<CustomerResponse> CreateCustomer(CreateCustomerRequest customerRequest);
-    
+    Task<CustomerResponse> Create(CreateCustomerRequest customerRequest);
+
     [Put("/api/v1/customers/{id}")]
-    Task<CustomerResponse> UpdateCustomer(Guid id, UpdateCustomerRequest customerRequest);
+    Task<CustomerResponse> Update(Guid id, UpdateCustomerRequest customerRequest);
+
+    [Delete("/api/v1/customers/{id}")]
+    Task Delete(Guid id);
 }

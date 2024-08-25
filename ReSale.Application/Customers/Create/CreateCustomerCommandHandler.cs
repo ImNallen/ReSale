@@ -16,11 +16,11 @@ internal sealed class CreateCustomerCommandHandler(
 {
     public async Task<Result<CustomerResult>> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
     {
-        var emailResult = Email.Create(request.Email);
-        var firstNameResult = FirstName.Create(request.FirstName);
-        var lastNameResult = LastName.Create(request.LastName);
-        var phoneNumberResult = PhoneNumber.Create(request.PhoneNumber);
-        
+        Result<Email> emailResult = Email.Create(request.Email);
+        Result<FirstName> firstNameResult = FirstName.Create(request.FirstName);
+        Result<LastName> lastNameResult = LastName.Create(request.LastName);
+        Result<PhoneNumber> phoneNumberResult = PhoneNumber.Create(request.PhoneNumber);
+
         if (emailResult.IsFailure)
         {
             return Result.Failure<CustomerResult>(emailResult.Error);
@@ -30,25 +30,25 @@ internal sealed class CreateCustomerCommandHandler(
         {
             return Result.Failure<CustomerResult>(firstNameResult.Error);
         }
-        
+
         if (lastNameResult.IsFailure)
         {
             return Result.Failure<CustomerResult>(lastNameResult.Error);
         }
-        
+
         if (phoneNumberResult.IsFailure)
         {
             return Result.Failure<CustomerResult>(phoneNumberResult.Error);
         }
-        
-        var emailExists = await context.Customers
+
+        bool emailExists = await context.Customers
             .AnyAsync(c => c.Email == emailResult.Value, cancellationToken);
-        
+
         if (emailExists)
         {
             return Result.Failure<CustomerResult>(EmailErrors.NotUnique);
         }
-        
+
         Address? billingAddress = null;
         if (request.BillingStreet is not null &&
             request.BillingCity is not null &&
@@ -63,24 +63,24 @@ internal sealed class CreateCustomerCommandHandler(
                 request.BillingCountry,
                 request.BillingState);
         }
-        
+
         var customer = Customer.Create(
             emailResult.Value,
             firstNameResult.Value,
             lastNameResult.Value,
             new Address(
-                request.ShippingStreet, 
-                request.ShippingCity, 
-                request.ShippingZipCode, 
-                request.ShippingCountry, 
+                request.ShippingStreet,
+                request.ShippingCity,
+                request.ShippingZipCode,
+                request.ShippingCountry,
                 request.ShippingState),
             billingAddress,
             phoneNumberResult.Value);
-        
+
         await context.Customers.AddAsync(customer, cancellationToken);
-        
+
         await context.SaveChangesAsync(cancellationToken);
-        
+
         return mapper.Map<CustomerResult>(customer);
     }
 }

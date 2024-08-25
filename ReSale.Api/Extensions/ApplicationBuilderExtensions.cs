@@ -9,15 +9,21 @@ public static class ApplicationBuilderExtensions
         app.UseSwagger();
         app.UseSwaggerUI(options =>
         {
-            IReadOnlyList<ApiVersionDescription> descriptions = app.DescribeApiVersions();
+            options.DefaultModelsExpandDepth(-1);
 
-            foreach (ApiVersionDescription description in descriptions)
-            {
-                var url = $"/swagger/{description.GroupName}/swagger.json";
-                var name = description.GroupName.ToUpperInvariant();
+            IReadOnlyList<ApiVersionDescription> descriptions =
+                app.DescribeApiVersions();
 
-                options.SwaggerEndpoint(url, name);
-            }
+            descriptions
+                .Select(d => d.GroupName)
+                .ToList()
+                .ForEach(groupName =>
+                {
+                    string url = $"/swagger/{groupName}/swagger.json";
+                    string name = groupName.ToUpperInvariant();
+
+                    options.SwaggerEndpoint(url, name);
+                });
         });
 
         return app;

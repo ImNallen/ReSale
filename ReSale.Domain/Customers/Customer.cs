@@ -7,21 +7,11 @@ namespace ReSale.Domain.Customers;
 
 public sealed class Customer : Entity
 {
-    public Email Email { get; private set; }
-    public PhoneNumber PhoneNumber { get; private set; }
-    public FirstName FirstName { get; private set; }
-    public LastName LastName { get; private set; }
-    public Address ShippingAddress { get; private set; }
-    public Address? BillingAddress { get; private set; }
-    
-    // Navigation properties
-    public ICollection<Order> Orders { get; private set; } = [];
-    
     private Customer(
-        Guid id, 
+        Guid id,
         Email email,
-        FirstName firstName, 
-        LastName lastName, 
+        FirstName firstName,
+        LastName lastName,
         Address shippingAddress,
         Address? billingAddress,
         PhoneNumber phoneNumber)
@@ -40,11 +30,26 @@ public sealed class Customer : Entity
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     {
     }
-    
+
+    public Email Email { get; private set; }
+
+    public PhoneNumber PhoneNumber { get; private set; }
+
+    public FirstName FirstName { get; private set; }
+
+    public LastName LastName { get; private set; }
+
+    public Address ShippingAddress { get; private set; }
+
+    public Address? BillingAddress { get; private set; }
+
+    // Navigation properties
+    public ICollection<Order> Orders { get; private set; } = [];
+
     public static Customer Create(
-        Email email, 
-        FirstName firstName, 
-        LastName lastName, 
+        Email email,
+        FirstName firstName,
+        LastName lastName,
         Address shippingAddress,
         Address? billingAddress,
         PhoneNumber phoneNumber)
@@ -57,7 +62,7 @@ public sealed class Customer : Entity
             shippingAddress,
             billingAddress,
             phoneNumber);
-        
+
         customer.Raise(new CustomerCreatedDomainEvent(customer.Id));
 
         return customer;

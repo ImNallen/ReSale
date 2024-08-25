@@ -1,14 +1,9 @@
-﻿namespace ReSale.Domain.Common;
+﻿using System.Collections.ObjectModel;
+
+namespace ReSale.Domain.Common;
 
 public class PagedList<T>
 {
-    public List<T> Items { get; }
-    public int Page { get; }
-    public int PageSize { get; }
-    public int TotalCount { get; }
-    public bool HasNextPage => Page * PageSize < TotalCount;
-    public bool HasPreviousPage => Page > 1;
-    
     private PagedList(List<T> items, int page, int pageSize, int totalCount)
     {
         Items = items;
@@ -16,13 +11,18 @@ public class PagedList<T>
         PageSize = pageSize;
         TotalCount = totalCount;
     }
-    
-    public static PagedList<T> Create(
-        List<T> items,
-        int page, 
-        int pageSize,
-        int totalCount)
-    {
-        return new PagedList<T>(items, page, pageSize, totalCount);
-    }
+
+    public List<T> Items { get; }
+
+    public int Page { get; }
+
+    public int PageSize { get; }
+
+    public int TotalCount { get; }
+
+    public bool HasNextPage => Page * PageSize < TotalCount;
+
+    public bool HasPreviousPage => Page > 1;
+
+    public static PagedList<T> Create(List<T> items, int page, int pageSize, int totalCount) => new(items, page, pageSize, totalCount);
 }

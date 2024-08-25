@@ -39,6 +39,7 @@
                     <th scope="col" class="hidden lg:table-cell sticky top-0 z-10 text-left bg-darker-gray bg-opacity-75 py-2 pl-4 backdrop-blur backdrop-filter font-semibold">ID</th>
                     <th scope="col" class="sticky top-0 z-10 text-left bg-darker-gray bg-opacity-75 py-2 pl-4 lg:pl-2 backdrop-blur backdrop-filter font-semibold">Name</th>
                     <th scope="col" class="sticky top-0 z-10 text-left bg-darker-gray bg-opacity-75 py-2 pl-2 backdrop-blur backdrop-filter font-semibold">Email</th>
+                    <th scope="col" class="sticky top-0 z-10 text-left bg-darker-gray bg-opacity-75 py-2 pl-2 backdrop-blur backdrop-filter font-semibold">Hire date</th>
                 </tr>
                 </thead>
                 <tbody class="mt-4">
@@ -48,6 +49,7 @@
                     <td class="hidden lg:table-cell border-t border-b border-dark-gray whitespace-nowrap text-sm py-2 pl-4">@employee.Id</td>
                     <td class="border-t border-b border-dark-gray whitespace-nowrap text-sm py-2 pl-4 lg:pl-2">@employee.FirstName @employee.LastName</td>
                     <td class="border-t border-b border-dark-gray whitespace-nowrap text-sm py-2 pl-2">@employee.Email</td>
+                    <td class="border-t border-b border-dark-gray whitespace-nowrap text-sm py-2 pl-2">@employee.HireDate.ToString()</td>
                 </tr>
                 }
                 </tbody>
@@ -82,7 +84,7 @@
     
     protected override async Task OnInitializedAsync()
     {
-        var employeesResponses = await EmployeesClient.SearchEmployees(_searchTerm, _page, _pageSize);
+        var employeesResponses = await EmployeesClient.Get(_searchTerm, _page, _pageSize);
 
         _total = employeesResponses.TotalCount;
         _hasNextPage = employeesResponses.HasNextPage;
@@ -91,14 +93,15 @@
         Employees = [];
         
         // TODO: Add mapster to map the response to the model
-        foreach (var customer in employeesResponses.Items)
+        foreach (var employee in employeesResponses.Items)
         {
             Employees.Add(new EmployeeModel
             {
-                Id = customer.Id,
-                FirstName = customer.FirstName,
-                LastName = customer.LastName,
-                Email = customer.Email
+                Id = employee.Id,
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                Email = employee.Email,
+                HireDate = employee.HireDate
             });
         }
     }
@@ -140,5 +143,6 @@
         public string Email { get; init; } = string.Empty;
         public string FirstName { get; init; } = string.Empty;
         public string LastName { get; init; } = string.Empty;
+        public DateOnly HireDate { get; init; }
     }
 }

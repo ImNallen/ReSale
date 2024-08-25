@@ -121,7 +121,7 @@
     
     protected override async Task OnInitializedAsync()
     {
-        var customer = await CustomersClient.GetCustomer(Id);
+        var customer = await CustomersClient.GetById(Id);
         
         if (customer is null)
         {
@@ -147,23 +147,21 @@
     
     private async Task HandleValidSubmit()
     {
-        var request = new UpdateCustomerRequest
-        {
-            FirstName = _customer.FirstName,
-            LastName = _customer.LastName,
-            ShippingStreet = _customer.ShippingStreet,
-            ShippingCity = _customer.ShippingCity,
-            ShippingState = _customer.ShippingState,
-            ShippingZipCode = _customer.ShippingZipCode,
-            ShippingCountry = _customer.ShippingCountry,
-            BillingStreet = _customer.BillingStreet,
-            BillingCity = _customer.BillingCity,
-            BillingZipCode = _customer.BillingZipCode,
-            BillingCountry = _customer.BillingCountry,
-            BillingState = _customer.BillingState
-        };
+        var request = new UpdateCustomerRequest(
+            _customer.FirstName,
+            _customer.LastName,
+            _customer.ShippingStreet,
+            _customer.ShippingCity,
+            _customer.ShippingZipCode,
+            _customer.ShippingCountry,
+            _customer.ShippingState,
+            _customer.BillingStreet,
+            _customer.BillingCity,
+            _customer.BillingZipCode,
+            _customer.BillingCountry,
+            _customer.BillingState);
         
-        await CustomersClient.UpdateCustomer(Id, request);
+        await CustomersClient.Update(Id, request);
         
         NavigationManager.NavigateTo("/customers");
     }
@@ -188,7 +186,7 @@
         [Required]
         public string ShippingCountry { get; set; } = string.Empty;
     
-        public string ShippingState { get; set; } = string.Empty;
+        public string? ShippingState { get; set; } = string.Empty;
         
         public string? BillingStreet { get; set; } = string.Empty;
         public string? BillingCity { get; set; } = string.Empty;

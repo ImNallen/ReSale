@@ -39,10 +39,10 @@ public static class DependencyInjection
     {
         var jwtSettings = new JwtSettings();
         configuration.Bind(JwtSettings.SectionName, jwtSettings);
-        
+
         services.AddSingleton(Options.Create(jwtSettings));
         services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
-        
+
         services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
             {
@@ -55,10 +55,10 @@ public static class DependencyInjection
                 IssuerSigningKey = new SymmetricSecurityKey(
                     Encoding.UTF8.GetBytes(jwtSettings.Secret))
             });
-        
+
         return services;
     }
-    
+
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
@@ -66,12 +66,12 @@ public static class DependencyInjection
 
         return services;
     }
-    
+
     private static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
     {
         SqlMapper.AddTypeHandler(new DateOnlyTypeHandler());
 
-        var connectionString = configuration.GetConnectionString("Database");
+        string? connectionString = configuration.GetConnectionString("Database");
         Ensure.NotNullOrEmpty(connectionString);
 
         services.AddSingleton<IDbConnectionFactory>(_ =>
@@ -86,7 +86,7 @@ public static class DependencyInjection
 
         return services;
     }
-    
+
     private static IServiceCollection AddCaching(this IServiceCollection services, IConfiguration configuration)
     {
         string redisConnectionString = configuration.GetConnectionString("Cache")!;
@@ -97,7 +97,7 @@ public static class DependencyInjection
 
         return services;
     }
-    
+
     private static IServiceCollection AddHealthChecks(this IServiceCollection services, IConfiguration configuration)
     {
         services

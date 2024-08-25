@@ -6,16 +6,11 @@ namespace ReSale.Domain.Users;
 
 public sealed class User : Entity
 {
-    public Email Email { get; private set; }
-    public Password Password { get; private set; }
-    public FirstName FirstName { get; private set; }
-    public LastName LastName { get; private set; }
-    
     private User(
-        Guid id, 
-        Email email, 
+        Guid id,
+        Email email,
         Password password,
-        FirstName firstName, 
+        FirstName firstName,
         LastName lastName)
         : base(id)
     {
@@ -25,21 +20,37 @@ public sealed class User : Entity
         Password = password;
     }
 
+    public Email Email { get; private set; }
+
+    public Password Password { get; private set; }
+
+    public FirstName FirstName { get; private set; }
+
+    public LastName LastName { get; private set; }
+
+    public string? RefreshToken { get; private set; }
+
     public static User Create(
         Email email,
         Password password,
-        FirstName firstName, 
+        FirstName firstName,
         LastName lastName)
     {
         var user = new User(
-            Guid.NewGuid(), 
+            Guid.NewGuid(),
             email,
             password,
-            firstName, 
+            firstName,
             lastName);
-        
+
         user.Raise(new UserCreatedDomainEvent(user.Id));
 
         return user;
+    }
+
+    public User SetRefreshToken(string refreshToken)
+    {
+        RefreshToken = refreshToken;
+        return this;
     }
 }

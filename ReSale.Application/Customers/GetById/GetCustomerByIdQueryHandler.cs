@@ -10,14 +10,14 @@ namespace ReSale.Application.Customers.GetById;
 
 public class GetCustomerByIdQueryHandler(
     IReSaleDbContext context,
-    IMapper mapper) 
+    IMapper mapper)
     : IQueryHandler<GetCustomerByIdQuery, CustomerResult>
 {
     public async Task<Result<CustomerResult>> Handle(
-        GetCustomerByIdQuery request, 
+        GetCustomerByIdQuery request,
         CancellationToken cancellationToken)
     {
-        var customer = await context.Customers
+        CustomerResult? customer = await context.Customers
             .Where(x => x.Id == request.Id)
             .Select(c => mapper.Map<CustomerResult>(c))
             .FirstOrDefaultAsync(cancellationToken);

@@ -2,7 +2,9 @@
 
 public static class Tags
 {
-    public const string Identity = "Identity";
+    public const string Authentication = "Auth";
     public const string Customers = "Customers";
     public const string Employees = "Employees";
+    public const string Orders = "Orders";
+    public const string Products = "Products";
 }

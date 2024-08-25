@@ -12,7 +12,7 @@ public record UpdateCustomerCommand(
     string ShippingCity,
     string ShippingZipCode,
     string ShippingCountry,
-    string ShippingState,
+    string? ShippingState,
     string? BillingStreet,
     string? BillingCity,
     string? BillingZipCode,

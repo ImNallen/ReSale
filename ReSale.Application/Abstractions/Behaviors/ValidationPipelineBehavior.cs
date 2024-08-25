@@ -51,6 +51,9 @@ internal sealed class ValidationPipelineBehavior<TRequest, TResponse>(
         throw new ValidationException(validationFailures);
     }
 
+    private static ValidationError CreateValidationError(ValidationFailure[] validationFailures) =>
+        new(validationFailures.Select(f => Error.Problem(f.ErrorCode, f.ErrorMessage)).ToArray());
+
     private async Task<ValidationFailure[]> ValidateAsync(TRequest request)
     {
         if (!validators.Any())
@@ -70,7 +73,4 @@ internal sealed class ValidationPipelineBehavior<TRequest, TResponse>(
 
         return validationFailures;
     }
-
-    private static ValidationError CreateValidationError(ValidationFailure[] validationFailures) =>
-        new(validationFailures.Select(f => Error.Problem(f.ErrorCode, f.ErrorMessage)).ToArray());
 }

@@ -15,6 +15,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{23789E0F-9F21-428F-987C-23B84DF47C99}"
 	ProjectSection(SolutionItems) = preProject
 		docker-compose.yml = docker-compose.yml
+		.editorconfig = .editorconfig
+		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReSale.Api.Contracts", "ReSale.Api.Contracts\ReSale.Api.Contracts.csproj", "{174AE162-3EFC-4ED5-8AD1-2C513CF57C77}"

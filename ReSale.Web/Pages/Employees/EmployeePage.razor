@@ -1,0 +1,144 @@
+﻿@page "/employees/{id:guid}"
+@using System.Globalization
+
+@inject IEmployeesClient EmployeesClient
+@inject NavigationManager NavigationManager
+
+<div class="h-full flex flex-col">
+    <div class="flex justify-between">
+        <h3 class="p-4 bg-table-gray rounded">Employee</h3>
+
+        <div>
+            <button class="bg-table-gray hover:bg-blue-primary p-[10px] rounded" @onclick="@(() => NavigationManager.NavigateTo($"/employees/edit/{Employee.Id}"))" title="Edit">
+                <i class="fas fa-pen-to-square p-2"></i>
+            </button>
+            <button class="bg-table-gray hover:bg-red-primary p-[10px] rounded" @onclick="Delete" title="Delete">
+                <i class="fas fa-minus p-2"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="md:flex w-full block overflow-y-auto">
+        <div class="mt-4 p-4 flex-grow bg-table-gray rounded">
+            <h3>Contact</h3>
+            <div class="mb-4 mt-4">
+                <label for="id" class="block">ID</label>
+                <InputText id="id" @bind-Value="Employee.IdAsString" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+            </div>
+            <div class="md:flex block mt-4">
+                <div class="flex-grow">
+                    <div class="mb-4">
+                        <label for="firstName" class="block">First Name</label>
+                        <InputText id="firstName" @bind-Value="Employee.FirstName" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+                    </div>
+                </div>
+                <div class="flex-grow md:ml-4">
+                    <label for="lastName" class="block">Last Name</label>
+                    <InputText id="lastName" @bind-Value="Employee.LastName" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+                </div>
+            </div>
+            <div class="mb-4 md:mt-0 mt-4">
+                <label for="email" class="block">Email</label>
+                <InputText id="email" @bind-Value="Employee.Email" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+            </div>
+            <div class="md:flex block mt-4">
+                <div class="flex-grow">
+                    <div class="mb-4">
+                        <label for="hireDate" class="block">Hire Date</label>
+                        <InputText id="hireDate" @bind-Value="Employee.HireDate" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+                    </div>
+                </div>
+                <div class="flex-grow md:ml-4">
+                    <label for="salary" class="block">Salary</label>
+                    <InputText id="salary" @bind-Value="Employee.Salary" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+                </div>
+            </div>
+        </div>
+        <div class="mt-4 md:ml-4 ml-0 p-4 flex-grow bg-table-gray rounded">
+            <h3>Address</h3>
+
+            <div class="mt-4">
+                <label for="Street" class="block">Street</label>
+                <InputText id="Street" @bind-Value="Employee.Street" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+            </div>
+
+            <div class="mt-4">
+                <label for="City" class="block">City</label>
+                <InputText id="City" @bind-Value="Employee.City" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+            </div>
+
+            <div class="mt-4">
+                <label for="ZipCode" class="block">Zip Code</label>
+                <InputText id="ZipCode" @bind-Value="Employee.ZipCode" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+            </div>
+
+            <div class="mt-4">
+                <label for="Country" class="block">Country</label>
+                <InputText id="Country" @bind-Value="Employee.Country" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(Employee.State))
+            {
+            <div class="mt-4">
+                <label for="State" class="block">State</label>
+                <InputText id="State" @bind-Value="Employee.State" class="bg-dark-gray p-2 mt-2 rounded w-full" disabled="true"/>
+            </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] 
+    public Guid Id { get; set; }
+    private EmployeeModel Employee { get; set; } = new();
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var employee = await EmployeesClient.GetById(Id);
+
+        if (employee is null)
+        {
+            NavigationManager.NavigateTo("/employees");
+        }
+        
+        Employee = new EmployeeModel
+        {
+            Id = employee!.Id,
+            FirstName = employee.FirstName,
+            LastName = employee.LastName,
+            Email = employee.Email,
+            HireDate = employee.HireDate.ToString(),
+            IdAsString = employee.Id.ToString(),
+            Street = employee.Street,
+            City = employee.City,
+            ZipCode = employee.ZipCode,
+            Country = employee.Country,
+            State = employee.State,
+            Salary = $"{employee.Amount.ToString(CultureInfo.InvariantCulture)} {employee.Currency}",
+        };
+    }
+    
+    public class EmployeeModel
+    {
+        public Guid Id { get; set; }
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string HireDate { get; set; } = string.Empty;
+        public string Street { get; set; } = string.Empty;
+        public string City { get; set; } = string.Empty;
+        public string ZipCode { get; set; } = string.Empty;
+        public string Country { get; set; } = string.Empty;
+        public string State { get; set; } = string.Empty;
+        public string IdAsString { get; set; } = string.Empty;
+        public string Salary { get; set; } = string.Empty;
+    }
+    
+    private async Task Delete()
+    {
+        await EmployeesClient.Delete(Employee.Id);
+        
+        NavigationManager.NavigateTo("/employees");
+    }
+}

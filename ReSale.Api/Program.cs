@@ -1,5 +1,6 @@
 using System.Reflection;
 using Asp.Versioning;
+using Asp.Versioning.Builder;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using ReSale.Api.Extensions;
@@ -7,7 +8,7 @@ using ReSale.Application;
 using ReSale.Infrastructure;
 using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog((context, loggerConfig) =>
     loggerConfig.ReadFrom.Configuration(context.Configuration));
@@ -19,19 +20,19 @@ builder.Services
 
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 app.UseCors(x => x
     .AllowAnyOrigin()
     .AllowAnyMethod()
     .AllowAnyHeader());
 
-var apiVersionSet = app.NewApiVersionSet()
+ApiVersionSet apiVersionSet = app.NewApiVersionSet()
     .HasApiVersion(new ApiVersion(1))
     .ReportApiVersions()
     .Build();
 
-var versionedGroup = app
+RouteGroupBuilder versionedGroup = app
     .MapGroup("api/v{version:apiVersion}")
     .WithApiVersionSet(apiVersionSet);
 
@@ -60,10 +61,4 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.Run();
-
-// REMARK: Required for functional and integration tests to work.
-namespace ReSale.Api
-{
-    public partial class Program;
-}
+await app.RunAsync();

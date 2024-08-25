@@ -3,14 +3,15 @@ using MediatR;
 using ReSale.Api.Contracts.Requests.Customers;
 using ReSale.Api.Contracts.Responses.Customers;
 using ReSale.Api.Infrastructure;
+using ReSale.Application.Customers.Results;
 using ReSale.Application.Customers.Update;
+using ReSale.Domain.Common;
 
 namespace ReSale.Api.Endpoints.Customers;
 
 public class Update : IEndpoint
 {
-    public void MapEndpoint(IEndpointRouteBuilder app)
-    {
+    public void MapEndpoint(IEndpointRouteBuilder app) =>
         app.MapPut("/customers/{id:guid}", async (
         Guid id,
         UpdateCustomerRequest request,
@@ -32,12 +33,14 @@ public class Update : IEndpoint
                 request.BillingZipCode,
                 request.BillingCountry,
                 request.BillingState);
-            
-            var result = await sender.Send(command, cancellationToken);
-            
+
+            Result<CustomerResult> result = await sender.Send(command, cancellationToken);
+
             if (result.IsFailure)
+            {
                 return CustomResults.Problem(result);
-            
+            }
+
             return Results.Ok(mapper.Map<CustomerResponse>(result.Value));
         })
         .WithTags(Tags.Customers)
@@ -47,5 +50,4 @@ public class Update : IEndpoint
         .Produces(StatusCodes.Status200OK, typeof(CustomerResponse))
         .Produces(StatusCodes.Status404NotFound)
         .RequireAuthorization();
-    }
 }

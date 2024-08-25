@@ -18,16 +18,16 @@ public class CreateCustomerCommandValidator : AbstractValidator<CreateCustomerCo
 
         RuleFor(x => x.ShippingStreet)
             .NotEmpty();
-        
+
         RuleFor(x => x.ShippingCity)
             .NotEmpty();
-        
+
         RuleFor(x => x.ShippingCountry)
             .NotEmpty();
-        
+
         RuleFor(x => x.ShippingZipCode)
             .NotEmpty();
-        
+
         RuleFor(x => x.PhoneNumber)
             .NotEmpty();
     }

@@ -1,13 +1,12 @@
-﻿namespace ReSale.Domain.Common;
+﻿using System.Collections.ObjectModel;
+
+namespace ReSale.Domain.Common;
 
 public abstract class Entity
 {
     private readonly List<IDomainEvent> _domainEvents = new();
 
-    protected Entity(Guid id)
-    {
-        Id = id;
-    }
+    protected Entity(Guid id) => Id = id;
 
     protected Entity()
     {
@@ -15,15 +14,9 @@ public abstract class Entity
 
     public Guid Id { get; init; }
 
-    public List<IDomainEvent> DomainEvents => _domainEvents.ToList();
+    public ReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
-    public void ClearDomainEvents()
-    {
-        _domainEvents.Clear();
-    }
+    public void ClearDomainEvents() => _domainEvents.Clear();
 
-    protected void Raise(IDomainEvent domainEvent)
-    {
-        _domainEvents.Add(domainEvent);
-    }
+    protected void Raise(IDomainEvent domainEvent) => _domainEvents.Add(domainEvent);
 }

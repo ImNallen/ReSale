@@ -11,17 +11,17 @@ namespace ReSale.Application.Employees.Create;
 
 public class CreateEmployeeCommandHandler(
     IReSaleDbContext context,
-    IMapper mapper) 
+    IMapper mapper)
     : ICommandHandler<CreateEmployeeCommand, EmployeeResult>
 {
     public async Task<Result<EmployeeResult>> Handle(
-        CreateEmployeeCommand request, 
+        CreateEmployeeCommand request,
         CancellationToken cancellationToken)
     {
-        var emailResult = Email.Create(request.Email);
-        var firstNameResult = FirstName.Create(request.FirstName);
-        var lastNameResult = LastName.Create(request.LastName);
-        
+        Result<Email> emailResult = Email.Create(request.Email);
+        Result<FirstName> firstNameResult = FirstName.Create(request.FirstName);
+        Result<LastName> lastNameResult = LastName.Create(request.LastName);
+
         if (emailResult.IsFailure)
         {
             return Result.Failure<EmployeeResult>(emailResult.Error);
@@ -31,15 +31,15 @@ public class CreateEmployeeCommandHandler(
         {
             return Result.Failure<EmployeeResult>(firstNameResult.Error);
         }
-        
+
         if (lastNameResult.IsFailure)
         {
             return Result.Failure<EmployeeResult>(lastNameResult.Error);
         }
-        
-        var emailExists = await context.Employees
+
+        bool emailExists = await context.Employees
             .AnyAsync(x => x.Email == emailResult.Value, cancellationToken);
-        
+
         if (emailExists)
         {
             return Result.Failure<EmployeeResult>(EmailErrors.NotUnique);
@@ -48,12 +48,22 @@ public class CreateEmployeeCommandHandler(
         var employee = Employee.Create(
             emailResult.Value,
             firstNameResult.Value,
-            lastNameResult.Value);
-        
+            lastNameResult.Value,
+            request.HireDate,
+            new Address(
+                request.Street,
+                request.City,
+                request.ZipCode,
+                request.Country,
+                request.State),
+            new Money(
+                request.Amount,
+                Currency.FromCode(request.Currency)));
+
         await context.Employees.AddAsync(employee, cancellationToken);
-        
+
         await context.SaveChangesAsync(cancellationToken);
-        
+
         return mapper.Map<EmployeeResult>(employee);
     }
 }

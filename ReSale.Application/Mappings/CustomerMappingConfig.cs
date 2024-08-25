@@ -6,8 +6,7 @@ namespace ReSale.Application.Mappings;
 
 public class CustomerMappingConfig : IRegister
 {
-    public void Register(TypeAdapterConfig config)
-    {
+    public void Register(TypeAdapterConfig config) =>
         config.NewConfig<Customer, CustomerResult>()
             .Map(d => d.Id, s => s.Id)
             .Map(d => d.Email, s => s.Email.Value)
@@ -24,5 +23,4 @@ public class CustomerMappingConfig : IRegister
             .Map(d => d.BillingZipCode, s => s.BillingAddress!.ZipCode)
             .Map(d => d.BillingCountry, s => s.BillingAddress!.Country)
             .Map(d => d.BillingState, s => s.BillingAddress!.State);
-    }
 }

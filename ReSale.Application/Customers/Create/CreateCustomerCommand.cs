@@ -9,7 +9,7 @@ public record CreateCustomerCommand(
     string LastName,
     string ShippingStreet,
     string ShippingCity,
-    string ShippingState,
+    string? ShippingState,
     string ShippingZipCode,
     string ShippingCountry,
     string PhoneNumber,

@@ -9,10 +9,7 @@ public static class DependencyInjection
     public static IServiceCollection AddPresentation(this IServiceCollection services)
     {
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen(o =>
-        {
-            o.EnableAnnotations();
-        });
+        services.AddSwaggerGen(o => o.EnableAnnotations());
 
         services.AddHttpContextAccessor();
 
@@ -31,7 +28,7 @@ public static class DependencyInjection
             options.GroupNameFormat = "'v'V";
             options.SubstituteApiVersionInUrl = true;
         });
-        
+
         services.ConfigureOptions<ConfigureSwaggerGenOptions>();
 
         return services;

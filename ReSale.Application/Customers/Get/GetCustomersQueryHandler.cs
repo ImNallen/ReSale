@@ -1,23 +1,66 @@
-﻿using MapsterMapper;
+﻿using System.Globalization;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using ReSale.Application.Abstractions.Messaging;
 using ReSale.Application.Abstractions.Persistence;
 using ReSale.Application.Customers.Results;
 using ReSale.Domain.Common;
+using ReSale.Domain.Customers;
 
 namespace ReSale.Application.Customers.Get;
 
 public class GetCustomersQueryHandler(
-    IReSaleDbContext context,
-    IMapper mapper) 
-    : IQueryHandler<GetCustomersQuery, List<CustomerResult>>
+    IReSaleDbContext context)
+    : IQueryHandler<GetCustomersQuery, PagedList<CustomerResult>>
 {
-    public async Task<Result<List<CustomerResult>>> Handle(
-        GetCustomersQuery request,
-        CancellationToken cancellationToken)
+    public async Task<Result<PagedList<CustomerResult>>> Handle(GetCustomersQuery request, CancellationToken cancellationToken)
     {
-        var customers = await context.Customers.ToListAsync(cancellationToken);
-        
-        return customers.Select(mapper.Map<CustomerResult>).ToList();
+        IQueryable<Customer> customersQuery = context.Customers.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(request.SearchTerm))
+        {
+            customersQuery = customersQuery
+                .Where(c =>
+                    ((string)c.Email).Contains(request.SearchTerm) ||
+                    ((string)c.FirstName).Contains(request.SearchTerm) ||
+                    ((string)c.LastName).Contains(request.SearchTerm));
+        }
+
+        Expression<Func<Customer, object>> keySelector = request.SortColumn?.ToLower(CultureInfo.CurrentCulture) switch
+        {
+            "email" => c => c.Email,
+            "firstName" => c => c.FirstName,
+            "lastName" => c => c.LastName,
+            _ => c => c.Id
+        };
+
+        customersQuery = request.SortColumn?.ToLower(CultureInfo.CurrentCulture) == "desc"
+            ? customersQuery.OrderByDescending(keySelector)
+            : customersQuery.OrderBy(keySelector);
+
+        int totalCount = await customersQuery.CountAsync(cancellationToken);
+
+        List<CustomerResult> customers = await customersQuery
+            .Skip((request.Page - 1) * request.PageSize)
+            .Take(request.PageSize)
+            .Select(c => new CustomerResult(
+                c.Id,
+                c.Email.Value,
+                c.FirstName.Value,
+                c.LastName.Value,
+                c.ShippingAddress.Street,
+                c.ShippingAddress.City,
+                c.ShippingAddress.ZipCode,
+                c.ShippingAddress.Country,
+                c.ShippingAddress.State!,
+                c.PhoneNumber.Value,
+                c.BillingAddress!.Street,
+                c.BillingAddress.City,
+                c.BillingAddress.ZipCode,
+                c.BillingAddress.Country,
+                c.BillingAddress.State))
+            .ToListAsync(cancellationToken);
+
+        return PagedList<CustomerResult>.Create(customers, request.Page, request.PageSize, totalCount);
     }
 }

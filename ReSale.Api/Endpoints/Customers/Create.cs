@@ -6,14 +6,15 @@ using ReSale.Api.Contracts.Responses.Customers;
 using ReSale.Api.Extensions;
 using ReSale.Api.Infrastructure;
 using ReSale.Application.Customers.Create;
+using ReSale.Application.Customers.Results;
+using ReSale.Domain.Common;
 
 namespace ReSale.Api.Endpoints.Customers;
 
 public class Create : IEndpoint
 {
-    public void MapEndpoint(IEndpointRouteBuilder app)
-    {
-        app.MapPost("customers", async (
+    public void MapEndpoint(IEndpointRouteBuilder app) =>
+        app.MapPost("/customers", async (
                 CreateCustomerRequest request,
                 ISender sender,
                 IMapper mapper,
@@ -34,12 +35,14 @@ public class Create : IEndpoint
                     request.BillingZipCode,
                     request.BillingCountry,
                     request.BillingState);
-        
-                var result = await sender.Send(command, cancellationToken);
+
+                Result<CustomerResult> result = await sender.Send(command, cancellationToken);
 
                 if (result.IsFailure)
+                {
                     return CustomResults.Problem(result);
-                
+                }
+
                 return Results.Ok(mapper.Map<CustomerResponse>(result.Value));
             })
             .WithTags(Tags.Customers)
@@ -49,5 +52,4 @@ public class Create : IEndpoint
             .Produces(StatusCodes.Status200OK, typeof(CustomerResponse))
             .Produces(StatusCodes.Status400BadRequest)
             .RequireAuthorization();
-    }
 }

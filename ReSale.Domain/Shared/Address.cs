@@ -5,4 +5,4 @@ public record Address(
     string City,
     string ZipCode,
     string Country,
-    string State);
+    string? State);

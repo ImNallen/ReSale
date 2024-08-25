@@ -12,33 +12,37 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasKey(u => u.Id);
 
         builder.Property(u => u.Email)
-            .HasConversion(e => e.Value,
+            .HasConversion(
+                e => e.Value,
                 v => Email.Create(v).Value)
             .HasColumnName(nameof(Email))
             .HasMaxLength(200)
             .IsRequired();
 
         builder.Property(u => u.Password)
-            .HasConversion(p => p.Value,
+            .HasConversion(
+                p => p.Value,
                 v => Password.Create(v).Value)
             .HasColumnName(nameof(Password))
             .HasMaxLength(250)
             .IsRequired();
-        
+
         builder.Property(u => u.FirstName)
-            .HasConversion(e => e.Value,
+            .HasConversion(
+                e => e.Value,
                 v => FirstName.Create(v).Value)
             .HasColumnName(nameof(FirstName))
             .HasMaxLength(100)
             .IsRequired();
-        
+
         builder.Property(u => u.LastName)
-            .HasConversion(e => e.Value,
+            .HasConversion(
+                e => e.Value,
                 v => LastName.Create(v).Value)
             .HasColumnName(nameof(LastName))
             .HasMaxLength(100)
             .IsRequired();
-        
+
         builder.HasIndex(u => u.Email)
             .IsUnique();
     }

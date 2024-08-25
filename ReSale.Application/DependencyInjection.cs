@@ -19,15 +19,15 @@ public static class DependencyInjection
             config.AddOpenBehavior(typeof(ValidationPipelineBehavior<,>));
             config.AddOpenBehavior(typeof(QueryCachingPipelineBehavior<,>));
         });
-        
+
         // Add Mapster
-        var config = TypeAdapterConfig.GlobalSettings;
+        TypeAdapterConfig config = TypeAdapterConfig.GlobalSettings;
         config.Scan(Assembly.GetExecutingAssembly());
         services.AddSingleton(config);
         services.AddSingleton<IMapper, ServiceMapper>();
-        
+
         services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly, includeInternalTypes: true);
-        
+
         return services;
     }
 }

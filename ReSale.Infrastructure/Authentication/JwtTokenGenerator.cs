@@ -1,9 +1,11 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using ReSale.Application.Abstractions.Authentication;
+using ReSale.Application.Auth.Results;
 using ReSale.Domain.Common;
 using ReSale.Domain.Users;
 
@@ -20,21 +22,21 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         _jwtSettings = jwtOptions.Value;
     }
 
-    public string GenerateToken(User user)
+    public AccessTokenResult GenerateToken(User user)
     {
         var signingCredentials = new SigningCredentials(
             new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(_jwtSettings.Secret)),
             SecurityAlgorithms.HmacSha256);
 
-        var claims = new[]
-        {
+        Claim[] claims =
+        [
             new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Email, user.Email.Value),
             new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName.Value),
             new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName.Value),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        };
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        ];
 
         var securityToken = new JwtSecurityToken(
             issuer: _jwtSettings.Issuer,
@@ -43,6 +45,20 @@ public class JwtTokenGenerator : IJwtTokenGenerator
             claims: claims,
             signingCredentials: signingCredentials);
 
-        return new JwtSecurityTokenHandler().WriteToken(securityToken);
+        string? accessToken = new JwtSecurityTokenHandler().WriteToken(securityToken);
+        string? refreshToken = GenerateRefreshToken();
+
+        return new AccessTokenResult(accessToken, _jwtSettings.ExpiryMinutes, refreshToken);
+    }
+
+    private static string GenerateRefreshToken()
+    {
+        byte[] randomNumber = new byte[320];
+
+        using var rng = RandomNumberGenerator.Create();
+
+        rng.GetBytes(randomNumber);
+
+        return Convert.ToBase64String(randomNumber);
     }
 }

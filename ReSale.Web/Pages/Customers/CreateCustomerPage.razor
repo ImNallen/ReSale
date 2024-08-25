@@ -180,27 +180,26 @@
 
     private async Task HandleValidSubmit()
     {
-        var request = new CreateCustomerRequest
-        {
-            Email = _customer.Email,
-            FirstName = _customer.FirstName,
-            LastName = _customer.LastName,
-            ShippingStreet = _customer.ShippingStreet,
-            ShippingCity = _customer.ShippingCity,
-            ShippingState = _customer.ShippingState,
-            ShippingZipCode = _customer.ShippingZipCode,
-            ShippingCountry = _customer.ShippingCountry,
-            PhoneNumber = _customer.PhoneNumber,
-            BillingStreet = _customer.BillingStreet,
-            BillingCity = _customer.BillingCity,
-            BillingState = _customer.BillingState,
-            BillingZipCode = _customer.BillingZipCode,
-            BillingCountry = _customer.BillingCountry
-        };
+        var request = new CreateCustomerRequest(
+            _customer.Email,
+            _customer.FirstName,
+            _customer.LastName,
+            _customer.ShippingStreet,
+            _customer.ShippingCity,
+            _customer.ShippingZipCode,
+            _customer.ShippingCountry,
+            _customer.ShippingState,
+            _customer.PhoneNumber,
+            _customer.BillingStreet,
+            _customer.BillingCity,
+            _customer.BillingZipCode,
+            _customer.BillingCountry,
+            _customer.BillingState
+            );
         
         try
         {
-            await CustomersClient.CreateCustomer(request);
+            await CustomersClient.Create(request);
             _customer = new CreateCustomer();
             _ = ShowNotification("Success", "Customer created successfully!", Notification.NotificationType.Success);
         }

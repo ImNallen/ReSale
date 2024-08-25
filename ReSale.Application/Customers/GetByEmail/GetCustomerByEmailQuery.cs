@@ -5,7 +5,7 @@ namespace ReSale.Application.Customers.GetByEmail;
 
 public sealed record GetCustomerByEmailQuery(string Email) : ICachedQuery<CustomerResult>
 {
-    public string CacheKey => $"customer-by-id-{Email}";
+    public string CacheKey => $"customer-by-email-{Email}";
 
     public TimeSpan? Expiration => TimeSpan.FromMinutes(2);
 }

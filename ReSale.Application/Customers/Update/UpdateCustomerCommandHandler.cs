@@ -15,24 +15,26 @@ public class UpdateCustomerCommandHandler(
     : ICommandHandler<UpdateCustomerCommand, CustomerResult>
 {
     public async Task<Result<CustomerResult>> Handle(
-        UpdateCustomerCommand request, 
+        UpdateCustomerCommand request,
         CancellationToken cancellationToken)
     {
-        var customer = await context.Customers
+        Customer? customer = await context.Customers
             .Where(x => x.Id == request.Id)
             .FirstOrDefaultAsync(cancellationToken);
-        
-        if (customer is null) 
+
+        if (customer is null)
+        {
             return Result.Failure<CustomerResult>(CustomerErrors.NotFound);
-        
-        var firstNameResult = FirstName.Create(request.FirstName);
-        var lastNameResult = LastName.Create(request.LastName);
-        
+        }
+
+        Result<FirstName> firstNameResult = FirstName.Create(request.FirstName);
+        Result<LastName> lastNameResult = LastName.Create(request.LastName);
+
         if (firstNameResult.IsFailure)
         {
             return Result.Failure<CustomerResult>(firstNameResult.Error);
         }
-        
+
         if (lastNameResult.IsFailure)
         {
             return Result.Failure<CustomerResult>(lastNameResult.Error);
@@ -52,7 +54,7 @@ public class UpdateCustomerCommandHandler(
                 request.BillingCountry,
                 request.BillingState);
         }
-        
+
         customer.Update(
             firstNameResult.Value,
             lastNameResult.Value,
@@ -63,9 +65,9 @@ public class UpdateCustomerCommandHandler(
                 request.ShippingCountry,
                 request.ShippingState),
             billingAddress);
-        
+
         await context.SaveChangesAsync(cancellationToken);
-        
+
         return mapper.Map<CustomerResult>(customer);
     }
 }

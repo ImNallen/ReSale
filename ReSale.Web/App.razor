@@ -10,12 +10,18 @@
                     <FocusOnNavigate RouteData="@routeData" Selector="h1"/>
                 </Authorized>
                 <NotAuthorized>
-                    @if (routeData.PageType != typeof(Login) && routeData.PageType != typeof(Verify) && routeData.PageType != typeof(Reset))
+                    @if (routeData.PageType != typeof(Login)
+                         && routeData.PageType != typeof(Verify)
+                         && routeData.PageType != typeof(Reset)
+                         && routeData.PageType != typeof(Register))
                     {
                         <RedirectToLogin />
                     }
                     
-                    @if (routeData.PageType == typeof(Login) || routeData.PageType == typeof(Verify) || routeData.PageType == typeof(Reset))
+                    @if (routeData.PageType == typeof(Login)
+                         || routeData.PageType == typeof(Verify)
+                         || routeData.PageType == typeof(Reset)
+                         || routeData.PageType == typeof(Register))
                     {
                         <RouteView RouteData="@routeData" DefaultLayout="@typeof(EmptyLayout)"/>
                     }

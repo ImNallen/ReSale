@@ -1,0 +1,121 @@
+@page "/register"
+@using ReSale.Api.Contracts.Requests.Auth
+@inject IAuthenticationClient AuthenticationClient
+@inject NavigationManager Navigation
+
+<PageTitle>ReSale | Register</PageTitle>
+
+<Notification @ref="_notificationComponent" />
+
+<div class="h-screen text-white">
+    <div class="flex items-center justify-center h-screen bg-darker-gray">
+        <div class="bg-dark-gray p-8 rounded shadow-md w-full max-w-md">
+            <h2 class="text-2xl mb-6 text-center text-white">Register for ReSale</h2>
+            <EditForm Model="@_registerModel" OnValidSubmit="HandleRegister">
+                <DataAnnotationsValidator/>
+
+                <div class="mb-4">
+                    <label for="email" class="block text-white">Email</label>
+                    <InputText id="email" class="w-full p-2 mt-2 rounded bg-table-gray text-white" @bind-Value="_registerModel.Email"/>
+                    <div class="text-red-primary">
+                        <ValidationMessage For="@(() => _registerModel.Email)"/>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="firstName" class="block text-white">First Name</label>
+                    <InputText id="firstName" class="w-full p-2 mt-2 rounded bg-table-gray text-white" @bind-Value="_registerModel.FirstName"/>
+                    <div class="text-red-primary">
+                        <ValidationMessage For="@(() => _registerModel.FirstName)"/>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="lastName" class="block text-white">Last Name</label>
+                    <InputText id="lastName" class="w-full p-2 mt-2 rounded bg-table-gray text-white" @bind-Value="_registerModel.LastName"/>
+                    <div class="text-red-primary">
+                        <ValidationMessage For="@(() => _registerModel.LastName)"/>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="password" class="block text-white">Password</label>
+                    <InputText id="password" type="password" class="w-full p-2 mt-2 rounded bg-table-gray text-white" @bind-Value="_registerModel.Password"/>
+                    <div class="text-red-primary">
+                        <ValidationMessage For="@(() => _registerModel.Password)"/>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <label for="confirmPassword" class="block text-white">Confirm Password</label>
+                    <InputText id="confirmPassword" type="password" class="w-full p-2 mt-2 rounded bg-table-gray text-white" @bind-Value="_registerModel.ConfirmPassword"/>
+                    <div class="text-red-primary">
+                        <ValidationMessage For="@(() => _registerModel.ConfirmPassword)"/>
+                    </div>
+                </div>
+
+                <button type="submit" disabled="@_isBusy" class="w-full bg-blue-primary hover:bg-blue-secondary disabled:bg-light-gray text-white p-2 rounded">Register</button>
+            </EditForm>
+            <div class="mt-4 text-center">
+                <a href="/login" class="text-blue-primary hover:text-blue-secondary">Already have an account? Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private RegisterModel _registerModel = new();
+    private Notification _notificationComponent = new();
+    private bool _isBusy = false;
+
+    private async Task HandleRegister()
+    {
+        _isBusy = true;
+        
+        try
+        {
+            await AuthenticationClient.Register(new RegisterUserRequest(
+                _registerModel.Email,
+                _registerModel.Password,
+                _registerModel.FirstName,
+                _registerModel.LastName));
+            
+            await ShowNotification("Success", "Registration successful. Please check your email to verify your account.", Notification.NotificationType.Success);
+            Navigation.NavigateTo("/login");
+        }
+        catch (Exception)
+        {
+            await ShowNotification("Error", "An error occurred during registration. Please try again.", Notification.NotificationType.Error);
+        }
+        finally
+        {
+            _isBusy = false;
+        }
+    }
+
+    private async Task ShowNotification(string title, string message, Notification.NotificationType notificationType)
+    {
+        await _notificationComponent.Show(title, message, notificationType);
+    }
+
+    private class RegisterModel
+    {
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; } = string.Empty;
+
+        [Required]
+        public string FirstName { get; set; } = string.Empty;
+
+        [Required]
+        public string LastName { get; set; } = string.Empty;
+
+        [Required]
+        [MinLength(8, ErrorMessage = "Password must be at least 8 characters long")]
+        public string Password { get; set; } = string.Empty;
+
+        [Required]
+        [Compare(nameof(Password), ErrorMessage = "Passwords do not match")]
+        public string ConfirmPassword { get; set; } = string.Empty;
+    }
+}

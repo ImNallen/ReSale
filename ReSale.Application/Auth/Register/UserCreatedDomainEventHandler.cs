@@ -19,7 +19,7 @@ internal sealed class UserCreatedDomainEventHandler(
                 "<br/><br/>",
                 "Your account has been created successfully, please click the link below to verify your email address:",
                 "<br/><br/>",
-                $"<a href=\"https://localhost:5001/api/v1/auth/verify/{notification.User.EmailVerificationToken}\">Click here</a>",
+                $"<a href=\"https://localhost:5003/verify/{notification.User.EmailVerificationToken}\">Click here</a>",
                 "<br/><br/>",
                 "Best regards,",
                 "<br/><br/>",

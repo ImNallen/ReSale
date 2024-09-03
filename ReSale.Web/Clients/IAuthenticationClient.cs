@@ -8,4 +8,10 @@ public interface IAuthenticationClient
 {
     [Post("/api/v1/auth/login")]
     Task<AccessTokenResponse> Login(LoginUserRequest request);
+
+    [Get("/api/v1/auth/verify/{token}")]
+    Task Verify(Guid token);
+
+    [Post("/api/v1/auth/reset/{token}")]
+    Task Reset(Guid token, ResetRequest request);
 }

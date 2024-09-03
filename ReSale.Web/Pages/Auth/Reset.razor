@@ -1,0 +1,82 @@
+@page "/reset/{Token:guid}"
+@using ReSale.Api.Contracts.Requests.Auth
+@inject IAuthenticationClient AuthenticationClient
+@inject NavigationManager Navigation
+
+<PageTitle>ReSale | Reset Password</PageTitle>
+
+<Notification @ref="_notificationComponent" />
+
+<div class="h-screen text-white">
+    <div class="flex items-center justify-center h-screen bg-darker-gray">
+        <div class="bg-dark-gray p-8 rounded shadow-md w-full max-w-md">
+            <h2 class="text-2xl mb-6 text-center text-white">Reset Password</h2>
+            <EditForm Model="@_resetPasswordModel" OnValidSubmit="HandleResetPassword">
+                <DataAnnotationsValidator/>
+
+                <div class="mb-4">
+                    <label for="password" class="block text-white">New Password</label>
+                    <InputText id="password" type="password" class="w-full p-2 mt-2 rounded bg-table-gray text-white" @bind-Value="_resetPasswordModel.Password"/>
+                    <div class="text-red-primary">
+                        <ValidationMessage For="@(() => _resetPasswordModel.Password)"/>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <label for="confirmPassword" class="block text-white">Confirm Password</label>
+                    <InputText id="confirmPassword" type="password" class="w-full p-2 mt-2 rounded bg-table-gray text-white" @bind-Value="_resetPasswordModel.ConfirmPassword"/>
+                    <div class="text-red-primary">
+                        <ValidationMessage For="@(() => _resetPasswordModel.ConfirmPassword)"/>
+                    </div>
+                </div>
+
+                <button type="submit" disabled="@_isBusy" class="w-full bg-blue-primary hover:bg-blue-secondary disabled:bg-light-gray text-white p-2 rounded">Reset Password</button>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Guid Token { get; set; }
+
+    private ResetPasswordModel _resetPasswordModel = new();
+    private Notification _notificationComponent = new();
+    private bool _isBusy = false;
+
+    private async Task HandleResetPassword()
+    {
+        _isBusy = true;
+        
+        try
+        {
+            await AuthenticationClient.Reset(Token, new ResetRequest(_resetPasswordModel.Password));
+            await ShowNotification("Success", "Your password has been reset successfully.", Notification.NotificationType.Success);
+            Navigation.NavigateTo("/login");
+        }
+        catch (Exception)
+        {
+            await ShowNotification("Error", "An error occurred while resetting your password. Please try again.", Notification.NotificationType.Error);
+        }
+        finally
+        {
+            _isBusy = false;
+        }
+    }
+
+    private async Task ShowNotification(string title, string message, Notification.NotificationType notificationType)
+    {
+        await _notificationComponent.Show(title, message, notificationType);
+    }
+
+    private class ResetPasswordModel
+    {
+        [Required]
+        [MinLength(8, ErrorMessage = "Password must be at least 8 characters long")]
+        public string Password { get; set; } = string.Empty;
+
+        [Required]
+        [Compare(nameof(Password), ErrorMessage = "Passwords do not match")]
+        public string ConfirmPassword { get; set; } = string.Empty;
+    }
+}

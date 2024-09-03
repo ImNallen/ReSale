@@ -3,7 +3,6 @@ using ReSale.Application.Abstractions.Messaging;
 using ReSale.Application.Abstractions.Persistence;
 using ReSale.Application.Abstractions.Services;
 using ReSale.Domain.Common;
-using ReSale.Domain.Shared;
 using ReSale.Domain.Users;
 
 namespace ReSale.Application.Auth.Forgot;
@@ -35,7 +34,7 @@ public class ForgotPasswordCommandHandler(
                 "<br/><br/>",
                 "You have requested to reset your password. Please click the link below to reset your password:",
                 "<br/><br/>",
-                $"<a href=\"https://localhost:5001/api/v1/auth/reset/{user.PasswordResetToken}\">Reset Password</a>",
+                $"<a href=\"https://localhost:5003/reset/{user.PasswordResetToken}\">Reset Password</a>",
                 "<br/><br/>",
                 "This link will expire in 24 hours.",
                 "<br/><br/>",

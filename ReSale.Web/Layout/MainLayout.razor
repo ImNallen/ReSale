@@ -1,53 +1,39 @@
 ﻿@inherits LayoutComponentBase
 
-@inject AuthenticationStateProvider AuthenticationStateProvider
+<div class="h-screen text-white">
+    <div class="h-[50px] w-full bg-darker-gray shadow-sm flex justify-between">
+        <button class="text-white hover:bg-blue-primary w-[50px] h-[50px]" @onclick="ToggleMenu">
+            <i class="fas fa-bars"></i>
+        </button>
+        <NavbarLayout/>
+    </div>
+    @if (_isMenuOpen)
+    {
+        <div class="absolute z-10 w-full bg-darker-gray h-[50px] md:hidden">
 
-<AuthorizeView>
-    <Authorized>
-        <div class="h-screen text-white">
-            <div class="h-[50px] w-full bg-darker-gray shadow-sm flex justify-between">
-                <button class="text-white hover:bg-blue-primary w-[50px] h-[50px]" @onclick="ToggleMenu">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <NavbarLayout/>
-            </div>
-            @if (_isMenuOpen)
-            {
-                <div class="absolute z-10 w-full bg-darker-gray h-[50px] md:hidden">
-
-                </div>
-            }
-            <div class="flex h-screen-50 bg-dark-gray">
-                @if (_isMenuOpen)
-                {
-                    <div class="w-[250px] bg-darker-gray shadow-right hidden md:block">
-                        <SidebarLayout/>
-                    </div>
-                }
-                else
-                {
-                    <div class="w-[50px] bg-darker-gray shadow-right hidden md:block">
-                        <SidebarButtonsLayout/>
-                    </div>
-                }
-                <div class="w-full m-4">
-                    @Body
-                </div>
-            </div>
         </div>
-    </Authorized>
-    <NotAuthorized>
-        <Login />
-    </NotAuthorized>
-</AuthorizeView>
+    }
+    <div class="flex h-screen-50 bg-dark-gray">
+        @if (_isMenuOpen)
+        {
+            <div class="w-[250px] bg-darker-gray shadow-right hidden md:block">
+                <SidebarLayout/>
+            </div>
+        }
+        else
+        {
+            <div class="w-[50px] bg-darker-gray shadow-right hidden md:block">
+                <SidebarButtonsLayout/>
+            </div>
+        }
+        <div class="w-full m-4">
+            @Body
+        </div>
+    </div>
+</div>
 
 @code {
     bool _isMenuOpen;
-
-    protected override async Task OnInitializedAsync()
-    {
-        await AuthenticationStateProvider.GetAuthenticationStateAsync();
-    }
 
     void ToggleMenu()
     {

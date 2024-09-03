@@ -1,4 +1,6 @@
-﻿@using ReSale.Api.Contracts.Requests.Auth
+﻿@page "/login"
+
+@using ReSale.Api.Contracts.Requests.Auth
 @inject IAuthenticationClient AuthenticationClient
 @inject ILocalStorageService LocalStorage
 @inject NavigationManager Navigation
@@ -8,31 +10,33 @@
 
 <Notification @ref="_notificationComponent" />
 
-<div class="flex items-center justify-center h-screen bg-darker-gray">
-    <div class="bg-dark-gray p-8 rounded shadow-md w-full max-w-md">
-        <h2 class="text-2xl mb-6 text-center text-white">ReSale</h2>
-        <EditForm Model="@_loginModel" OnValidSubmit="HandleLogin">
-            <DataAnnotationsValidator/>
+<div class="h-screen text-white">
+    <div class="flex items-center justify-center h-screen bg-darker-gray">
+        <div class="bg-dark-gray p-8 rounded shadow-md w-full max-w-md">
+            <h2 class="text-2xl mb-6 text-center text-white">ReSale</h2>
+            <EditForm Model="@_loginModel" OnValidSubmit="HandleLogin">
+                <DataAnnotationsValidator/>
 
-            <div class="mb-4">
-                <label for="email" class="block text-white">Email</label>
-                <InputText id="email" class="w-full p-2 mt-2 rounded bg-table-gray text-white" @bind-Value="_loginModel.Email"/>
-                <div class="text-red-primary">
-                    <ValidationMessage For="@(() => _loginModel.Email)"/>
+                <div class="mb-4">
+                    <label for="email" class="block text-white">Email</label>
+                    <InputText id="email" class="w-full p-2 mt-2 rounded bg-table-gray text-white" @bind-Value="_loginModel.Email"/>
+                    <div class="text-red-primary">
+                        <ValidationMessage For="@(() => _loginModel.Email)"/>
+                    </div>
                 </div>
-            </div>
 
-            <div class="mb-8">
-                <label for="password" class="block text-white">Password</label>
-                <InputText id="password" type="password" class="w-full p-2 mt-2 rounded bg-table-gray text-white" @bind-Value="_loginModel.Password"/>
-                <div class="text-red-primary">
-                    <ValidationMessage For="@(() => _loginModel.Password)"/>
+                <div class="mb-8">
+                    <label for="password" class="block text-white">Password</label>
+                    <InputText id="password" type="password" class="w-full p-2 mt-2 rounded bg-table-gray text-white" @bind-Value="_loginModel.Password"/>
+                    <div class="text-red-primary">
+                        <ValidationMessage For="@(() => _loginModel.Password)"/>
+                    </div>
+                    <p class="text-red-primary">@_errorMessage</p>
                 </div>
-                <p class="text-red-primary">@_errorMessage</p>
-            </div>
 
-            <button type="submit" disabled="@_isBusy" class="w-full bg-blue-primary hover:bg-blue-secondary disabled:bg-light-gray text-white p-2 rounded">Login</button>
-        </EditForm>
+                <button type="submit" disabled="@_isBusy" class="w-full bg-blue-primary hover:bg-blue-secondary disabled:bg-light-gray text-white p-2 rounded">Login</button>
+            </EditForm>
+        </div>
     </div>
 </div>
 

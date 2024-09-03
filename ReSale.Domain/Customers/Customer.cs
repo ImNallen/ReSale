@@ -63,7 +63,7 @@ public sealed class Customer : Entity
             billingAddress,
             phoneNumber);
 
-        customer.Raise(new CustomerCreatedDomainEvent(customer.Id));
+        customer.RaiseDomainEvent(new CustomerCreatedDomainEvent(customer.Id));
 
         return customer;
     }

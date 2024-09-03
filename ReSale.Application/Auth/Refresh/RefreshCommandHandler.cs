@@ -4,6 +4,7 @@ using ReSale.Application.Abstractions.Messaging;
 using ReSale.Application.Abstractions.Persistence;
 using ReSale.Application.Auth.Results;
 using ReSale.Domain.Common;
+using ReSale.Domain.Shared;
 using ReSale.Domain.Users;
 
 namespace ReSale.Application.Auth.Refresh;
@@ -22,7 +23,7 @@ public class RefreshCommandHandler(
 
         if (user is null)
         {
-            return Result.Failure<AccessTokenResult>(UserErrors.NotFound);
+            return Result.Failure<AccessTokenResult>(DomainErrors.NotFound(nameof(User)));
         }
 
         AccessTokenResult tokens = tokenGenerator.GenerateToken(user);

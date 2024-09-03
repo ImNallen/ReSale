@@ -5,6 +5,7 @@ using ReSale.Application.Abstractions.Persistence;
 using ReSale.Application.Products.Results;
 using ReSale.Domain.Common;
 using ReSale.Domain.Products;
+using ReSale.Domain.Shared;
 
 namespace ReSale.Application.Products.GetById;
 
@@ -23,7 +24,7 @@ public class GetProductByIdQueryHandler(
 
         if (product is null)
         {
-            return Result.Failure<ProductResult>(ProductErrors.NotFound);
+            return Result.Failure<ProductResult>(DomainErrors.NotFound(nameof(Product)));
         }
 
         return product;

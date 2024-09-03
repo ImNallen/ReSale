@@ -46,7 +46,7 @@ internal sealed class CreateCustomerCommandHandler(
 
         if (emailExists)
         {
-            return Result.Failure<CustomerResult>(EmailErrors.NotUnique);
+            return Result.Failure<CustomerResult>(DomainErrors.NotUnique(nameof(Email)));
         }
 
         Address? billingAddress = null;

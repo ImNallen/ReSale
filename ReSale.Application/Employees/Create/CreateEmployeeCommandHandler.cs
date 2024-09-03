@@ -42,7 +42,7 @@ public class CreateEmployeeCommandHandler(
 
         if (emailExists)
         {
-            return Result.Failure<EmployeeResult>(EmailErrors.NotUnique);
+            return Result.Failure<EmployeeResult>(DomainErrors.NotUnique(nameof(Email)));
         }
 
         var employee = Employee.Create(

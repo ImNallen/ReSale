@@ -15,12 +15,12 @@ public sealed record PhoneNumber
     {
         if (string.IsNullOrEmpty(value))
         {
-            return Result.Failure<PhoneNumber>(PhoneNumberErrors.Empty);
+            return Result.Failure<PhoneNumber>(DomainErrors.Empty(nameof(PhoneNumber)));
         }
 
         if (!IsValidPhoneNumber(value))
         {
-            return Result.Failure<PhoneNumber>(PhoneNumberErrors.NotValid);
+            return Result.Failure<PhoneNumber>(DomainErrors.InvalidFormat(nameof(PhoneNumber)));
         }
 
         return new PhoneNumber(value);

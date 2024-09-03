@@ -3,6 +3,7 @@ using ReSale.Application.Abstractions.Messaging;
 using ReSale.Application.Abstractions.Persistence;
 using ReSale.Domain.Common;
 using ReSale.Domain.Employees;
+using ReSale.Domain.Shared;
 
 namespace ReSale.Application.Employees.Delete;
 
@@ -20,7 +21,7 @@ public class DeleteEmployeeCommandHandler(
 
         if (employee is null)
         {
-            return Result.Failure<bool>(EmployeeErrors.NotFound);
+            return Result.Failure<bool>(DomainErrors.NotFound(nameof(Employee)));
         }
 
         context.Employees.Remove(employee);

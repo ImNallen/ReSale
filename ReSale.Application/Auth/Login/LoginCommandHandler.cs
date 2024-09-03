@@ -5,6 +5,7 @@ using ReSale.Application.Abstractions.Messaging;
 using ReSale.Application.Abstractions.Persistence;
 using ReSale.Application.Auth.Results;
 using ReSale.Domain.Common;
+using ReSale.Domain.Shared;
 using ReSale.Domain.Users;
 
 namespace ReSale.Application.Auth.Login;
@@ -23,12 +24,12 @@ public class LoginCommandHandler(
 
         if (user is null)
         {
-            return Result.Failure<AccessTokenResult>(UserErrors.NotFound);
+            return Result.Failure<AccessTokenResult>(DomainErrors.NotFound(nameof(User)));
         }
 
         if (!hasher.Verify(request.Password, user.Password.Value))
         {
-            return Result.Failure<AccessTokenResult>(UserErrors.InvalidCredentials);
+            return Result.Failure<AccessTokenResult>(DomainErrors.InvalidCredentials);
         }
 
         AccessTokenResult tokens = tokenGenerator.GenerateToken(user);

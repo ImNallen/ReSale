@@ -14,14 +14,14 @@ public sealed record Email
     {
         if (string.IsNullOrEmpty(email))
         {
-            return Result.Failure<Email>(EmailErrors.Empty);
+            return Result.Failure<Email>(DomainErrors.Empty(nameof(Email)));
         }
 
         email = email.ToLower(System.Globalization.CultureInfo.CurrentCulture);
 
         if (email.Split('@').Length != 2)
         {
-            return Result.Failure<Email>(EmailErrors.InvalidFormat);
+            return Result.Failure<Email>(DomainErrors.InvalidFormat(nameof(Email)));
         }
 
         return new Email(email);

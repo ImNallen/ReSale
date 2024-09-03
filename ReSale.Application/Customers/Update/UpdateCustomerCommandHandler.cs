@@ -24,7 +24,7 @@ public class UpdateCustomerCommandHandler(
 
         if (customer is null)
         {
-            return Result.Failure<CustomerResult>(CustomerErrors.NotFound);
+            return Result.Failure<CustomerResult>(DomainErrors.NotFound(nameof(Customer)));
         }
 
         Result<FirstName> firstNameResult = FirstName.Create(request.FirstName);

@@ -5,6 +5,7 @@ using ReSale.Application.Abstractions.Persistence;
 using ReSale.Application.Employees.Results;
 using ReSale.Domain.Common;
 using ReSale.Domain.Employees;
+using ReSale.Domain.Shared;
 
 namespace ReSale.Application.Employees.GetById;
 
@@ -24,7 +25,7 @@ public class GetEmployeeByIdQueryHandler(
 
         if (employee is null)
         {
-            return Result.Failure<EmployeeResult>(EmployeeErrors.NotFound);
+            return Result.Failure<EmployeeResult>(DomainErrors.NotFound(nameof(Employee)));
         }
 
         return employee;

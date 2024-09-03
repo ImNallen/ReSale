@@ -12,11 +12,13 @@ using ReSale.Application.Abstractions.Authentication;
 using ReSale.Application.Abstractions.Caching;
 using ReSale.Application.Abstractions.Encryption;
 using ReSale.Application.Abstractions.Persistence;
+using ReSale.Application.Abstractions.Services;
 using ReSale.Domain.Common;
 using ReSale.Infrastructure.Authentication;
 using ReSale.Infrastructure.Caching;
 using ReSale.Infrastructure.Encryption;
 using ReSale.Infrastructure.Persistence;
+using ReSale.Infrastructure.Services.Email;
 using ReSale.Infrastructure.Time;
 
 namespace ReSale.Infrastructure;
@@ -31,7 +33,22 @@ public static class DependencyInjection
             .AddDatabase(configuration)
             .AddCaching(configuration)
             .AddAuthentication(configuration)
-            .AddHealthChecks(configuration);
+            .AddHealthChecks(configuration)
+            .AddFluentEmail(configuration);
+
+    private static IServiceCollection AddFluentEmail(
+        this IServiceCollection services,
+        IConfiguration configuration)
+    {
+        services
+            .AddFluentEmail(configuration["Email:SenderEmail"], configuration["Email:SenderName"])
+            .AddRazorRenderer()
+            .AddSmtpSender(configuration["Email:Host"], configuration.GetValue<int>("Email:Port"));
+
+        services.AddScoped<IEmailService, EmailService>();
+
+        return services;
+    }
 
     private static IServiceCollection AddAuthentication(
         this IServiceCollection services,

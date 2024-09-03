@@ -5,6 +5,7 @@ using ReSale.Application.Abstractions.Persistence;
 using ReSale.Application.Customers.Results;
 using ReSale.Domain.Common;
 using ReSale.Domain.Customers;
+using ReSale.Domain.Shared;
 
 namespace ReSale.Application.Customers.GetByEmail;
 
@@ -24,7 +25,7 @@ public class GetCustomerByEmailQueryHandler(
 
         if (customer is null)
         {
-            return Result.Failure<CustomerResult>(CustomerErrors.NotFound);
+            return Result.Failure<CustomerResult>(DomainErrors.NotFound(nameof(Customer)));
         }
 
         return customer;

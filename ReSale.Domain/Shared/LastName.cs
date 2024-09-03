@@ -15,7 +15,7 @@ public sealed record LastName
     {
         if (string.IsNullOrEmpty(value))
         {
-            return Result.Failure<LastName>(LastNameErrors.Empty);
+            return Result.Failure<LastName>(DomainErrors.Empty(nameof(LastName)));
         }
 
         value = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value.ToLower(CultureInfo.CurrentCulture));

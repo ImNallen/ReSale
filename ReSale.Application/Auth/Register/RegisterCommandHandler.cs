@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ReSale.Application.Abstractions.Authentication;
 using ReSale.Application.Abstractions.Encryption;
 using ReSale.Application.Abstractions.Messaging;
 using ReSale.Application.Abstractions.Persistence;
@@ -48,14 +49,15 @@ internal sealed class RegisterCommandHandler(
 
         if (emailExists)
         {
-            return Result.Failure<Guid>(EmailErrors.NotUnique);
+            return Result.Failure<Guid>(DomainErrors.NotUnique(nameof(Email)));
         }
 
         var user = User.Create(
             emailResult.Value,
             passwordResult.Value,
             firstNameResult.Value,
-            lastNameResult.Value);
+            lastNameResult.Value,
+            Guid.NewGuid());
 
         await context.Users.AddAsync(user, cancellationToken);
 

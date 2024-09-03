@@ -3,6 +3,7 @@ using ReSale.Application.Abstractions.Messaging;
 using ReSale.Application.Abstractions.Persistence;
 using ReSale.Domain.Common;
 using ReSale.Domain.Customers;
+using ReSale.Domain.Shared;
 
 namespace ReSale.Application.Customers.Delete;
 
@@ -18,7 +19,7 @@ public class DeleteCustomerCommandHandler(
 
         if (customer is null)
         {
-            return Result.Failure<bool>(CustomerErrors.NotFound);
+            return Result.Failure<bool>(DomainErrors.NotFound(nameof(Customer)));
         }
 
         context.Customers.Remove(customer);

@@ -17,4 +17,7 @@ public interface IAuthenticationClient
 
     [Post("/api/v1/auth/register")]
     Task<Guid> Register(RegisterUserRequest request);
+
+    [Post("/api/v1/auth/forgot")]
+    Task Forgot(ForgotPasswordRequest request);
 }

@@ -13,7 +13,8 @@
                     @if (routeData.PageType != typeof(Login)
                          && routeData.PageType != typeof(Verify)
                          && routeData.PageType != typeof(Reset)
-                         && routeData.PageType != typeof(Register))
+                         && routeData.PageType != typeof(Register)
+                         && routeData.PageType != typeof(Forgot))
                     {
                         <RedirectToLogin />
                     }
@@ -21,7 +22,8 @@
                     @if (routeData.PageType == typeof(Login)
                          || routeData.PageType == typeof(Verify)
                          || routeData.PageType == typeof(Reset)
-                         || routeData.PageType == typeof(Register))
+                         || routeData.PageType == typeof(Register)
+                         || routeData.PageType == typeof(Forgot))
                     {
                         <RouteView RouteData="@routeData" DefaultLayout="@typeof(EmptyLayout)"/>
                     }

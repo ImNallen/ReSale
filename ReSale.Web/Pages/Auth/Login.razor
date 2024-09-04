@@ -25,7 +25,7 @@
                     </div>
                 </div>
 
-                <div class="mb-8">
+                <div>
                     <label for="password" class="block text-white">Password</label>
                     <InputText id="password" type="password" class="w-full p-2 mt-2 rounded bg-table-gray text-white" @bind-Value="_loginModel.Password"/>
                     <div class="text-red-primary">
@@ -33,12 +33,15 @@
                     </div>
                     <p class="text-red-primary">@_errorMessage</p>
                 </div>
+                <div class="mt-2 mb-8 text-center">
+                    <a href="/forgot" class="text-blue-primary hover:text-blue-secondary">Forgot Password?</a>
+                </div>
 
                 <button type="submit" disabled="@_isBusy" class="w-full bg-blue-primary hover:bg-blue-secondary disabled:bg-light-gray text-white p-2 rounded">Login</button>
             </EditForm>
             <div class="mt-4 text-center">
-    <a href="/register" class="text-blue-primary hover:text-blue-secondary">Don't have an account? Register</a>
-</div>
+                <a href="/register" class="text-blue-primary hover:text-blue-secondary">Don't have an account? Register</a>
+            </div>
         </div>
     </div>
 </div>

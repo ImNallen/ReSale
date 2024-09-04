@@ -1,0 +1,70 @@
+@page "/forgot"
+@using ReSale.Api.Contracts.Requests.Auth
+@inject IAuthenticationClient AuthenticationClient
+@inject NavigationManager Navigation
+
+<PageTitle>ReSale | Forgot Password</PageTitle>
+
+<Notification @ref="_notificationComponent" />
+
+<div class="h-screen text-white">
+    <div class="flex items-center justify-center h-screen bg-darker-gray">
+        <div class="bg-dark-gray p-8 rounded shadow-md w-full max-w-md">
+            <h2 class="text-2xl mb-6 text-center text-white">Forgot Password?</h2>
+            <EditForm Model="@_forgotPasswordModel" OnValidSubmit="HandleForgotPassword">
+                <DataAnnotationsValidator/>
+
+                <div class="mb-4">
+                    <label for="email" class="block text-white">Email</label>
+                    <InputText id="email" class="w-full p-2 mt-2 rounded bg-table-gray text-white" @bind-Value="_forgotPasswordModel.Email"/>
+                    <div class="text-red-primary">
+                        <ValidationMessage For="@(() => _forgotPasswordModel.Email)"/>
+                    </div>
+                </div>
+
+                <button type="submit" disabled="@_isBusy" class="w-full bg-blue-primary hover:bg-blue-secondary disabled:bg-light-gray text-white p-2 rounded">Send Reset Link</button>
+            </EditForm>
+            <div class="mt-4 text-center">
+                <a href="/login" class="text-blue-primary hover:text-blue-secondary">Back to Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private ForgotPasswordModel _forgotPasswordModel = new();
+    private Notification _notificationComponent = new();
+    private bool _isBusy = false;
+
+    private async Task HandleForgotPassword()
+    {
+        _isBusy = true;
+        
+        try
+        {
+            await AuthenticationClient.Forgot(new ForgotPasswordRequest(_forgotPasswordModel.Email));
+            await ShowNotification("Success", "If an account with that email exists, we've sent a password reset link.", Notification.NotificationType.Success);
+            Navigation.NavigateTo("/login");
+        }
+        catch (Exception)
+        {
+            await ShowNotification("Error", "An error occurred. Please try again.", Notification.NotificationType.Error);
+        }
+        finally
+        {
+            _isBusy = false;
+        }
+    }
+
+    private async Task ShowNotification(string title, string message, Notification.NotificationType notificationType)
+    {
+        await _notificationComponent.Show(title, message, notificationType);
+    }
+
+    private class ForgotPasswordModel
+    {
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; } = string.Empty;
+    }
+}

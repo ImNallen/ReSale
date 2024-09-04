@@ -1,5 +1,6 @@
 ﻿@using ReSale.Web.Pages.Auth
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager Navigation
 
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(App).Assembly">
@@ -40,13 +41,13 @@
                             <h1 class="text-8xl font-bold text-red-primary">404</h1>
                             <h2 class="text-6xl font-bold text-red-primary">Page Not Found</h2>
                             <p class="text-4xl mt-8 text-light-gray">It's okay to panic!</p>
-                            <p class="text-sm mt-4 text-light-gray">This page is still under construction by our trained AI.</p>
-                            <a href="/" class="mt-6 inline-block text-blue-primary hover:text-blue-secondary">
-                                <div class="flex">
-                                    <i class="fas fa-arrow-left mt-1 mr-2"></i>
-                                    <p>Back to home</p>
+                            <p class="text-sm mt-4 text-light-gray">Oops! Looks like our AI took a coffee break and forgot to build this page.</p>
+                            <p class="text-sm mt-4 text-light-gray">Maybe it's meditating on the meaning of '404'?</p>
+                            <button @onclick="NavigateToHome" class="mt-6 p-4 rounded inline-block bg-blue-primary hover:bg-blue-secondary border-none cursor-pointer">
+                                <div class="flex items-center">
+                                    <span>Back to home</span>
                                 </div>
-                            </a>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -59,5 +60,10 @@
     protected override async Task OnInitializedAsync()
     {
         await AuthenticationStateProvider.GetAuthenticationStateAsync();
+    }
+
+    private void NavigateToHome()
+    {
+        Navigation.NavigateTo("/");
     }
 }

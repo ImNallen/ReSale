@@ -1,0 +1,51 @@
+@if (!string.IsNullOrWhiteSpace(Street))
+{
+    <div class="mb-2">
+        <span class="font-semibold">Street:</span> @Street
+    </div>
+}
+
+@if (!string.IsNullOrWhiteSpace(City))
+{
+    <div class="mb-2">
+        <span class="font-semibold">City:</span> @City
+    </div>
+}
+
+@if (!string.IsNullOrWhiteSpace(ZipCode))
+{
+    <div class="mb-2">
+        <span class="font-semibold">Zip Code:</span> @ZipCode
+    </div>
+}
+
+@if (!string.IsNullOrWhiteSpace(Country))
+{
+    <div class="mb-2">
+        <span class="font-semibold">Country:</span> @Country
+    </div>
+}
+
+@if (!string.IsNullOrWhiteSpace(State))
+{
+    <div class="mb-2">
+        <span class="font-semibold">State:</span> @State
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string Street { get; set; } = string.Empty;
+
+    [Parameter]
+    public string City { get; set; } = string.Empty;
+
+    [Parameter]
+    public string ZipCode { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Country { get; set; } = string.Empty;
+
+    [Parameter]
+    public string? State { get; set; }
+}

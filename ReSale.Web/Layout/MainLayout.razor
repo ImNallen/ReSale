@@ -1,32 +1,29 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="h-screen text-white">
-    <div class="h-[50px] w-full bg-darker-gray shadow-sm flex justify-between">
-        <button class="text-white hover:bg-blue-primary w-[50px] h-[50px]" @onclick="ToggleMenu">
-            <i class="fas fa-bars"></i>
+<div class="h-screen">
+    <div class="h-[50px] w-full bg-background-primary shadow-sm flex justify-between">
+        <button 
+            class="text-parchment hover:bg-blue-primary w-[50px] h-[50px] transition-colors duration-300 ease-in-out focus:outline-none" 
+            @onclick="ToggleMenu"
+            aria-label="Toggle Menu">
+            <i class="fas fa-bars text-lg"></i>
         </button>
         <NavbarLayout/>
     </div>
-    @if (_isMenuOpen)
-    {
-        <div class="absolute z-10 w-full bg-darker-gray h-[50px] md:hidden">
-
-        </div>
-    }
-    <div class="flex h-screen-50 bg-dark-gray">
+    <div class="flex h-screen-50 bg-background-primary">
         @if (_isMenuOpen)
         {
-            <div class="w-[250px] bg-darker-gray shadow-right hidden md:block">
+            <div class="w-[250px] bg-background-primary shadow-right hidden md:block">
                 <SidebarLayout/>
             </div>
         }
         else
         {
-            <div class="w-[50px] bg-darker-gray shadow-right hidden md:block">
+            <div class="w-[50px] bg-background-primary shadow-right hidden md:block">
                 <SidebarButtonsLayout/>
             </div>
         }
-        <div class="w-full m-4">
+        <div class="w-full">
             @Body
         </div>
     </div>

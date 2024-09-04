@@ -7,58 +7,54 @@
 
 <Notification @ref="_notificationComponent" />
 
-<div class="h-screen text-white">
-    <div class="flex items-center justify-center h-screen bg-darker-gray">
-        <div class="bg-dark-gray p-8 rounded shadow-md w-full max-w-md">
-            <h2 class="text-2xl mb-6 text-center text-white">Register for ReSale</h2>
-            <EditForm Model="@_registerModel" OnValidSubmit="HandleRegister">
-                <DataAnnotationsValidator/>
+<div class="min-h-screen flex items-center justify-center bg-background-primary">
+    <div class="bg-background-secondary p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h2 class="text-3xl font-bold mb-6 text-center text-parchment">Register for ReSale</h2>
+        <EditForm Model="@_registerModel" OnValidSubmit="HandleRegister">
+            <DataAnnotationsValidator/>
 
-                <div class="mb-4">
-                    <label for="email" class="block text-white">Email</label>
-                    <InputText id="email" class="w-full p-2 mt-2 rounded bg-table-gray text-white" @bind-Value="_registerModel.Email"/>
-                    <div class="text-red-primary">
-                        <ValidationMessage For="@(() => _registerModel.Email)"/>
-                    </div>
-                </div>
-
-                <div class="mb-4">
-                    <label for="firstName" class="block text-white">First Name</label>
-                    <InputText id="firstName" class="w-full p-2 mt-2 rounded bg-table-gray text-white" @bind-Value="_registerModel.FirstName"/>
-                    <div class="text-red-primary">
-                        <ValidationMessage For="@(() => _registerModel.FirstName)"/>
-                    </div>
-                </div>
-
-                <div class="mb-4">
-                    <label for="lastName" class="block text-white">Last Name</label>
-                    <InputText id="lastName" class="w-full p-2 mt-2 rounded bg-table-gray text-white" @bind-Value="_registerModel.LastName"/>
-                    <div class="text-red-primary">
-                        <ValidationMessage For="@(() => _registerModel.LastName)"/>
-                    </div>
-                </div>
-
-                <div class="mb-4">
-                    <label for="password" class="block text-white">Password</label>
-                    <InputText id="password" type="password" class="w-full p-2 mt-2 rounded bg-table-gray text-white" @bind-Value="_registerModel.Password"/>
-                    <div class="text-red-primary">
-                        <ValidationMessage For="@(() => _registerModel.Password)"/>
-                    </div>
-                </div>
-
-                <div class="mb-8">
-                    <label for="confirmPassword" class="block text-white">Confirm Password</label>
-                    <InputText id="confirmPassword" type="password" class="w-full p-2 mt-2 rounded bg-table-gray text-white" @bind-Value="_registerModel.ConfirmPassword"/>
-                    <div class="text-red-primary">
-                        <ValidationMessage For="@(() => _registerModel.ConfirmPassword)"/>
-                    </div>
-                </div>
-
-                <button type="submit" disabled="@_isBusy" class="w-full bg-blue-primary hover:bg-blue-secondary disabled:bg-light-gray text-white p-2 rounded">Register</button>
-            </EditForm>
-            <div class="mt-4 text-center">
-                <a href="/login" class="text-blue-primary hover:text-blue-secondary">Already have an account? Login</a>
+            <div class="mb-6">
+                <label for="email" class="block text-sm font-medium mb-2">Email</label>
+                <InputText id="email" class="w-full p-3 rounded-md bg-parchment text-background-secondary focus:outline-none focus:ring-2 focus:ring-parchment" @bind-Value="_registerModel.Email"/>
+                <ValidationMessage For="@(() => _registerModel.Email)" class="text-red-primary text-sm mt-1"/>
             </div>
+
+            <div class="mb-6">
+                <label for="firstName" class="block text-sm font-medium mb-2">First Name</label>
+                <InputText id="firstName" class="w-full p-3 rounded-md bg-parchment text-background-secondary focus:outline-none focus:ring-2 focus:ring-parchment" @bind-Value="_registerModel.FirstName"/>
+                <ValidationMessage For="@(() => _registerModel.FirstName)" class="text-red-primary text-sm mt-1"/>
+            </div>
+
+            <div class="mb-6">
+                <label for="lastName" class="block text-sm font-medium mb-2">Last Name</label>
+                <InputText id="lastName" class="w-full p-3 rounded-md bg-parchment text-background-secondary focus:outline-none focus:ring-2 focus:ring-parchment" @bind-Value="_registerModel.LastName"/>
+                <ValidationMessage For="@(() => _registerModel.LastName)" class="text-red-primary text-sm mt-1"/>
+            </div>
+
+            <div class="mb-6">
+                <label for="password" class="block text-sm font-medium mb-2">Password</label>
+                <InputText id="password" type="password" class="w-full p-3 rounded-md bg-parchment text-background-secondary focus:outline-none focus:ring-2 focus:ring-parchment" @bind-Value="_registerModel.Password"/>
+                <ValidationMessage For="@(() => _registerModel.Password)" class="text-red-primary text-sm mt-1"/>
+            </div>
+
+            <div class="mb-6">
+                <label for="confirmPassword" class="block text-sm font-medium mb-2">Confirm Password</label>
+                <InputText id="confirmPassword" type="password" class="w-full p-3 rounded-md bg-parchment text-background-secondary focus:outline-none focus:ring-2 focus:ring-parchment" @bind-Value="_registerModel.ConfirmPassword"/>
+                <ValidationMessage For="@(() => _registerModel.ConfirmPassword)" class="text-red-primary text-sm mt-1"/>
+            </div>
+
+            <button type="submit" disabled="@_isBusy" class="w-full bg-parchment disabled:bg-light-gray text-background-secondary p-3 rounded-md font-medium transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-parchment focus:ring-opacity-50">
+                @if (_isBusy)
+                {
+                    <span class="inline-block animate-spin mr-2">&#8635;</span>
+                }
+                Register
+            </button>
+        </EditForm>
+        <div class="mt-4 text-center">
+            <a href="/login" class="inline-block text-parchment font-medium text-sm transition duration-300 ease-in-out hover:scale-105">
+                Already have an account? Login here
+            </a>
         </div>
     </div>
 </div>

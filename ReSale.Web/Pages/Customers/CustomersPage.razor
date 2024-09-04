@@ -5,69 +5,93 @@
 
 <PageTitle>ReSale | Customers</PageTitle>
 
-<div class="flex flex-col h-full">
-    <div class="flex justify-between">
-        <div>
-            <h3 class="p-4 bg-table-gray rounded">Customers</h3>
-        </div>
-        <div class="flex">
-            <button class="bg-table-gray hover:bg-green-primary p-[10px] rounded-l" title="Create" @onclick="@(() => NavigationManager.NavigateTo("/customers/create"))">
-                <i class="fas fa-plus p-2"></i>
+<div class="flex flex-col h-full bg-background-secondary p-4">
+    <div class="flex flex-col md:flex-row justify-between items-center bg-background-primary p-4 rounded shadow-md">
+        <h3 class="text-2xl font-bold mb-4 md:mb-0">Customers</h3>
+        <div class="flex flex-col sm:flex-row w-full md:w-auto space-y-2 sm:space-y-0 sm:space-x-2">
+            <button class="bg-green-primary hover:bg-green-secondary text-white py-2 px-4 rounded transition duration-300 ease-in-out flex items-center justify-center shadow-md focus:outline-none focus:ring-2 focus:ring-green-secondary" 
+                    title="Create New Customer" 
+                    @onclick="@(() => NavigationManager.NavigateTo("/customers/create"))"
+                    aria-label="Create New Customer">
+                <i class="fas fa-user-plus mr-2"></i>
+                <span>New Customer</span>
             </button>
-            <input type="text" placeholder="Search..." @bind="_searchTerm" class="bg-table-gray p-2 focus:outline-0"/>
-            <button class="bg-table-gray hover:bg-blue-primary p-[10px] rounded-r" title="Search" @onclick="Search">
-                <i class="fas fa-magnifying-glass p-2"></i>
-            </button>
+            <div class="relative flex-grow sm:flex-grow-0">
+                <input type="text" 
+                       placeholder="Search customers..." 
+                       @bind="_searchTerm" 
+                       @oninput="HandleSearchInput"
+                       @onkeyup="HandleKeyPress" 
+                       class="w-full bg-parchment text-background-secondary py-2 pl-10 pr-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-primary transition duration-300 ease-in-out"
+                       aria-label="Search customers"/>
+                <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                @if (!string.IsNullOrWhiteSpace(_searchTerm))
+                {
+                    <button @onclick="ClearSearch" 
+                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
+                            aria-label="Clear search">
+                        <i class="fas fa-times"></i>
+                    </button>
+                }
+            </div>
         </div>
-        <div></div>
     </div>
 
     @if (!Customers.Any())
     {
-    <div class="mt-4 bg-darker-gray rounded p-4">
-        <div class="flex items-center justify-center h-[440px]">
-            <p class="text-2xl">No customers found</p>
+        <div class="mt-4 bg-background-primary rounded p-4 flex items-center justify-center h-[440px]">
+            <div class="flex space-x-2">
+                <div class="w-4 h-4 bg-parchment rounded-full animate-bounce" style="animation-duration: 0.8s"></div>
+                <div class="w-4 h-4 bg-parchment rounded-full animate-bounce" style="animation-delay: 0.2s; animation-duration: 0.8s"></div>
+                <div class="w-4 h-4 bg-parchment rounded-full animate-bounce" style="animation-delay: 0.4s; animation-duration: 0.8s"></div>
+            </div>
         </div>
-    </div>
     }
     else
     {
-    <div class="mt-4 rounded-t flex-grow bg-table-gray overflow-x-auto overflow-y-auto">
+    <div class="mt-4 rounded-t flex-grow bg-background-primary overflow-auto">
         <table class="w-full table-auto">
-            <thead class="border-separate border-spacing-0">
+            <thead>
             <tr>
-                <th scope="col" class="hidden lg:table-cell sticky top-0 z-10 text-left bg-darker-gray bg-opacity-75 py-2 pl-4 backdrop-blur backdrop-filter font-semibold">ID</th>
-                <th scope="col" class="sticky top-0 z-10 text-left bg-darker-gray bg-opacity-75 py-2 pl-4 lg:pl-2 backdrop-blur backdrop-filter font-semibold">Name</th>
-                <th scope="col" class="sticky top-0 z-10 text-left bg-darker-gray bg-opacity-75 py-2 pl-2 backdrop-blur backdrop-filter font-semibold">Email</th>
-                <th scope="col" class="sticky top-0 z-10 text-left bg-darker-gray bg-opacity-75 py-2 pr-4 pl-2 backdrop-blur backdrop-filter font-semibold">Phone number</th>
+                <th scope="col" class="hidden lg:table-cell sticky top-0 z-10 text-left py-3 px-4 font-semibold">ID</th>
+                <th scope="col" class="sticky top-0 z-10 text-left py-3 px-4 font-semibold">Name</th>
+                <th scope="col" class="sticky top-0 z-10 text-left py-3 px-4 font-semibold">Email</th>
+                <th scope="col" class="sticky top-0 z-10 text-left py-3 px-4 font-semibold">Phone number</th>
             </tr>
             </thead>
-            <tbody class="mt-4">
+            <tbody>
             @foreach (var customer in Customers)
             {
-                <tr class="hover:bg-dark-gray hover:cursor-pointer" @onclick="@(() => NavigationManager.NavigateTo($"/customers/{customer.Id}"))">
-                    <td class="hidden lg:table-cell border-t border-b border-dark-gray whitespace-nowrap text-sm py-2 pl-4">@customer.Id</td>
-                    <td class="border-t border-b border-dark-gray whitespace-nowrap text-sm py-2 pl-4 lg:pl-2">@customer.FirstName @customer.LastName</td>
-                    <td class="border-t border-b border-dark-gray whitespace-nowrap text-sm py-2 pl-2">@customer.Email</td>
-                    <td class="border-t border-b border-dark-gray whitespace-nowrap text-sm py-2 pr-4 pl-2">@customer.PhoneNumber</td>
+                <tr class="hover:bg-background-secondary transition duration-300 ease-in-out cursor-pointer" @onclick="@(() => NavigationManager.NavigateTo($"/customers/{customer.Id}"))">
+                    <td class="hidden lg:table-cell border-t border-background-secondary py-3 px-4">@customer.Id</td>
+                    <td class="border-t border-background-secondary py-3 px-4">@customer.FirstName @customer.LastName</td>
+                    <td class="border-t border-background-secondary py-3 px-4">@customer.Email</td>
+                    <td class="border-t border-background-secondary py-3 px-4">@customer.PhoneNumber</td>
                 </tr>
             }
             </tbody>
         </table>
     </div>
-    <div class="flex justify-between bg-darker-gray rounded-b h-[40px]">
-        <div class="flex items-center ml-4">
-            <p class="hidden md:flex">Showing @((_page - 1) * _pageSize + 1) to @Math.Min(_page * _pageSize, _total) of @_total results</p>
-            <p class="md:ml-4">Count</p>
-            <select class="ml-2 h-[40px] bg-table-gray" @onchange="OnPageSizeChanged">
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="50">100</option>
-            </select>
+    <div class="flex flex-col sm:flex-row justify-between items-center bg-background-primary rounded-b p-4">
+        <div class="flex flex-col sm:flex-row items-center mb-4 sm:mb-0">
+            <p class="text-sm text-gray-600 mb-2 sm:mb-0 sm:mr-4">Showing @((_page - 1) * _pageSize + 1) to @Math.Min(_page * _pageSize, _total) of @_total results</p>
+            <div class="flex items-center">
+                <label for="pageSize" class="text-sm mr-2">Items per page:</label>
+                <select id="pageSize" class="bg-background-secondary text-sm p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-primary transition duration-300 ease-in-out" @onchange="OnPageSizeChanged">
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </div>
         </div>
-        <div class="flex items-center justify-center">
-            <button class="hover:bg-blue-primary w-[100px] h-[40px] disabled:bg-light-gray disabled:text-darker-gray" @onclick="PreviousPage" disabled="@(!_hasPreviousPage)">Previous</button>
-            <button class="hover:bg-blue-primary w-[100px] h-[40px] rounded-br disabled:bg-light-gray disabled:text-darker-gray" @onclick="NextPage" disabled="@(!_hasNextPage)">Next</button>
+        <div class="flex items-center space-x-2">
+            <button class="bg-background-secondary py-2 px-4 rounded transition duration-300 ease-in-out disabled:cursor-not-allowed disabled:opacity-50 flex items-center @(_hasPreviousPage ? "hover:bg-blue-secondary" : "")" @onclick="PreviousPage" disabled="@(!_hasPreviousPage)">
+                <i class="fas fa-chevron-left mr-2"></i>Previous
+            </button>
+            <span class="text-sm">Page @_page of @((_total + _pageSize - 1) / _pageSize)</span>
+            <button class="bg-background-secondary py-2 px-4 rounded transition duration-300 ease-in-out disabled:cursor-not-allowed disabled:opacity-50 flex items-center @(_hasNextPage ? "hover:bg-blue-secondary" : "")" @onclick="NextPage" disabled="@(!_hasNextPage)">
+                Next<i class="fas fa-chevron-right ml-2"></i>
+            </button>
         </div>
     </div>
     }
@@ -135,6 +159,27 @@
     {
         _page = 1;
         await OnInitializedAsync();
+    }
+
+    private async Task HandleKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await Search();
+        }
+    }
+
+    private async Task ClearSearch()
+    {
+        _searchTerm = string.Empty;
+        _page = 1;
+        await OnInitializedAsync();
+    }
+
+    private async Task HandleSearchInput(ChangeEventArgs e)
+    {
+        _searchTerm = e.Value?.ToString() ?? string.Empty;
+        await Search();
     }
     
     private class CustomerModel

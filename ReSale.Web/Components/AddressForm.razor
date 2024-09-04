@@ -1,0 +1,66 @@
+@using System.ComponentModel.DataAnnotations
+
+<div class="mb-4">
+    <label for="@($"{Prefix}Street")" class="block">Street</label>
+    <InputText id="@($"{Prefix}Street")" @bind-Value="Street" class="bg-parchment text-background-secondary p-2 mt-2 rounded w-full"/>
+    <ValidationMessage For="@(() => Street)" class="text-red-primary"/>
+</div>
+
+<div class="mb-4">
+    <label for="@($"{Prefix}City")" class="block">City</label>
+    <InputText id="@($"{Prefix}City")" @bind-Value="City" class="bg-parchment text-background-secondary p-2 mt-2 rounded w-full"/>
+    <ValidationMessage For="@(() => City)" class="text-red-primary"/>
+</div>
+
+<div class="mb-4">
+    <label for="@($"{Prefix}ZipCode")" class="block">Zip Code</label>
+    <InputText id="@($"{Prefix}ZipCode")" @bind-Value="ZipCode" class="bg-parchment text-background-secondary p-2 mt-2 rounded w-full"/>
+    <ValidationMessage For="@(() => ZipCode)" class="text-red-primary"/>
+</div>
+
+<div class="mb-4">
+    <label for="@($"{Prefix}Country")" class="block">Country</label>
+    <InputText id="@($"{Prefix}Country")" @bind-Value="Country" class="bg-parchment text-background-secondary p-2 mt-2 rounded w-full"/>
+    <ValidationMessage For="@(() => Country)" class="text-red-primary"/>
+</div>
+
+<div class="mb-4">
+    <label for="@($"{Prefix}State")" class="block">State (Optional)</label>
+    <InputText id="@($"{Prefix}State")" @bind-Value="State" class="bg-parchment text-background-secondary p-2 mt-2 rounded w-full"/>
+    <ValidationMessage For="@(() => State)" class="text-red-primary"/>
+</div>
+
+@code {
+    [Parameter]
+    public string Street { get; set; } = string.Empty;
+
+    [Parameter]
+    public string City { get; set; } = string.Empty;
+
+    [Parameter]
+    public string ZipCode { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Country { get; set; } = string.Empty;
+
+    [Parameter]
+    public string? State { get; set; }
+
+    [Parameter]
+    public string Prefix { get; set; } = string.Empty;
+
+    [Parameter]
+    public EventCallback<string> StreetChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<string> CityChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<string> ZipCodeChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<string> CountryChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<string> StateChanged { get; set; }
+}

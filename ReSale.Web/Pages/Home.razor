@@ -1,53 +1,67 @@
 ﻿@page "/"
 
 @inject NavigationManager NavigationManager
+@inject ICustomersClient CustomerClient
 
-<PageTitle>ReSale | Home</PageTitle>
+<PageTitle>ReSale | Dashboard</PageTitle>
 
-<div class="h-full">
-    <div class="flex flex-col md:flex-row">
-        <div class="md:w-[500px] w-full">
-            <div class="bg-darker-gray rounded">
-                <h1 class="text-4xl p-4">Customers</h1>
-                <button class="flex justify-between bg-table-gray hover:bg-green-primary p-4 w-full text-left rounded-b" @onclick="@(() => NavigationManager.NavigateTo("/customers/create"))">
-                    <p>Create customer</p>
-                    <i class="fas fa-arrow-right mt-1"></i>
-                </button>
-            </div>
+<div class="h-full bg-background-secondary p-4 md:p-8">
+    <h1 class="text-4xl font-bold mb-8 text-parchment">Dashboard</h1>
 
-            <div class="bg-darker-gray rounded mt-4">
-                <h1 class="text-4xl p-4">Items</h1>
-                <button class="flex justify-between bg-table-gray hover:bg-green-primary p-4 w-full text-left">
-                    <p>Create product</p>
-                    <i class="fas fa-arrow-right mt-1"></i>
-                </button>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <DashboardCard Title="Customers" Value="@(_customers > 0 ? _customers.ToString() : "Loading...")" Icon="fas fa-users" Color="bg-blue-primary" />
+        <DashboardCard Title="Orders" Value="5,678" Icon="fas fa-shopping-cart" Color="bg-green-primary" />
+        <DashboardCard Title="Products" Value="789" Icon="fas fa-box" Color="bg-purple-600" />
+        <DashboardCard Title="Revenue" Value="$123,456" Icon="fas fa-dollar-sign" Color="bg-yellow-500" />
+    </div>
 
-                <button class="flex justify-between bg-table-gray hover:bg-green-primary p-4 w-full text-left rounded-b">
-                    <p>Create supplier</p>
-                    <i class="fas fa-arrow-right mt-1"></i>
-                </button>
-            </div>
-
-            <div class="bg-darker-gray rounded mt-4">
-                <h1 class="text-4xl p-4">Sales</h1>
-                <button class="flex justify-between bg-table-gray hover:bg-green-primary p-4 w-full text-left">
-                    <p>Create order</p>
-                    <i class="fas fa-arrow-right mt-1"></i>
-                </button>
-
-                <button class="flex justify-between bg-table-gray hover:bg-green-primary p-4 w-full text-left rounded-b">
-                    <p>Create purchase order</p>
-                    <i class="fas fa-arrow-right mt-1"></i>
-                </button>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="bg-background-primary rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
+            <h2 class="text-2xl font-bold mb-4 text-parchment">Quick Actions</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <QuickActionButton Text="Create Customer" Icon="fas fa-user-plus" />
+                <QuickActionButton Text="Create Order" Icon="fas fa-file-invoice" />
+                <QuickActionButton Text="Add Product" Icon="fas fa-box-open" />
+                <QuickActionButton Text="View Reports" Icon="fas fa-chart-bar" />
             </div>
         </div>
 
-        <div class="w-full md:ml-4 mt-4 md:mt-0 bg-darker-gray rounded">
-            <div class="p-4">
-                <div class="flex items-center justify-center">
-
-                </div>
+        <div class="bg-background-primary rounded-lg shadow-lg p-6">
+            <h2 class="text-2xl font-bold mb-4 text-parchment">Recent Activity</h2>
+            <ul class="space-y-4">
+                <RecentActivityItem Text="New order #12345 received" Time="5 minutes ago" Icon="fas fa-shopping-cart" />
+                <RecentActivityItem Text="Customer John Doe updated their profile" Time="2 hours ago" Icon="fas fa-user-edit" />
+                <RecentActivityItem Text="New product 'Widget X' added to inventory" Time="Yesterday" Icon="fas fa-box-open" />
+                <RecentActivityItem Text="Monthly sales report generated" Time="2 days ago" Icon="fas fa-chart-line" />
+            </ul>
+            <div class="mt-4 text-right">
+                <button class="text-blue-primary hover:text-blue-600 transition-colors duration-300 flex items-center justify-end space-x-2 w-full">
+                    <span>View All Activity</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
             </div>
         </div>
     </div>
 </div>
+
+@code {
+    private int _customers;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await GetCustomers();
+    }
+
+    private async Task GetCustomers()
+    {
+        try
+        {
+            var result = await CustomerClient.Get(string.Empty, 1, 1);
+            _customers = result.TotalCount;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred while getting customers: {ex.Message}");
+        }
+    }
+}

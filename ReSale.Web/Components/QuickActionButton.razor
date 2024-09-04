@@ -1,0 +1,10 @@
+<button @onclick="OnClick" class="w-full bg-table-gray hover:bg-blue-primary text-parchment font-semibold py-3 px-4 rounded transition duration-300 ease-in-out flex items-center justify-between">
+    <span>@Text</span>
+    <i class="@Icon"></i>
+</button>
+
+@code {
+    [Parameter] public string Text { get; set; } = "";
+    [Parameter] public string Icon { get; set; } = "";
+    [Parameter] public EventCallback OnClick { get; set; }
+}

@@ -5,111 +5,94 @@
 @inject ICustomersClient CustomersClient
 @inject NavigationManager NavigationManager
 
-<div class="h-full flex flex-col">
-    <h3 class="p-4 bg-table-gray">Edit Customer</h3>
+<div class="h-full flex flex-col bg-background-secondary p-4">
+    <div class="bg-background-primary rounded p-4 mb-4 flex justify-between items-center">
+        <h3 class="text-xl font-semibold">Edit Customer</h3>
+        <div>
+            <button class="bg-green-primary hover:bg-green-secondary text-white py-2 px-4 rounded transition duration-300 ease-in-out mr-2" type="submit" form="editCustomerForm">
+                <i class="fas fa-save mr-2"></i>Update
+            </button>
+            <button class="bg-red-primary hover:bg-red-secondary text-white py-2 px-4 rounded transition duration-300 ease-in-out" @onclick="@(() => NavigationManager.NavigateTo($"/customers/{Id}"))">
+                <i class="fas fa-times mr-2"></i>Cancel
+            </button>
+        </div>
+    </div>
 
-    <EditForm Model="_customer" class="mt-4 p-4 bg-table-gray flex-grow" OnValidSubmit="HandleValidSubmit">
+    <EditForm Model="_customer" OnValidSubmit="HandleValidSubmit" id="editCustomerForm" class="bg-background-primary rounded p-4 flex-grow overflow-y-auto">
         <DataAnnotationsValidator/>
 
-        <div class="mb-4">
-            <label for="firstName" class="block">First Name</label>
-            <InputText id="firstName" @bind-Value="_customer.FirstName" class="bg-dark-gray p-2 w-[210px]"/>
-            <div class="text-red-primary">
-                <ValidationMessage For="@(() => _customer.FirstName)"/>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="space-y-4">
+                <h4 class="text-lg font-semibold mb-2">Personal Information</h4>
+                <div>
+                    <label for="firstName" class="block text-sm font-medium mb-1">First Name</label>
+                    <InputText id="firstName" @bind-Value="_customer.FirstName" class="w-full bg-parchment text-background-secondary p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-primary transition duration-300 ease-in-out"/>
+                    <ValidationMessage For="@(() => _customer.FirstName)" class="text-red-primary text-sm"/>
+                </div>
+                <div>
+                    <label for="lastName" class="block text-sm font-medium mb-1">Last Name</label>
+                    <InputText id="lastName" @bind-Value="_customer.LastName" class="w-full bg-parchment text-background-secondary p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-primary transition duration-300 ease-in-out"/>
+                    <ValidationMessage For="@(() => _customer.LastName)" class="text-red-primary text-sm"/>
+                </div>
             </div>
-        </div>
 
-        <div class="mb-4">
-            <label for="lastName" class="block">Last Name</label>
-            <InputText id="lastName" @bind-Value="_customer.LastName" class="bg-dark-gray p-2 w-[210px]"/>
-            <div class="text-red-primary">
-                <ValidationMessage For="@(() => _customer.LastName)"/>
+            <div class="space-y-4">
+                <h4 class="text-lg font-semibold mb-2">Shipping Address</h4>
+                <div>
+                    <label for="shippingStreet" class="block text-sm font-medium mb-1">Street</label>
+                    <InputText id="shippingStreet" @bind-Value="_customer.ShippingStreet" class="w-full bg-parchment text-background-secondary p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-primary transition duration-300 ease-in-out"/>
+                    <ValidationMessage For="@(() => _customer.ShippingStreet)" class="text-red-primary text-sm"/>
+                </div>
+                <div>
+                    <label for="shippingCity" class="block text-sm font-medium mb-1">City</label>
+                    <InputText id="shippingCity" @bind-Value="_customer.ShippingCity" class="w-full bg-parchment text-background-secondary p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-primary transition duration-300 ease-in-out"/>
+                    <ValidationMessage For="@(() => _customer.ShippingCity)" class="text-red-primary text-sm"/>
+                </div>
+                <div>
+                    <label for="shippingZipCode" class="block text-sm font-medium mb-1">Zip Code</label>
+                    <InputText id="shippingZipCode" @bind-Value="_customer.ShippingZipCode" class="w-full bg-parchment text-background-secondary p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-primary transition duration-300 ease-in-out"/>
+                    <ValidationMessage For="@(() => _customer.ShippingZipCode)" class="text-red-primary text-sm"/>
+                </div>
+                <div>
+                    <label for="shippingCountry" class="block text-sm font-medium mb-1">Country</label>
+                    <InputText id="shippingCountry" @bind-Value="_customer.ShippingCountry" class="w-full bg-parchment text-background-secondary p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-primary transition duration-300 ease-in-out"/>
+                    <ValidationMessage For="@(() => _customer.ShippingCountry)" class="text-red-primary text-sm"/>
+                </div>
+                <div>
+                    <label for="shippingState" class="block text-sm font-medium mb-1">State (Optional)</label>
+                    <InputText id="shippingState" @bind-Value="_customer.ShippingState" class="w-full bg-parchment text-background-secondary p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-primary transition duration-300 ease-in-out"/>
+                    <ValidationMessage For="@(() => _customer.ShippingState)" class="text-red-primary text-sm"/>
+                </div>
             </div>
-        </div>
 
-        <div class="mb-4">
-            <label for="shippingStreet" class="block">Street</label>
-            <InputText id="shippingStreet" @bind-Value="_customer.ShippingStreet" class="bg-dark-gray p-2 w-[210px]"/>
-            <div class="text-red-primary">
-                <ValidationMessage For="@(() => _customer.ShippingStreet)"/>
+            <div class="space-y-4">
+                <h4 class="text-lg font-semibold mb-2">Billing Address</h4>
+                <div>
+                    <label for="billingStreet" class="block text-sm font-medium mb-1">Street</label>
+                    <InputText id="billingStreet" @bind-Value="_customer.BillingStreet" class="w-full bg-parchment text-background-secondary p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-primary transition duration-300 ease-in-out"/>
+                    <ValidationMessage For="@(() => _customer.BillingStreet)" class="text-red-primary text-sm"/>
+                </div>
+                <div>
+                    <label for="billingCity" class="block text-sm font-medium mb-1">City</label>
+                    <InputText id="billingCity" @bind-Value="_customer.BillingCity" class="w-full bg-parchment text-background-secondary p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-primary transition duration-300 ease-in-out"/>
+                    <ValidationMessage For="@(() => _customer.BillingCity)" class="text-red-primary text-sm"/>
+                </div>
+                <div>
+                    <label for="billingZipCode" class="block text-sm font-medium mb-1">Zip Code</label>
+                    <InputText id="billingZipCode" @bind-Value="_customer.BillingZipCode" class="w-full bg-parchment text-background-secondary p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-primary transition duration-300 ease-in-out"/>
+                    <ValidationMessage For="@(() => _customer.BillingZipCode)" class="text-red-primary text-sm"/>
+                </div>
+                <div>
+                    <label for="billingCountry" class="block text-sm font-medium mb-1">Country</label>
+                    <InputText id="billingCountry" @bind-Value="_customer.BillingCountry" class="w-full bg-parchment text-background-secondary p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-primary transition duration-300 ease-in-out"/>
+                    <ValidationMessage For="@(() => _customer.BillingCountry)" class="text-red-primary text-sm"/>
+                </div>
+                <div>
+                    <label for="billingState" class="block text-sm font-medium mb-1">State (Optional)</label>
+                    <InputText id="billingState" @bind-Value="_customer.BillingState" class="w-full bg-parchment text-background-secondary p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-primary transition duration-300 ease-in-out"/>
+                    <ValidationMessage For="@(() => _customer.BillingState)" class="text-red-primary text-sm"/>
+                </div>
             </div>
-        </div>
-
-        <div class="mb-4">
-            <label for="shippingCity" class="block">City</label>
-            <InputText id="shippingCity" @bind-Value="_customer.ShippingCity" class="bg-dark-gray p-2 w-[210px]"/>
-            <div class="text-red-primary">
-                <ValidationMessage For="@(() => _customer.ShippingCity)"/>
-            </div>
-        </div>
-
-        <div class="mb-4">
-            <label for="shippingZipCode" class="block">Zip Code</label>
-            <InputText id="shippingZipCode" @bind-Value="_customer.ShippingZipCode" class="bg-dark-gray p-2 w-[210px]"/>
-            <div class="text-red-primary">
-                <ValidationMessage For="@(() => _customer.ShippingZipCode)"/>
-            </div>
-        </div>
-
-        <div class="mb-4">
-            <label for="shippingCountry" class="block">Country</label>
-            <InputText id="shippingCountry" @bind-Value="_customer.ShippingCountry" class="bg-dark-gray p-2 w-[210px]"/>
-            <div class="text-red-primary">
-                <ValidationMessage For="@(() => _customer.ShippingCountry)"/>
-            </div>
-        </div>
-
-        <div class="mb-4">
-            <label for="shippingState" class="block">State (Optional)</label>
-            <InputText id="shippingState" @bind-Value="_customer.ShippingState" class="bg-dark-gray p-2 w-[210px]"/>
-            <div class="text-red-primary">
-                <ValidationMessage For="@(() => _customer.ShippingState)"/>
-            </div>
-        </div>
-
-        <div class="mb-4">
-            <label for="billingStreet" class="block">Street</label>
-            <InputText id="billingStreet" @bind-Value="_customer.BillingStreet" class="bg-dark-gray p-2 w-[210px]"/>
-            <div class="text-red-primary">
-                <ValidationMessage For="@(() => _customer.BillingStreet)"/>
-            </div>
-        </div>
-
-        <div class="mb-4">
-            <label for="billingCity" class="block">City</label>
-            <InputText id="billingCity" @bind-Value="_customer.BillingCity" class="bg-dark-gray p-2 w-[210px]"/>
-            <div class="text-red-primary">
-                <ValidationMessage For="@(() => _customer.BillingCity)"/>
-            </div>
-        </div>
-
-        <div class="mb-4">
-            <label for="billingZipCode" class="block">Zip Code</label>
-            <InputText id="billingZipCode" @bind-Value="_customer.BillingZipCode" class="bg-dark-gray p-2 w-[210px]"/>
-            <div class="text-red-primary">
-                <ValidationMessage For="@(() => _customer.BillingZipCode)"/>
-            </div>
-        </div>
-
-        <div class="mb-4">
-            <label for="billingCountry" class="block">Country</label>
-            <InputText id="billingCountry" @bind-Value="_customer.BillingCountry" class="bg-dark-gray p-2 w-[210px]"/>
-            <div class="text-red-primary">
-                <ValidationMessage For="@(() => _customer.BillingCountry)"/>
-            </div>
-        </div>
-
-        <div class="mb-4">
-            <label for="billingState" class="block">State (Optional)</label>
-            <InputText id="billingState" @bind-Value="_customer.BillingState" class="bg-dark-gray p-2 w-[210px]"/>
-            <div class="text-red-primary">
-                <ValidationMessage For="@(() => _customer.BillingState)"/>
-            </div>
-        </div>
-
-        <div class="flex">
-            <button type="submit" class="hover:bg-green-primary bg-dark-gray w-[100px] h-[40px]">Update</button>
-            <button class="hover:bg-red-primary bg-dark-gray w-[100px] h-[40px] ml-2" @onclick="@(() => NavigationManager.NavigateTo("/customers"))">Cancel</button>
         </div>
     </EditForm>
 </div>

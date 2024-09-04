@@ -7,26 +7,30 @@
 
 <Notification @ref="_notificationComponent" />
 
-<div class="h-screen text-white">
-    <div class="flex items-center justify-center h-screen bg-darker-gray">
-        <div class="bg-dark-gray p-8 rounded shadow-md w-full max-w-md">
-            <h2 class="text-2xl mb-6 text-center text-white">Forgot Password?</h2>
-            <EditForm Model="@_forgotPasswordModel" OnValidSubmit="HandleForgotPassword">
-                <DataAnnotationsValidator/>
+<div class="min-h-screen flex items-center justify-center bg-background-primary">
+    <div class="bg-background-secondary p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h2 class="text-3xl font-bold mb-6 text-center text-parchment">Forgot Password?</h2>
+        <EditForm Model="@_forgotPasswordModel" OnValidSubmit="HandleForgotPassword">
+            <DataAnnotationsValidator/>
 
-                <div class="mb-4">
-                    <label for="email" class="block text-white">Email</label>
-                    <InputText id="email" class="w-full p-2 mt-2 rounded bg-table-gray text-white" @bind-Value="_forgotPasswordModel.Email"/>
-                    <div class="text-red-primary">
-                        <ValidationMessage For="@(() => _forgotPasswordModel.Email)"/>
-                    </div>
-                </div>
-
-                <button type="submit" disabled="@_isBusy" class="w-full bg-blue-primary hover:bg-blue-secondary disabled:bg-light-gray text-white p-2 rounded">Send Reset Link</button>
-            </EditForm>
-            <div class="mt-4 text-center">
-                <a href="/login" class="text-blue-primary hover:text-blue-secondary">Back to Login</a>
+            <div class="mb-6">
+                <label for="email" class="block text-sm font-medium mb-2">Email</label>
+                <InputText id="email" class="w-full p-3 rounded-md bg-parchment text-background-secondary focus:outline-none focus:ring-2 focus:ring-parchment" @bind-Value="_forgotPasswordModel.Email"/>
+                <ValidationMessage For="@(() => _forgotPasswordModel.Email)" class="text-red-primary text-sm mt-1"/>
             </div>
+
+            <button type="submit" disabled="@_isBusy" class="w-full bg-parchment disabled:bg-light-gray text-background-secondary p-3 rounded-md font-medium transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-parchment focus:ring-opacity-50">
+                @if (_isBusy)
+                {
+                    <span class="inline-block animate-spin mr-2">&#8635;</span>
+                }
+                Send Reset Link
+            </button>
+        </EditForm>
+        <div class="mt-4 text-center">
+            <a href="/login" class="inline-block text-parchment font-medium text-sm transition duration-300 ease-in-out hover:scale-105">
+                Remember your password? Login here
+            </a>
         </div>
     </div>
 </div>

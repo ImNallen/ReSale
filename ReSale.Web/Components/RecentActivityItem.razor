@@ -1,0 +1,13 @@
+<li class="flex justify-between items-center text-parchment hover:bg-background-secondary transition-colors duration-300 p-2 rounded">
+    <div class="flex items-center">
+        <i class="@Icon mr-3 text-blue-primary"></i>
+        <span class="text-sm md:text-base">@Text</span>
+    </div>
+    <span class="text-xs md:text-sm text-gray-400 ml-4">@Time</span>
+</li>
+
+@code {
+    [Parameter] public string Text { get; set; } = "";
+    [Parameter] public string Time { get; set; } = "";
+    [Parameter] public string Icon { get; set; } = "";
+}

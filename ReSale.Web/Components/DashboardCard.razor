@@ -1,0 +1,16 @@
+<div class="@Color rounded-lg shadow-lg p-6 text-white">
+    <div class="flex justify-between items-center">
+        <div>
+            <h3 class="text-xl font-semibold mb-2">@Title</h3>
+            <p class="text-3xl font-bold">@Value</p>
+        </div>
+        <i class="@Icon text-4xl opacity-50"></i>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string Title { get; set; } = "";
+    [Parameter] public string Value { get; set; } = "";
+    [Parameter] public string Icon { get; set; } = "";
+    [Parameter] public string Color { get; set; } = "";
+}

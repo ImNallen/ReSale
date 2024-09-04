@@ -1,8 +1,13 @@
 ﻿@if (IsVisible)
 {
-    <div class="fixed top-5 right-5 p-4 rounded-md text-white z-50 @_notificationTypeClass">
-        <h3>@Title</h3>
-        <p class="mt-4">@Message</p>
+    <div class="fixed top-5 right-5 p-4 rounded-md text-parchment z-50 @_notificationTypeClass transition-opacity duration-300 ease-in-out @(IsVisible ? "opacity-100" : "opacity-0")">
+        <div class="flex justify-between items-start">
+            <h3 class="font-bold text-lg">@Title</h3>
+            <button class="text-parchment hover:text-gray-300 transition-colors duration-200" @onclick="Hide">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <p class="mt-2">@Message</p>
     </div>
 }
 
@@ -10,7 +15,7 @@
     private bool IsVisible { get; set; }
     private string Title { get; set; } = string.Empty;
     private string Message { get; set; } = string.Empty;
-    private string _notificationTypeClass = "bg-darker-gray";
+    private string _notificationTypeClass = "bg-background-primary";
 
     public async Task Show(string title, string message, NotificationType notificationType, int duration = 5000)
     {
@@ -31,6 +36,12 @@
         Info
     }
 
+    private void Hide()
+    {
+        IsVisible = false;
+        StateHasChanged();
+    }
+
     private Task SetBackground(NotificationType notificationType)
     {
         _notificationTypeClass = notificationType switch
@@ -38,7 +49,7 @@
             NotificationType.Success => "bg-green-primary",
             NotificationType.Error => "bg-red-primary",
             NotificationType.Info => "bg-blue-primary",
-            _ => "bg-darker-gray"
+            _ => "bg-background-primary"
         };
 
         return Task.CompletedTask;

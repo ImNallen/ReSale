@@ -15,7 +15,7 @@ module.exports = {
     extend: {
       colors: {
         'background-primary': {
-          light: '#f0f0f0',
+          light: '#efefef',
           dark: '#1c1c1c',
         },
         'background-secondary': {
@@ -24,7 +24,7 @@ module.exports = {
         },
         'text-primary': {
           light: '#333333',
-          dark: '#f0f0f0',
+          dark: '#efefef',
         },
         'green-primary': '#22a559',
         'green-secondary': '#17723d',

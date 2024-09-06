@@ -9,11 +9,19 @@ public class ThemeService(ILocalStorageService localStorage)
     public event Action? OnThemeChange;
 #pragma warning restore CA1003
 
-    public async Task<string> GetThemeAsync() => await localStorage.GetItemAsync<string>("theme") ?? "dark";
+    public bool IsDarkMode { get; private set; }
+
+    public async Task<string> GetThemeAsync()
+    {
+        string theme = await localStorage.GetItemAsync<string>("theme") ?? "dark";
+        IsDarkMode = theme == "dark";
+        return theme;
+    }
 
     public async Task SetThemeAsync(string theme)
     {
         await localStorage.SetItemAsync("theme", theme);
+        IsDarkMode = theme == "dark";
         OnThemeChange?.Invoke();
     }
 

@@ -140,30 +140,6 @@
             </div>
         </button>
     </div>
-    
-    <div class="text-parchment">
-        <button class="@(NavigationManager.Uri.Contains("/settings") ? 
-                           "bg-blue-primary hover:bg-blue-secondary text-text-primary-dark" : 
-                           "hover:bg-blue-primary") hover:text-text-primary-dark h-[60px] w-full transition-colors duration-300 ease-in-out focus:outline-none"
-                title="Settings"
-                @onclick="@(() => NavigationManager.NavigateTo("/settings"))">
-            <div class="flex">
-                <div>
-                    <i class="fa-solid fa-gear w-[50px]"></i>
-                </div>
-            </div>
-        </button>
-    
-        <button class="w-full h-[60px] hover:bg-red-secondary hover:text-text-primary-dark transition-colors duration-300 ease-in-out focus:outline-none"
-                title="Log out"
-                @onclick="Logout">
-            <div class="flex">
-                <div>
-                    <i class="fa-solid fa-right-from-bracket w-[50px]"></i>
-                </div>
-            </div>
-        </button>
-    </div>
 </div>
 
 @code {

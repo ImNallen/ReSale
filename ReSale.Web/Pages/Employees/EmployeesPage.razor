@@ -19,17 +19,17 @@
             </button>
             <div class="relative flex-grow sm:flex-grow-0">
                 <input type="text"
-                       placeholder="Search customers..."
+                       placeholder="Search..."
                        @bind="_searchTerm"
                        @oninput="HandleSearchInput"
                        @onkeyup="HandleKeyPress"
-                       class="w-full bg-background-primary-dark dark:bg-background-primary-light text-text-primary-dark dark:text-text-primary-light py-2 pl-10 pr-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-primary transition duration-300 ease-in-out"
+                       class="w-full bg-background-secondary-light dark:bg-background-secondary-dark text-text-primary-light dark:text-text-primary-dark py-2 pl-10 pr-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-primary transition duration-300 ease-in-out"
                        aria-label="Search customers"/>
-                <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-text-primary-dark dark:text-text-primary-light"></i>
+                <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-text-primary-light dark:text-text-primary-dark"></i>
                 @if (!string.IsNullOrWhiteSpace(_searchTerm))
                 {
                 <button @onclick="ClearSearch"
-                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-text-primary-dark dark:text-text-primary-light hover:text-text-secondary-dark hover:dark:text-text-secondary-light focus:outline-none"
+                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-text-primary-light dark:text-text-primary-dark hover:text-text-secondary-dark hover:dark:text-text-secondary-light focus:outline-none"
                         aria-label="Clear search">
                     <i class="fas fa-times"></i>
                 </button>

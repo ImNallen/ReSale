@@ -14,31 +14,31 @@
 
             <div class="mb-6">
                 <label for="email" class="block text-sm font-medium mb-2 text-text-primary-light dark:text-text-primary-dark">Email</label>
-                <InputText id="email" class="w-full p-3 rounded-md bg-background-primary-dark dark:bg-background-primary-light text-text-primary-dark dark:text-text-primary-light focus:outline-none focus:ring-2 focus:ring-blue-primary" @bind-Value="_registerModel.Email"/>
+                <InputText id="email" class="w-full p-3 rounded-md bg-background-primary-light dark:bg-background-primary-dark text-text-primary-light dark:text-text-primary-dark focus:outline-none focus:ring-2 focus:ring-blue-primary" @bind-Value="_registerModel.Email"/>
                 <ValidationMessage For="@(() => _registerModel.Email)" class="text-red-primary text-sm mt-1"/>
             </div>
 
             <div class="mb-6">
                 <label for="firstName" class="block text-sm font-medium mb-2 text-text-primary-light dark:text-text-primary-dark">First Name</label>
-                <InputText id="firstName" class="w-full p-3 rounded-md bg-background-primary-dark dark:bg-background-primary-light text-text-primary-dark dark:text-text-primary-light focus:outline-none focus:ring-2 focus:ring-blue-primary" @bind-Value="_registerModel.FirstName"/>
+                <InputText id="firstName" class="w-full p-3 rounded-md bg-background-primary-light dark:bg-background-primary-dark text-text-primary-light dark:text-text-primary-dark focus:outline-none focus:ring-2 focus:ring-blue-primary" @bind-Value="_registerModel.FirstName"/>
                 <ValidationMessage For="@(() => _registerModel.FirstName)" class="text-red-primary text-sm mt-1"/>
             </div>
 
             <div class="mb-6">
                 <label for="lastName" class="block text-sm font-medium mb-2 text-text-primary-light dark:text-text-primary-dark">Last Name</label>
-                <InputText id="lastName" class="w-full p-3 rounded-md bg-background-primary-dark dark:bg-background-primary-light text-text-primary-dark dark:text-text-primary-light focus:outline-none focus:ring-2 focus:ring-blue-primary" @bind-Value="_registerModel.LastName"/>
+                <InputText id="lastName" class="w-full p-3 rounded-md bg-background-primary-light dark:bg-background-primary-dark text-text-primary-light dark:text-text-primary-dark focus:outline-none focus:ring-2 focus:ring-blue-primary" @bind-Value="_registerModel.LastName"/>
                 <ValidationMessage For="@(() => _registerModel.LastName)" class="text-red-primary text-sm mt-1"/>
             </div>
 
             <div class="mb-6">
                 <label for="password" class="block text-sm font-medium mb-2 text-text-primary-light dark:text-text-primary-dark">Password</label>
-                <InputText id="password" type="password" class="w-full p-3 rounded-md bg-background-primary-dark dark:bg-background-primary-light text-text-primary-dark dark:text-text-primary-light focus:outline-none focus:ring-2 focus:ring-blue-primary" @bind-Value="_registerModel.Password"/>
+                <InputText id="password" type="password" class="w-full p-3 rounded-md bg-background-primary-light dark:bg-background-primary-dark text-text-primary-light dark:text-text-primary-dark focus:outline-none focus:ring-2 focus:ring-blue-primary" @bind-Value="_registerModel.Password"/>
                 <ValidationMessage For="@(() => _registerModel.Password)" class="text-red-primary text-sm mt-1"/>
             </div>
 
             <div class="mb-6">
                 <label for="confirmPassword" class="block text-sm font-medium mb-2 text-text-primary-light dark:text-text-primary-dark">Confirm Password</label>
-                <InputText id="confirmPassword" type="password" class="w-full p-3 rounded-md bg-background-primary-dark dark:bg-background-primary-light text-text-primary-dark dark:text-text-primary-light focus:outline-none focus:ring-2 focus:ring-blue-primary" @bind-Value="_registerModel.ConfirmPassword"/>
+                <InputText id="confirmPassword" type="password" class="w-full p-3 rounded-md bg-background-primary-light dark:bg-background-primary-dark text-text-primary-light dark:text-text-primary-dark focus:outline-none focus:ring-2 focus:ring-blue-primary" @bind-Value="_registerModel.ConfirmPassword"/>
                 <ValidationMessage For="@(() => _registerModel.ConfirmPassword)" class="text-red-primary text-sm mt-1"/>
             </div>
 

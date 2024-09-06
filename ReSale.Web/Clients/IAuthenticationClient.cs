@@ -20,4 +20,7 @@ public interface IAuthenticationClient
 
     [Post("/api/v1/auth/forgot")]
     Task Forgot(ForgotPasswordRequest request);
+
+    [Post("/api/v1/auth/refresh")]
+    Task<AccessTokenResponse> Refresh(RefreshTokenRequest request);
 }

@@ -17,13 +17,13 @@
 
             <div class="mb-6">
                 <label for="email" class="block text-sm font-medium mb-2 text-text-primary-light dark:text-text-primary-dark">Email</label>
-                <InputText id="email" class="w-full p-3 rounded-md bg-background-primary-dark dark:bg-background-primary-light text-text-primary-dark dark:text-text-primary-light focus:outline-none focus:ring-2 focus:ring-blue-primary" @bind-Value="_loginModel.Email"/>
+                <InputText id="email" class="w-full p-3 rounded-md bg-background-primary-light dark:bg-background-primary-dark text-text-primary-light dark:text-text-primary-dark focus:outline-none focus:ring-2 focus:ring-blue-primary" @bind-Value="_loginModel.Email"/>
                 <ValidationMessage For="@(() => _loginModel.Email)" class="text-red-primary text-sm mt-1"/>
             </div>
 
             <div class="mb-6">
                 <label for="password" class="block text-sm font-medium mb-2 text-text-primary-light dark:text-text-primary-dark">Password</label>
-                <InputText id="password" type="password" class="w-full p-3 rounded-md bg-background-primary-dark dark:bg-background-primary-light text-text-primary-dark dark:text-text-primary-light focus:outline-none focus:ring-2 focus:ring-blue-primary" @bind-Value="_loginModel.Password"/>
+                <InputText id="password" type="password" class="w-full p-3 rounded-md bg-background-primary-light dark:bg-background-primary-dark text-text-primary-light dark:text-text-primary-dark focus:outline-none focus:ring-2 focus:ring-blue-primary" @bind-Value="_loginModel.Password"/>
                 <ValidationMessage For="@(() => _loginModel.Password)" class="text-red-primary text-sm mt-1"/>
                 @if (!string.IsNullOrEmpty(_errorMessage))
                 {

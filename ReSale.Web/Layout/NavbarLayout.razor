@@ -1,6 +1,8 @@
 ﻿@using System.Security.Claims
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject ThemeService ThemeService
+@inject NavigationManager NavigationManager
+@inject ILocalStorageService LocalStorage
 
 <div class="flex items-center h-[50px]">
     <button 
@@ -30,8 +32,8 @@
                     <span class="text-3xl text-text-primary-dark font-bold">@(_firstName.FirstOrDefault())@(_lastName.FirstOrDefault())</span>
                 </div>
                 <div class="text-center">
-                    <div class="font-semibold hover:text-blue-primary transition-colors duration-300">@_firstName @_lastName</div>
-                    <div class="text-sm text-text-secondary-light dark:text-text-secondary-dark hover:underline transition-all duration-300">@_email</div>
+                    <div class="font-semibold">@_firstName @_lastName</div>
+                    <div class="text-sm">@_email</div>
                 </div>
             </div>
             <div class="border-t border-background-secondary-light dark:border-background-secondary-dark"></div>
@@ -45,10 +47,10 @@
                 <span class="group-hover:translate-x-1 transition-transform duration-300">Settings</span>
             </a>
             <div class="border-t border-background-secondary-light dark:border-background-secondary-dark"></div>
-            <a href="/logout" class="flex items-center px-4 py-3 text-text-primary-light dark:text-text-primary-dark hover:bg-red-primary hover:text-text-primary-dark transition duration-300 ease-in-out group">
+            <button @onclick="Logout" class="flex items-center w-full px-4 py-3 text-text-primary-light dark:text-text-primary-dark hover:bg-red-primary hover:text-text-primary-dark transition duration-300 ease-in-out group">
                 <i class="fas fa-sign-out-alt mr-3 group-hover:-translate-x-1 transition-transform duration-300"></i>
                 <span class="group-hover:translate-x-1 transition-transform duration-300">Logout</span>
-            </a>
+            </button>
         </div>
     }
 </div>
@@ -78,5 +80,15 @@
     private void ToggleDropdown()
     {
         _isDropdownOpen = !_isDropdownOpen;
+    }
+    
+    private async Task Logout()
+    {
+        await LocalStorage.RemoveItemAsync("accessToken");
+        await LocalStorage.RemoveItemAsync("refreshToken");
+        
+        await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        
+        NavigationManager.NavigateTo("/");
     }
 }

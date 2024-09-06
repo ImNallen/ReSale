@@ -40,4 +40,8 @@
       <ProjectReference Include="..\ReSale.Infrastructure\ReSale.Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Endpoints\Reports\" />
+    </ItemGroup>
+
 </Project>

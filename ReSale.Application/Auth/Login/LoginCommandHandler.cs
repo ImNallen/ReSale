@@ -3,6 +3,7 @@ using ReSale.Application.Abstractions.Authentication;
 using ReSale.Application.Abstractions.Encryption;
 using ReSale.Application.Abstractions.Messaging;
 using ReSale.Application.Abstractions.Persistence;
+using ReSale.Application.Abstractions.Services;
 using ReSale.Application.Auth.Results;
 using ReSale.Domain.Common;
 using ReSale.Domain.Shared;

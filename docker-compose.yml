@@ -48,3 +48,12 @@
     ports:
       - 8080:80
       - 25:25
+        
+  storage:
+    image: mrc.microsoft.com/azure-storage/azurite:latest
+    container_name: storage
+    volumes:
+      - ./.containers/storage/data:/data
+    ports:
+      - 10000:10000
+    command: "azurite-blob --blobHost 0.0.0.0 -l /data"

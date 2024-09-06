@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Npgsql;
+using QuestPDF.Infrastructure;
 using ReSale.Application.Abstractions.Authentication;
 using ReSale.Application.Abstractions.Caching;
 using ReSale.Application.Abstractions.Encryption;
@@ -19,6 +20,7 @@ using ReSale.Infrastructure.Caching;
 using ReSale.Infrastructure.Encryption;
 using ReSale.Infrastructure.Persistence;
 using ReSale.Infrastructure.Services.Email;
+using ReSale.Infrastructure.Services.Report;
 using ReSale.Infrastructure.Time;
 
 namespace ReSale.Infrastructure;
@@ -78,8 +80,11 @@ public static class DependencyInjection
 
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
+        QuestPDF.Settings.License = LicenseType.Community;
+
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
+        services.AddSingleton<IReportService, ReportService>();
 
         return services;
     }

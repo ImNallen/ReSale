@@ -1,17 +1,16 @@
 @page "/verify/{Token:guid}"
 @inject IAuthenticationClient AuthenticationClient
 @inject NavigationManager Navigation
+@inject NotificationService NotificationService
 
 <PageTitle>ReSale | Verify Email</PageTitle>
 
-<Notification @ref="_notificationComponent" />
-
-<div class="min-h-screen flex items-center justify-center bg-background-primary">
-    <div class="bg-background-secondary p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 class="text-3xl font-bold mb-6 text-center text-parchment">Verify Your Email</h2>
+<div class="min-h-screen flex items-center justify-center bg-background-primary-light dark:bg-background-primary-dark">
+    <div class="bg-background-secondary-light dark:bg-background-secondary-dark p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h2 class="text-3xl font-bold mb-6 text-center text-text-primary-light dark:text-text-primary-dark">Verify Your Email</h2>
         @if (!_isVerified && !_isVerifying)
         {
-            <button @onclick="VerifyEmail" disabled="@_isVerifying" class="w-full bg-parchment disabled:bg-light-gray text-background-secondary p-3 rounded-md font-medium transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-parchment focus:ring-opacity-50">
+            <button @onclick="VerifyEmail" disabled="@_isVerifying" class="w-full bg-blue-primary disabled:bg-gray-400 text-text-primary-dark p-3 rounded-md font-medium transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-primary focus:ring-opacity-50">
                 @if (_isVerifying)
                 {
                     <span class="inline-block animate-spin mr-2">&#8635;</span>
@@ -21,17 +20,17 @@
         }
         @if (_isVerifying)
         {
-            <p class="text-parchment text-center mt-4">Verifying your email...</p>
+            <p class="text-text-primary-light dark:text-text-primary-dark text-center mt-4">Verifying your email...</p>
         }
         else if (_isVerified)
         {
             <p class="text-green-primary text-center mb-4">Your email has been successfully verified!</p>
-            <button @onclick="NavigateToLogin" class="w-full bg-parchment text-background-secondary p-3 rounded-md font-medium transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-parchment focus:ring-opacity-50">
+            <button @onclick="NavigateToLogin" class="w-full bg-blue-primary text-text-primary-dark p-3 rounded-md font-medium transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-primary focus:ring-opacity-50">
                 Go to Login
             </button>
         }
         <div class="mt-4 text-center">
-            <a href="/login" class="inline-block text-parchment font-medium text-sm transition duration-300 ease-in-out hover:scale-105">
+            <a href="/login" class="inline-block text-text-primary-light dark:text-text-primary-dark font-medium text-sm transition duration-300 ease-in-out hover:scale-105">
                 Already verified? Login here
             </a>
         </div>
@@ -42,13 +41,12 @@
     [Parameter]
     public Guid Token { get; set; }
 
-    private Notification _notificationComponent = new();
     private bool _isVerifying = false;
     private bool _isVerified = false;
-    private string _errorMessage = string.Empty;
 
     private async Task VerifyEmail()
     {
+        _isVerifying = true;
         try
         {
             await AuthenticationClient.Verify(Token);
@@ -56,8 +54,7 @@
         }
         catch (Exception)
         {
-            _errorMessage = "An error occurred while verifying your email. Please try again.";
-            await ShowNotification("Error", _errorMessage, Notification.NotificationType.Error);
+            await NotificationService.Show("Error", "An error occurred while verifying your email. Please try again.", Notification.NotificationType.Error);
         }
         finally
         {
@@ -68,10 +65,5 @@
     private void NavigateToLogin()
     {
         Navigation.NavigateTo("/login");
-    }
-
-    private async Task ShowNotification(string title, string message, Notification.NotificationType notificationType)
-    {
-        await _notificationComponent.Show(title, message, notificationType);
     }
 }

@@ -1,0 +1,26 @@
+@using ReSale.Web.Services
+@implements IDisposable
+
+<Notification @ref="_notificationComponent" />
+
+@code {
+    private Notification _notificationComponent = new();
+
+    [Inject]
+    private NotificationService NotificationService { get; set; } = default!;
+
+    protected override void OnInitialized()
+    {
+        NotificationService.OnShow += ShowNotification;
+    }
+
+    private Task ShowNotification(string title, string message, Notification.NotificationType type)
+    {
+        return _notificationComponent.Show(title, message, type);
+    }
+
+    public void Dispose()
+    {
+        NotificationService.OnShow -= ShowNotification;
+    }
+}

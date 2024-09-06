@@ -1,8 +1,14 @@
-﻿@if (IsVisible)
+﻿@using System.Timers
+@using ReSale.Web.Services
+
+@if (IsVisible)
 {
-    <div class="fixed top-5 right-5 p-4 rounded-md text-parchment z-50 @_notificationTypeClass transition-opacity duration-300 ease-in-out @(IsVisible ? "opacity-100" : "opacity-0")">
+    <div class="fixed top-5 right-5 p-4 rounded-md text-text-primary-dark z-50 @_notificationTypeClass transition-opacity duration-300 ease-in-out @(IsVisible ? "opacity-100" : "opacity-0")">
         <div class="flex justify-between items-start">
-            <h3 class="font-bold text-lg">@Title</h3>
+            <div class="flex items-center">
+                <i class="@_notificationIcon mr-2"></i>
+                <h3 class="font-bold text-lg">@Title</h3>
+            </div>
             <button class="text-parchment hover:text-gray-300 transition-colors duration-200" @onclick="Hide">
                 <i class="fas fa-times"></i>
             </button>
@@ -16,17 +22,40 @@
     private string Title { get; set; } = string.Empty;
     private string Message { get; set; } = string.Empty;
     private string _notificationTypeClass = "bg-background-primary";
+    private string _notificationIcon = "fas fa-info-circle";
+    private Timer? _timer;
+
+    [Inject]
+    private NotificationService NotificationService { get; set; } = default!;
+
+    protected override void OnInitialized()
+    {
+        NotificationService.OnShow += ShowNotification;
+    }
+
+    private Task ShowNotification(string title, string message, NotificationType type)
+    {
+        return Show(title, message, type);
+    }
+
+    public void Dispose()
+    {
+        NotificationService.OnShow -= ShowNotification;
+        _timer?.Dispose();
+    }
 
     public async Task Show(string title, string message, NotificationType notificationType, int duration = 5000)
     {
         Title = title;
         Message = message;
-        await SetBackground(notificationType);
+        await SetNotificationStyle(notificationType);
         IsVisible = true;
         StateHasChanged();
-        await Task.Delay(duration);
-        IsVisible = false;
-        StateHasChanged();
+
+        _timer = new Timer(duration);
+        _timer.Elapsed += (sender, e) => Hide();
+        _timer.AutoReset = false;
+        _timer.Start();
     }
     
     public enum NotificationType
@@ -39,17 +68,19 @@
     private void Hide()
     {
         IsVisible = false;
-        StateHasChanged();
+        _timer?.Stop();
+        _timer?.Dispose();
+        InvokeAsync(StateHasChanged);
     }
 
-    private Task SetBackground(NotificationType notificationType)
+    private Task SetNotificationStyle(NotificationType notificationType)
     {
-        _notificationTypeClass = notificationType switch
+        (_notificationTypeClass, _notificationIcon) = notificationType switch
         {
-            NotificationType.Success => "bg-green-primary",
-            NotificationType.Error => "bg-red-primary",
-            NotificationType.Info => "bg-blue-primary",
-            _ => "bg-background-primary"
+            NotificationType.Success => ("bg-green-primary", "fas fa-check-circle"),
+            NotificationType.Error => ("bg-red-primary", "fas fa-exclamation-circle"),
+            NotificationType.Info => ("bg-blue-primary", "fas fa-info-circle"),
+            _ => ("bg-background-primary", "fas fa-info-circle")
         };
 
         return Task.CompletedTask;

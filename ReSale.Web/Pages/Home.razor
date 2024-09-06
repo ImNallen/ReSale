@@ -5,28 +5,28 @@
 
 <PageTitle>ReSale | Dashboard</PageTitle>
 
-<div class="h-full bg-background-secondary p-4 md:p-8">
+<div class="h-full bg-background-secondary-light dark:bg-background-secondary-dark p-4 md:p-8">
     <h1 class="text-4xl font-bold mb-8 text-parchment">Dashboard</h1>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <DashboardCard Title="Customers" Value="@(_customers > 0 ? _customers.ToString() : "Loading...")" Icon="fas fa-users" Color="bg-blue-primary" />
+        <DashboardCard Title="Customers" Value="@_customers.ToString()" Icon="fas fa-users" Color="bg-blue-primary" />
         <DashboardCard Title="Orders" Value="5,678" Icon="fas fa-shopping-cart" Color="bg-green-primary" />
         <DashboardCard Title="Products" Value="789" Icon="fas fa-box" Color="bg-purple-600" />
         <DashboardCard Title="Revenue" Value="$123,456" Icon="fas fa-dollar-sign" Color="bg-yellow-500" />
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div class="bg-background-primary rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
+        <div class="bg-background-primary-light dark:bg-background-primary-dark rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
             <h2 class="text-2xl font-bold mb-4 text-parchment">Quick Actions</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <QuickActionButton Text="Create Customer" Icon="fas fa-user-plus" />
+                <QuickActionButton Text="Create Customer" Icon="fas fa-user-plus" OnClick="@(() => NavigationManager.NavigateTo("/customers/create"))" />
                 <QuickActionButton Text="Create Order" Icon="fas fa-file-invoice" />
                 <QuickActionButton Text="Add Product" Icon="fas fa-box-open" />
                 <QuickActionButton Text="View Reports" Icon="fas fa-chart-bar" />
             </div>
         </div>
 
-        <div class="bg-background-primary rounded-lg shadow-lg p-6">
+        <div class="bg-background-primary-light dark:bg-background-primary-dark rounded-lg shadow-lg p-6">
             <h2 class="text-2xl font-bold mb-4 text-parchment">Recent Activity</h2>
             <ul class="space-y-4">
                 <RecentActivityItem Text="New order 3" Time="5 minutes ago" Icon="fas fa-shopping-cart" />

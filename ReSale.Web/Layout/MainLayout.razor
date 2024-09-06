@@ -1,25 +1,25 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="h-screen">
-    <div class="h-[50px] w-full bg-background-primary shadow-sm flex justify-between">
+<div class="h-screen bg-background-primary-light dark:bg-background-primary-dark text-text-primary-light dark:text-text-primary-dark">
+    <div class="h-[50px] w-full bg-background-secondary-light dark:bg-background-secondary-dark shadow-sm flex justify-between">
         <button 
-            class="text-parchment hover:bg-blue-primary w-[50px] h-[50px] transition-colors duration-300 ease-in-out focus:outline-none" 
+            class="text-text-primary-light dark:text-text-primary-dark hover:bg-blue-primary hover:text-text-primary-dark w-[50px] h-[50px] transition-colors duration-300 ease-in-out focus:outline-none" 
             @onclick="ToggleMenu"
             aria-label="Toggle Menu">
             <i class="fas fa-bars text-lg"></i>
         </button>
         <NavbarLayout/>
     </div>
-    <div class="flex h-screen-50 bg-background-primary">
+    <div class="flex h-screen-50">
         @if (_isMenuOpen)
         {
-            <div class="w-[250px] bg-background-primary shadow-right hidden md:block">
+            <div class="w-[250px] bg-background-secondary-light dark:bg-background-secondary-dark shadow-right hidden md:block">
                 <SidebarLayout/>
             </div>
         }
         else
         {
-            <div class="w-[50px] bg-background-primary shadow-right hidden md:block">
+            <div class="w-[50px] bg-background-secondary-light dark:bg-background-secondary-dark shadow-right hidden md:block">
                 <SidebarButtonsLayout/>
             </div>
         }

@@ -3,57 +3,61 @@
 @inject NavigationManager Navigation
 
 <CascadingAuthenticationState>
-    <Router AppAssembly="@typeof(App).Assembly">
-        <Found Context="routeData">
-            <AuthorizeView>
-                <Authorized>
-                    <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)"/>
-                    <FocusOnNavigate RouteData="@routeData" Selector="h1"/>
-                </Authorized>
-                <NotAuthorized>
-                    @if (routeData.PageType != typeof(Login)
-                         && routeData.PageType != typeof(Verify)
-                         && routeData.PageType != typeof(Reset)
-                         && routeData.PageType != typeof(Register)
-                         && routeData.PageType != typeof(Forgot))
-                    {
-                        <RedirectToLogin />
-                    }
-                    
-                    @if (routeData.PageType == typeof(Login)
-                         || routeData.PageType == typeof(Verify)
-                         || routeData.PageType == typeof(Reset)
-                         || routeData.PageType == typeof(Register)
-                         || routeData.PageType == typeof(Forgot))
-                    {
-                        <RouteView RouteData="@routeData" DefaultLayout="@typeof(EmptyLayout)"/>
-                    }
-                </NotAuthorized>
-            </AuthorizeView>
-        </Found>
-        
-        <NotFound>
-            <PageTitle>Not found</PageTitle>
-            <LayoutView Layout="@typeof(EmptyLayout)">
-                <div class="flex items-center justify-center">
-                    <div class="mt-40">
-                        <div class="text-center">
-                            <h1 class="text-8xl font-bold text-red-primary">404</h1>
-                            <h2 class="text-6xl font-bold text-red-primary">Page Not Found</h2>
-                            <p class="text-4xl mt-8 text-parchment">It's okay to panic!</p>
-                            <p class="text-sm mt-4 text-parchment">Oops! Looks like our AI took a coffee break and forgot to build this page.</p>
-                            <p class="text-sm mt-4 text-parchment">Maybe it's meditating on the meaning of '404'?</p>
-                            <button @onclick="NavigateToHome" class="mt-6 p-4 rounded inline-block bg-blue-primary hover:bg-blue-secondary border-none cursor-pointer">
-                                <div class="flex items-center">
-                                    <span>Back to home</span>
-                                </div>
-                            </button>
+    <ThemeWrapper>
+        <Router AppAssembly="@typeof(App).Assembly">
+            <Found Context="routeData">
+                <AuthorizeView>
+                    <Authorized>
+                        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)"/>
+                        <FocusOnNavigate RouteData="@routeData" Selector="h1"/>
+                    </Authorized>
+                    <NotAuthorized>
+                        @if (routeData.PageType != typeof(Login)
+                            && routeData.PageType != typeof(Verify)
+                            && routeData.PageType != typeof(Reset)
+                            && routeData.PageType != typeof(Register)
+                            && routeData.PageType != typeof(Forgot))
+                        {
+                            <RedirectToLogin />
+                        }
+                        
+                        @if (routeData.PageType == typeof(Login)
+                            || routeData.PageType == typeof(Verify)
+                            || routeData.PageType == typeof(Reset)
+                            || routeData.PageType == typeof(Register)
+                            || routeData.PageType == typeof(Forgot))
+                        {
+                            <RouteView RouteData="@routeData" DefaultLayout="@typeof(EmptyLayout)"/>
+                        }
+                    </NotAuthorized>
+                </AuthorizeView>
+            </Found>
+            
+            <NotFound>
+                <PageTitle>Not found</PageTitle>
+                <LayoutView Layout="@typeof(EmptyLayout)">
+                    <div class="flex items-center justify-center">
+                        <div class="mt-40">
+                            <div class="text-center">
+                                <h1 class="text-8xl font-bold text-red-primary">404</h1>
+                                <h2 class="text-6xl font-bold text-red-primary">Page Not Found</h2>
+                                <p class="text-4xl mt-8 text-text-primary-light dark:text-text-primary-dark">It's okay to panic!</p>
+                                <p class="text-sm mt-4 text-text-primary-light dark:text-text-primary-dark">Oops! Looks like our AI took a coffee break and forgot to build this page.</p>
+                                <p class="text-sm mt-4 text-text-primary-light dark:text-text-primary-dark">Maybe it's meditating on the meaning of '404'?</p>
+                                <button @onclick="NavigateToHome" class="mt-6 p-4 rounded inline-block bg-blue-primary hover:bg-blue-secondary text-text-primary-dark border-none cursor-pointer transition-all duration-300 ease-in-out transform hover:scale-110 hover:rotate-3 hover:shadow-lg">
+                                    <div class="flex items-center justify-center">
+                                        <i class="fas fa-home mr-2"></i>
+                                        <span class="mx-1">Back to home</span>
+                                    </div>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </LayoutView>
-        </NotFound>
-    </Router>
+                </LayoutView>
+            </NotFound>
+        </Router>
+        <GlobalNotification />
+    </ThemeWrapper>
 </CascadingAuthenticationState>
 
 @code {

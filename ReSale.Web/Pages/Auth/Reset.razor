@@ -2,30 +2,29 @@
 @using ReSale.Api.Contracts.Requests.Auth
 @inject IAuthenticationClient AuthenticationClient
 @inject NavigationManager Navigation
+@inject NotificationService NotificationService
 
 <PageTitle>ReSale | Reset Password</PageTitle>
 
-<Notification @ref="_notificationComponent" />
-
-<div class="min-h-screen flex items-center justify-center bg-background-primary">
-    <div class="bg-background-secondary p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 class="text-3xl font-bold mb-6 text-center text-parchment">Reset Password</h2>
+<div class="min-h-screen flex items-center justify-center bg-background-primary-light dark:bg-background-primary-dark">
+    <div class="bg-background-secondary-light dark:bg-background-secondary-dark p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h2 class="text-3xl font-bold mb-6 text-center text-text-primary-light dark:text-text-primary-dark">Reset Password</h2>
         <EditForm Model="@_resetPasswordModel" OnValidSubmit="HandleResetPassword">
             <DataAnnotationsValidator/>
 
             <div class="mb-6">
-                <label for="password" class="block text-sm font-medium mb-2">New Password</label>
-                <InputText id="password" type="password" class="w-full p-3 rounded-md bg-parchment text-background-secondary focus:outline-none focus:ring-2 focus:ring-parchment" @bind-Value="_resetPasswordModel.Password"/>
+                <label for="password" class="block text-sm font-medium mb-2 text-text-primary-light dark:text-text-primary-dark">New Password</label>
+                <InputText id="password" type="password" class="w-full p-3 rounded-md bg-background-primary-dark dark:bg-background-primary-light text-text-primary-dark dark:text-text-primary-light focus:outline-none focus:ring-2 focus:ring-blue-primary" @bind-Value="_resetPasswordModel.Password"/>
                 <ValidationMessage For="@(() => _resetPasswordModel.Password)" class="text-red-primary text-sm mt-1"/>
             </div>
 
             <div class="mb-6">
-                <label for="confirmPassword" class="block text-sm font-medium mb-2">Confirm Password</label>
-                <InputText id="confirmPassword" type="password" class="w-full p-3 rounded-md bg-parchment text-background-secondary focus:outline-none focus:ring-2 focus:ring-parchment" @bind-Value="_resetPasswordModel.ConfirmPassword"/>
+                <label for="confirmPassword" class="block text-sm font-medium mb-2 text-text-primary-light dark:text-text-primary-dark">Confirm Password</label>
+                <InputText id="confirmPassword" type="password" class="w-full p-3 rounded-md bg-background-primary-dark dark:bg-background-primary-light text-text-primary-dark dark:text-text-primary-light focus:outline-none focus:ring-2 focus:ring-blue-primary" @bind-Value="_resetPasswordModel.ConfirmPassword"/>
                 <ValidationMessage For="@(() => _resetPasswordModel.ConfirmPassword)" class="text-red-primary text-sm mt-1"/>
             </div>
 
-            <button type="submit" disabled="@_isBusy" class="w-full bg-parchment disabled:bg-light-gray text-background-secondary p-3 rounded-md font-medium transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-parchment focus:ring-opacity-50">
+            <button type="submit" disabled="@_isBusy" class="w-full bg-blue-primary disabled:bg-gray-400 text-text-primary-dark p-3 rounded-md font-medium transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-primary focus:ring-opacity-50">
                 @if (_isBusy)
                 {
                     <span class="inline-block animate-spin mr-2">&#8635;</span>
@@ -34,7 +33,7 @@
             </button>
         </EditForm>
         <div class="mt-4 text-center">
-            <a href="/login" class="inline-block text-parchment font-medium text-sm transition duration-300 ease-in-out hover:scale-105">
+            <a href="/login" class="inline-block text-text-primary-light dark:text-text-primary-dark font-medium text-sm transition duration-300 ease-in-out hover:scale-105">
                 Remember your password? Login here
             </a>
         </div>
@@ -46,7 +45,6 @@
     public Guid Token { get; set; }
 
     private ResetPasswordModel _resetPasswordModel = new();
-    private Notification _notificationComponent = new();
     private bool _isBusy = false;
 
     private async Task HandleResetPassword()
@@ -56,22 +54,17 @@
         try
         {
             await AuthenticationClient.Reset(Token, new ResetRequest(_resetPasswordModel.Password));
-            await ShowNotification("Success", "Your password has been reset successfully.", Notification.NotificationType.Success);
+            await NotificationService.Show("Success", "Your password has been reset successfully.", Notification.NotificationType.Success);
             Navigation.NavigateTo("/login");
         }
         catch (Exception)
         {
-            await ShowNotification("Error", "An error occurred while resetting your password. Please try again.", Notification.NotificationType.Error);
+            await NotificationService.Show("Error", "An error occurred while resetting your password. Please try again.", Notification.NotificationType.Error);
         }
         finally
         {
             _isBusy = false;
         }
-    }
-
-    private async Task ShowNotification(string title, string message, Notification.NotificationType notificationType)
-    {
-        await _notificationComponent.Show(title, message, notificationType);
     }
 
     private class ResetPasswordModel

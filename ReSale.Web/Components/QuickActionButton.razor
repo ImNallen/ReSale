@@ -1,6 +1,6 @@
-<button @onclick="OnClick" class="w-full bg-table-gray hover:bg-blue-primary text-parchment font-semibold py-3 px-4 rounded transition duration-300 ease-in-out flex items-center justify-between">
-    <span>@Text</span>
-    <i class="@Icon"></i>
+<button @onclick="OnClick" class="w-full hover:bg-blue-primary hover:text-text-primary-dark text-text-primary-light dark:text-text-primary-dark font-semibold py-3 px-4 rounded transition duration-300 ease-in-out flex items-center justify-between group hover:scale-105">
+    <span class="transition-transform duration-300 group-hover:translate-x-1">@Text</span>
+    <i class="@Icon transition-transform duration-300 group-hover:translate-x-1"></i>
 </button>
 
 @code {

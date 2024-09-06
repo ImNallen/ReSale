@@ -5,20 +5,20 @@
 <div class="flex flex-col justify-between h-full">
     <div class="text-parchment">
         <button class="@(NavigationManager.Uri.EndsWith("/") ? 
-                           "bg-blue-primary hover:bg-blue-secondary" : 
-                           "hover:bg-blue-primary") h-[60px] w-full transition-colors duration-300 ease-in-out focus:outline-none"
+                           "bg-blue-primary hover:bg-blue-secondary text-text-primary-dark" : 
+                           "hover:bg-blue-primary") hover:text-text-primary-dark h-[60px] w-full transition-colors duration-300 ease-in-out focus:outline-none"
                 title="Home"
                 @onclick="@(() => NavigationManager.NavigateTo("/"))">
             <div class="flex">
                 <div>
-                    <i class="fas fa-home w-[50px]"></i>
+                    <i class="fas fa-table-columns w-[50px]"></i>
                 </div>
             </div>
         </button>
         
         <button class="@(NavigationManager.Uri.Contains("/customers") ? 
-                           "bg-blue-primary hover:bg-blue-secondary" : 
-                           "hover:bg-blue-primary") h-[60px] w-full transition-colors duration-300 ease-in-out focus:outline-none"
+                           "bg-blue-primary hover:bg-blue-secondary text-text-primary-dark" : 
+                           "hover:bg-blue-primary") hover:text-text-primary-dark h-[60px] w-full transition-colors duration-300 ease-in-out focus:outline-none"
                 title="Customers"
                 @onclick="@(() => NavigationManager.NavigateTo("/customers"))">
             <div class="flex">
@@ -28,7 +28,7 @@
             </div>
         </button>
 
-        <button class="h-[60px] w-full @( _isItemsMenuOpen ? "bg-blue-primary" : "" ) hover:bg-blue-primary transition-colors duration-300 ease-in-out focus:outline-none" @onclick="ToggleItemsMenu" title="Items">
+        <button class="h-[60px] w-full @( _isItemsMenuOpen ? "bg-blue-primary text-text-primary-dark" : "" ) hover:bg-blue-primary hover:text-text-primary-dark transition-colors duration-300 ease-in-out focus:outline-none" @onclick="ToggleItemsMenu" title="Items">
             <div class="flex">
                 <div>
                     <i class="fa-solid fa-boxes-stacked w-[50px]"></i>
@@ -41,8 +41,8 @@
         {
             <div class="bg-background-primary">
                 <button class="@(NavigationManager.Uri.Contains("/products") ?
-                                   "bg-blue-primary hover:bg-blue-secondary" :
-                                   "hover:bg-blue-primary") h-[60px] w-full transition-colors duration-300 ease-in-out focus:outline-none"
+                                   "bg-blue-primary hover:bg-blue-secondary text-text-primary-dark" :
+                                   "hover:bg-blue-primary") hover:text-text-primary-dark h-[60px] w-full transition-colors duration-300 ease-in-out focus:outline-none"
                         title="Products"
                         @onclick="@(() => NavigationManager.NavigateTo("/products"))">
                     <div class="flex">
@@ -53,8 +53,8 @@
                 </button>
 
                 <button class="@(NavigationManager.Uri.Contains("/suppliers") ?
-                "bg-blue-primary hover:bg-blue-secondary" :
-                "hover:bg-blue-primary") h-[60px] w-full transition-colors duration-300 ease-in-out focus:outline-none"
+                "bg-blue-primary hover:bg-blue-secondary text-text-primary-dark" :
+                "hover:bg-blue-primary") hover:text-text-primary-dark h-[60px] w-full transition-colors duration-300 ease-in-out focus:outline-none"
                         title="Suppliers"
                         @onclick="@(() => NavigationManager.NavigateTo("/suppliers"))">
                     <div class="flex">
@@ -66,7 +66,7 @@
             </div>
         }
 
-        <button class="h-[60px] w-full @( _isSalesMenuOpen ? "bg-blue-primary" : "" ) hover:bg-blue-primary transition-colors duration-300 ease-in-out focus:outline-none" @onclick="ToggleSalesMenu" title="Sales">
+        <button class="h-[60px] w-full @( _isSalesMenuOpen ? "bg-blue-primary text-text-primary-dark" : "" ) hover:bg-blue-primary hover:text-text-primary-dark transition-colors duration-300 ease-in-out focus:outline-none" @onclick="ToggleSalesMenu" title="Sales">
             <div class="flex">
                 <div>
                     <i class="fa-solid fa-clipboard w-[50px]"></i>
@@ -79,8 +79,8 @@
         {
         <div class="bg-background-primary">
             <button class="@(NavigationManager.Uri.Contains("/orders") ?
-            "bg-blue-primary hover:bg-blue-secondary" :
-            "hover:bg-blue-primary") h-[60px] w-full transition-colors duration-300 ease-in-out focus:outline-none"
+            "bg-blue-primary hover:bg-blue-secondary text-text-primary-dark" :
+            "hover:bg-blue-primary") hover:text-text-primary-dark h-[60px] w-full transition-colors duration-300 ease-in-out focus:outline-none"
                     title="Orders"
                     @onclick="@(() => NavigationManager.NavigateTo("/orders"))">
                 <div class="flex">
@@ -91,8 +91,8 @@
             </button>
 
             <button class="@(NavigationManager.Uri.Contains("/purchaseorders") ?
-            "bg-blue-primary hover:bg-blue-secondary" :
-            "hover:bg-blue-primary") h-[60px] w-full transition-colors duration-300 ease-in-out focus:outline-none"
+            "bg-blue-primary hover:bg-blue-secondary text-text-primary-dark" :
+            "hover:bg-blue-primary") hover:text-text-primary-dark h-[60px] w-full transition-colors duration-300 ease-in-out focus:outline-none"
                     title="Purchase orders"
                     @onclick="@(() => NavigationManager.NavigateTo("/purchaseorders"))">
                 <div class="flex">
@@ -105,8 +105,8 @@
         }
                 
         <button class="@(NavigationManager.Uri.Contains("/invoices") ? 
-                           "bg-blue-primary hover:bg-blue-secondary" : 
-                           "hover:bg-blue-primary") h-[60px] w-full transition-colors duration-300 ease-in-out focus:outline-none"
+                           "bg-blue-primary hover:bg-blue-secondary text-text-primary-dark" : 
+                           "hover:bg-blue-primary") hover:text-text-primary-dark h-[60px] w-full transition-colors duration-300 ease-in-out focus:outline-none"
                 title="Invoices"
                 @onclick="@(() => NavigationManager.NavigateTo("/invoices"))">
             <div class="flex">
@@ -117,8 +117,8 @@
         </button>
 
         <button class="@(NavigationManager.Uri.Contains("/employees") ?
-        "bg-blue-primary hover:bg-blue-secondary" :
-        "hover:bg-blue-primary") h-[60px] w-full transition-colors duration-300 ease-in-out focus:outline-none"
+        "bg-blue-primary hover:bg-blue-secondary text-text-primary-dark" :
+        "hover:bg-blue-primary") hover:text-text-primary-dark h-[60px] w-full transition-colors duration-300 ease-in-out focus:outline-none"
                 title="Employees"
                 @onclick="@(() => NavigationManager.NavigateTo("/employees"))">
             <div class="flex">
@@ -129,8 +129,8 @@
         </button>
 
         <button class="@(NavigationManager.Uri.Contains("/statistics") ?
-        "bg-blue-primary hover:bg-blue-secondary" :
-        "hover:bg-blue-primary") h-[60px] w-full transition-colors duration-300 ease-in-out focus:outline-none"
+        "bg-blue-primary hover:bg-blue-secondary text-text-primary-dark" :
+        "hover:bg-blue-primary") hover:text-text-primary-dark h-[60px] w-full transition-colors duration-300 ease-in-out focus:outline-none"
                 title="Statistics"
                 @onclick="@(() => NavigationManager.NavigateTo("/statistics"))">
             <div class="flex">
@@ -143,8 +143,8 @@
     
     <div class="text-parchment">
         <button class="@(NavigationManager.Uri.Contains("/settings") ? 
-                           "bg-blue-primary hover:bg-blue-secondary" : 
-                           "hover:bg-blue-primary") h-[60px] w-full transition-colors duration-300 ease-in-out focus:outline-none"
+                           "bg-blue-primary hover:bg-blue-secondary text-text-primary-dark" : 
+                           "hover:bg-blue-primary") hover:text-text-primary-dark h-[60px] w-full transition-colors duration-300 ease-in-out focus:outline-none"
                 title="Settings"
                 @onclick="@(() => NavigationManager.NavigateTo("/settings"))">
             <div class="flex">
@@ -154,7 +154,7 @@
             </div>
         </button>
     
-        <button class="w-full h-[60px] hover:bg-red-secondary transition-colors duration-300 ease-in-out focus:outline-none"
+        <button class="w-full h-[60px] hover:bg-red-secondary hover:text-text-primary-dark transition-colors duration-300 ease-in-out focus:outline-none"
                 title="Log out"
                 @onclick="Logout">
             <div class="flex">

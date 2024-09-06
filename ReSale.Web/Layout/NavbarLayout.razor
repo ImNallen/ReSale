@@ -1,23 +1,30 @@
 ﻿@using System.Security.Claims
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject ThemeService ThemeService
 
 <div class="flex items-center h-[50px]">
-    <button @onclick="ToggleDropdown" class="flex items-center text-parchment hover:bg-blue-primary px-4 h-full transition duration-300 ease-in-out group">
+    <button 
+        class="text-text-primary-light dark:text-text-primary-dark hover:bg-blue-primary hover:text-text-primary-dark w-[50px] h-[50px] transition-colors duration-300 ease-in-out focus:outline-none" 
+        @onclick="ToggleTheme"
+        aria-label="Toggle Theme">
+        <i class="fas fa-adjust text-lg"></i>
+    </button>
+    <button @onclick="ToggleDropdown" class="flex items-center text-text-primary-light dark:text-text-primary-dark hover:bg-blue-primary hover:text-text-primary-dark px-4 h-full transition duration-300 ease-in-out group">
         <span class="mr-4 font-medium">@_firstName</span>
-        <div class="rounded-full w-[30px] h-[30px] bg-background-secondary flex items-center justify-center shadow-sm group-hover:bg-parchment">
-            <i class="fas fa-user text-sm group-hover:text-background-secondary"></i>
+        <div class="rounded-full w-[30px] h-[30px] bg-background-secondary-light dark:bg-background-secondary-dark flex items-center justify-center shadow-sm group-hover:bg-text-primary-light dark:group-hover:bg-text-primary-dark">
+            <i class="fas fa-user text-sm group-hover:text-background-secondary-light dark:group-hover:text-background-secondary-dark"></i>
         </div>
         <i class="fas fa-chevron-down ml-2 text-xs transition-transform duration-300 @(_isDropdownOpen ? "rotate-180" : "")"></i>
     </button>
     @if (_isDropdownOpen)
     {
-        <div class="absolute top-[50px] right-0 bg-background-secondary shadow-lg rounded-b-lg overflow-hidden w-48 z-50">
-            <a href="/profile" class="flex items-center px-4 py-3 text-parchment hover:bg-blue-primary transition duration-300 ease-in-out">
+        <div class="absolute top-[50px] right-0 bg-background-secondary-light dark:bg-background-secondary-dark shadow-lg rounded-b-lg overflow-hidden w-48 z-50">
+            <a href="/profile" class="flex items-center px-4 py-3 text-text-primary-light dark:text-text-primary-dark hover:bg-blue-primary hover:text-text-primary-dark transition duration-300 ease-in-out">
                 <i class="fas fa-user-circle mr-3"></i>
                 <span>Account</span>
             </a>
-            <div class="border-t border-parchment"></div>
-            <a href="/logout" class="flex items-center px-4 py-3 text-parchment hover:bg-red-primary transition duration-300 ease-in-out">
+            <div class="border-t border-text-primary-light dark:border-text-primary-dark"></div>
+            <a href="/logout" class="flex items-center px-4 py-3 text-text-primary-light dark:text-text-primary-dark hover:bg-red-primary hover:text-text-primary-dark transition duration-300 ease-in-out">
                 <i class="fas fa-sign-out-alt mr-3"></i>
                 <span>Logout</span>
             </a>
@@ -29,6 +36,11 @@
 @code {
     private bool _isDropdownOpen;
     private string _firstName = string.Empty;
+
+    private async Task ToggleTheme()
+    {
+        await ThemeService.ToggleThemeAsync();
+    }
     
     protected override async Task OnInitializedAsync()
     {

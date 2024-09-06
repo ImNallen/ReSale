@@ -6,6 +6,7 @@ using Refit;
 using ReSale.Web;
 using ReSale.Web.Auth;
 using ReSale.Web.Clients;
+using ReSale.Web.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -36,5 +37,7 @@ builder.Services
 builder.Services.AddOptions();
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthorizationStateProvider>();
+builder.Services.AddScoped<NotificationService>();
+builder.Services.AddScoped<ThemeService>();
 
 await builder.Build().RunAsync();

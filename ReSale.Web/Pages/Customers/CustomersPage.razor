@@ -5,11 +5,11 @@
 
 <PageTitle>ReSale | Customers</PageTitle>
 
-<div class="flex flex-col h-full bg-background-secondary p-4">
-    <div class="flex flex-col md:flex-row justify-between items-center bg-background-primary p-4 rounded shadow-md">
+<div class="flex flex-col h-full bg-background-secondary-light dark:bg-background-secondary-dark p-4">
+    <div class="flex flex-col md:flex-row justify-between items-center bg-background-primary-light dark:bg-background-primary-dark p-4 rounded shadow-md">
         <h3 class="text-2xl font-bold mb-4 md:mb-0">Customers</h3>
         <div class="flex flex-col sm:flex-row w-full md:w-auto space-y-2 sm:space-y-0 sm:space-x-2">
-            <button class="bg-green-primary hover:bg-green-secondary text-white py-2 px-4 rounded transition duration-300 ease-in-out flex items-center justify-center shadow-md focus:outline-none focus:ring-2 focus:ring-green-secondary" 
+            <button class="bg-green-primary hover:bg-green-secondary text-text-primary-dark py-2 px-4 rounded transition duration-300 ease-in-out flex items-center justify-center shadow-md focus:outline-none focus:ring-2 focus:ring-green-secondary" 
                     title="Create New Customer" 
                     @onclick="@(() => NavigationManager.NavigateTo("/customers/create"))"
                     aria-label="Create New Customer">
@@ -22,13 +22,13 @@
                        @bind="_searchTerm" 
                        @oninput="HandleSearchInput"
                        @onkeyup="HandleKeyPress" 
-                       class="w-full bg-parchment text-background-secondary py-2 pl-10 pr-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-primary transition duration-300 ease-in-out"
+                       class="w-full bg-background-primary-dark dark:bg-background-primary-light text-text-primary-dark dark:text-text-primary-light py-2 pl-10 pr-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-primary transition duration-300 ease-in-out"
                        aria-label="Search customers"/>
-                <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-text-primary-dark dark:text-text-primary-light"></i>
                 @if (!string.IsNullOrWhiteSpace(_searchTerm))
                 {
                     <button @onclick="ClearSearch" 
-                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
+                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-text-primary-dark dark:text-text-primary-light hover:text-text-secondary-dark hover:dark:text-text-secondary-light focus:outline-none"
                             aria-label="Clear search">
                         <i class="fas fa-times"></i>
                     </button>
@@ -39,57 +39,64 @@
 
     @if (!Customers.Any())
     {
-        <div class="mt-4 bg-background-primary rounded p-4 flex items-center justify-center h-[440px]">
+        <div class="mt-4 rounded p-4 flex items-center justify-center h-[440px]">
             <div class="flex space-x-2">
-                <div class="w-4 h-4 bg-parchment rounded-full animate-bounce" style="animation-duration: 0.8s"></div>
-                <div class="w-4 h-4 bg-parchment rounded-full animate-bounce" style="animation-delay: 0.2s; animation-duration: 0.8s"></div>
-                <div class="w-4 h-4 bg-parchment rounded-full animate-bounce" style="animation-delay: 0.4s; animation-duration: 0.8s"></div>
+                <div class="w-4 h-4 bg-background-primary-dark dark:bg-background-primary-light rounded-full animate-bounce" style="animation-duration: 0.8s"></div>
+                <div class="w-4 h-4 bg-background-primary-dark dark:bg-background-primary-light rounded-full animate-bounce" style="animation-delay: 0.2s; animation-duration: 0.8s"></div>
+                <div class="w-4 h-4 bg-background-primary-dark dark:bg-background-primary-light rounded-full animate-bounce" style="animation-delay: 0.4s; animation-duration: 0.8s"></div>
             </div>
         </div>
     }
     else
     {
-    <div class="mt-4 rounded-t flex-grow bg-background-primary overflow-auto">
-        <table class="w-full table-auto">
+    <div class="mt-4 rounded-t flex-grow bg-background-primary-light dark:bg-background-primary-dark overflow-auto">
+        <table class="w-full table-auto border-collapse">
             <thead>
-            <tr>
-                <th scope="col" class="hidden lg:table-cell sticky top-0 z-10 text-left py-3 px-4 font-semibold">ID</th>
-                <th scope="col" class="sticky top-0 z-10 text-left py-3 px-4 font-semibold">Name</th>
-                <th scope="col" class="sticky top-0 z-10 text-left py-3 px-4 font-semibold">Email</th>
-                <th scope="col" class="sticky top-0 z-10 text-left py-3 px-4 font-semibold">Phone number</th>
-            </tr>
+                <tr>
+                    <th scope="col" class="hidden lg:table-cell bg-background-primary-light dark:bg-background-primary-dark sticky top-0 z-10 text-left py-2 px-3 font-semibold text-sm">ID</th>
+                    <th scope="col" class="bg-background-primary-light dark:bg-background-primary-dark sticky top-0 z-10 text-left py-2 px-3 font-semibold text-sm">Name</th>
+                    <th scope="col" class="bg-background-primary-light dark:bg-background-primary-dark sticky top-0 z-10 text-left py-2 px-3 font-semibold text-sm">Email</th>
+                    <th scope="col" class="bg-background-primary-light dark:bg-background-primary-dark sticky top-0 z-10 text-left py-2 px-3 font-semibold text-sm">Phone number</th>
+                </tr>
             </thead>
             <tbody>
             @foreach (var customer in Customers)
             {
-                <tr class="hover:bg-background-secondary transition duration-300 ease-in-out cursor-pointer" @onclick="@(() => NavigationManager.NavigateTo($"/customers/{customer.Id}"))">
-                    <td class="hidden lg:table-cell border-t border-background-secondary py-3 px-4">@customer.Id</td>
-                    <td class="border-t border-background-secondary py-3 px-4">@customer.FirstName @customer.LastName</td>
-                    <td class="border-t border-background-secondary py-3 px-4">@customer.Email</td>
-                    <td class="border-t border-background-secondary py-3 px-4">@customer.PhoneNumber</td>
+                <tr class="hover:bg-background-secondary-light dark:hover:bg-background-secondary-dark transition duration-300 ease-in-out cursor-pointer border-b border-background-secondary-light dark:border-background-secondary-dark" @onclick="@(() => NavigateToCustomerDetails(customer.Id))">
+                    <td class="hidden lg:table-cell py-2 px-3 text-xs">@customer.Id</td>
+                    <td class="py-2 px-3 text-sm font-medium">@($"{customer.FirstName} {customer.LastName}")</td>
+                    <td class="py-2 px-3 text-sm">
+                        <a href="mailto:@customer.Email" class="text-blue-primary hover:text-blue-secondary transition duration-300 ease-in-out" @onclick:stopPropagation>@customer.Email</a>
+                    </td>
+                    <td class="py-2 px-3 text-sm">
+                        <a href="tel:@customer.PhoneNumber" class="text-blue-primary hover:text-blue-secondary transition duration-300 ease-in-out" @onclick:stopPropagation>@customer.PhoneNumber</a>
+                    </td>
                 </tr>
             }
             </tbody>
         </table>
     </div>
-    <div class="flex flex-col sm:flex-row justify-between items-center bg-background-primary rounded-b p-4">
+    <div class="flex flex-col sm:flex-row justify-between items-center bg-background-primary-light dark:bg-background-primary-dark rounded-b p-4">
         <div class="flex flex-col sm:flex-row items-center mb-4 sm:mb-0">
-            <p class="text-sm text-gray-600 mb-2 sm:mb-0 sm:mr-4">Showing @((_page - 1) * _pageSize + 1) to @Math.Min(_page * _pageSize, _total) of @_total results</p>
-            <div class="flex items-center">
+            <p class="text-sm mb-2 sm:mb-0 sm:mr-4">
+                Showing @((_page - 1) * _pageSize + 1) to @Math.Min(_page * _pageSize, _total) of @_total results
+            </p>
+            <div class="hidden lg:flex items-center">
                 <label for="pageSize" class="text-sm mr-2">Items per page:</label>
-                <select id="pageSize" class="bg-background-secondary text-sm p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-primary transition duration-300 ease-in-out" @onchange="OnPageSizeChanged">
-                    <option value="25">25</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
+                <select id="pageSize" class="bg-background-secondary-light dark:bg-background-secondary-dark text-sm p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-primary transition duration-300 ease-in-out" @onchange="OnPageSizeChanged">
+                    @foreach (var size in new[] { 25, 50, 100 })
+                    {
+                        <option value="@size" selected="@(_pageSize == size)">@size</option>
+                    }
                 </select>
             </div>
         </div>
         <div class="flex items-center space-x-2">
-            <button class="bg-background-secondary py-2 px-4 rounded transition duration-300 ease-in-out disabled:cursor-not-allowed disabled:opacity-50 flex items-center @(_hasPreviousPage ? "hover:bg-blue-secondary" : "")" @onclick="PreviousPage" disabled="@(!_hasPreviousPage)">
+            <button class="bg-background-secondary-light dark:bg-background-secondary-dark text-text-primary-light dark:text-text-primary-dark hover:bg-blue-primary dark:hover:bg-blue-primary hover:text-text-primary-dark dark:hover:text-text-primary-dark py-2 px-4 rounded transition duration-300 ease-in-out disabled:cursor-not-allowed disabled:opacity-50 flex items-center" @onclick="PreviousPage" disabled="@(!_hasPreviousPage)">
                 <i class="fas fa-chevron-left mr-2"></i>Previous
             </button>
-            <span class="text-sm">Page @_page of @((_total + _pageSize - 1) / _pageSize)</span>
-            <button class="bg-background-secondary py-2 px-4 rounded transition duration-300 ease-in-out disabled:cursor-not-allowed disabled:opacity-50 flex items-center @(_hasNextPage ? "hover:bg-blue-secondary" : "")" @onclick="NextPage" disabled="@(!_hasNextPage)">
+            <span class="text-sm font-medium">Page @_page of @((_total + _pageSize - 1) / _pageSize)</span>
+            <button class="bg-background-secondary-light dark:bg-background-secondary-dark text-text-primary-light dark:text-text-primary-dark hover:bg-blue-primary dark:hover:bg-blue-primary hover:text-text-primary-dark dark:hover:text-text-primary-dark py-2 px-4 rounded transition duration-300 ease-in-out disabled:cursor-not-allowed disabled:opacity-50 flex items-center" @onclick="NextPage" disabled="@(!_hasNextPage)">
                 Next<i class="fas fa-chevron-right ml-2"></i>
             </button>
         </div>
@@ -128,6 +135,11 @@
                 PhoneNumber = customer.PhoneNumber,
             });
         }
+    }
+
+    private void NavigateToCustomerDetails(Guid customerId)
+    {
+        NavigationManager.NavigateTo($"/customers/{customerId}");
     }
     
     private async Task PreviousPage()

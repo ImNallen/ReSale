@@ -1,134 +1,174 @@
-﻿@page "/Employees"
-
+﻿@page "/employees"
+@using ReSale.Api.Contracts.Responses.Employees
 @inject IEmployeesClient EmployeesClient
 @inject NavigationManager NavigationManager
+@inject NotificationService NotificationService
 
 <PageTitle>ReSale | Employees</PageTitle>
 
-<div class="flex flex-col h-full">
-    <div class="flex justify-between">
-        <div>
-            <h3 class="p-4 bg-table-gray rounded">Employees</h3>
-        </div>
-        <div class="flex">
-            <button class="bg-table-gray hover:bg-green-primary p-[10px] rounded-l" title="Create" @onclick="@(() => NavigationManager.NavigateTo("/employees/create"))">
-                <i class="fas fa-plus p-2"></i>
+<div class="flex flex-col h-full bg-background-secondary-light dark:bg-background-secondary-dark p-4">
+    <div class="flex flex-col md:flex-row justify-between items-center bg-background-primary-light dark:bg-background-primary-dark p-4 rounded shadow-md">
+        <h3 class="text-2xl font-bold mb-4 md:mb-0">Employees</h3>
+        <div class="flex flex-col sm:flex-row w-full md:w-auto space-y-2 sm:space-y-0 sm:space-x-2">
+            <button class="bg-green-primary hover:bg-green-secondary text-text-primary-dark py-2 px-4 rounded transition duration-300 ease-in-out flex items-center justify-center shadow-md focus:outline-none focus:ring-2 focus:ring-green-secondary"
+                    title="Create New Customer"
+                    @onclick="@(() => NavigationManager.NavigateTo("/employees/create"))"
+                    aria-label="Create New Employee">
+                <i class="fas fa-user-plus mr-2"></i>
+                <span>New Employee</span>
             </button>
-            <input type="text" placeholder="Search..." @bind="_searchTerm" class="bg-table-gray p-2 focus:outline-0"/>
-            <button class="bg-table-gray hover:bg-blue-primary p-[10px] rounded-r" title="Search" @onclick="Search">
-                <i class="fas fa-magnifying-glass p-2"></i>
-            </button>
+            <div class="relative flex-grow sm:flex-grow-0">
+                <input type="text"
+                       placeholder="Search customers..."
+                       @bind="_searchTerm"
+                       @oninput="HandleSearchInput"
+                       @onkeyup="HandleKeyPress"
+                       class="w-full bg-background-primary-dark dark:bg-background-primary-light text-text-primary-dark dark:text-text-primary-light py-2 pl-10 pr-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-primary transition duration-300 ease-in-out"
+                       aria-label="Search customers"/>
+                <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-text-primary-dark dark:text-text-primary-light"></i>
+                @if (!string.IsNullOrWhiteSpace(_searchTerm))
+                {
+                <button @onclick="ClearSearch"
+                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-text-primary-dark dark:text-text-primary-light hover:text-text-secondary-dark hover:dark:text-text-secondary-light focus:outline-none"
+                        aria-label="Clear search">
+                    <i class="fas fa-times"></i>
+                </button>
+                }
+            </div>
         </div>
-        <div></div>
     </div>
-
-    @if (!Employees.Any())
+    
+    @if (!Employees.Any() || _isLoading)
     {
-        <div class="mt-4 bg-darker-gray rounded p-4">
-            <div class="flex items-center justify-center h-[440px]">
-                <p class="text-2xl">No employees found</p>
+        <div class="mt-4 rounded p-4 flex items-center justify-center h-[440px]">
+            <div class="flex space-x-2">
+                <div class="w-4 h-4 bg-background-primary-dark dark:bg-background-primary-light rounded-full animate-bounce" style="animation-duration: 0.8s"></div>
+                <div class="w-4 h-4 bg-background-primary-dark dark:bg-background-primary-light rounded-full animate-bounce" style="animation-delay: 0.2s; animation-duration: 0.8s"></div>
+                <div class="w-4 h-4 bg-background-primary-dark dark:bg-background-primary-light rounded-full animate-bounce" style="animation-delay: 0.4s; animation-duration: 0.8s"></div>
             </div>
         </div>
     }
     else
     {
-        <div class="mt-4 rounded-t flex-grow bg-table-gray overflow-x-auto overflow-y-auto">
-            <table class="w-full table-auto">
-                <thead class="border-separate border-spacing-0">
-                <tr>
-                    <th scope="col" class="hidden lg:table-cell sticky top-0 z-10 text-left bg-darker-gray bg-opacity-75 py-2 pl-4 backdrop-blur backdrop-filter font-semibold">ID</th>
-                    <th scope="col" class="sticky top-0 z-10 text-left bg-darker-gray bg-opacity-75 py-2 pl-4 lg:pl-2 backdrop-blur backdrop-filter font-semibold">Name</th>
-                    <th scope="col" class="sticky top-0 z-10 text-left bg-darker-gray bg-opacity-75 py-2 pl-2 backdrop-blur backdrop-filter font-semibold">Email</th>
-                    <th scope="col" class="sticky top-0 z-10 text-left bg-darker-gray bg-opacity-75 py-2 pl-2 backdrop-blur backdrop-filter font-semibold">Hire date</th>
-                </tr>
+        <div class="mt-4 rounded-t flex-grow bg-background-primary-light dark:bg-background-primary-dark overflow-auto">
+            <table class="w-full table-auto border-collapse">
+                <thead>
+                    <tr>
+                        <th scope="col" class="hidden lg:table-cell bg-background-primary-light dark:bg-background-primary-dark sticky top-0 z-10 text-left py-2 px-3 font-semibold text-sm">ID</th>
+                        <th scope="col" class="bg-background-primary-light dark:bg-background-primary-dark sticky top-0 z-10 text-left py-2 px-3 font-semibold text-sm">Name</th>
+                        <th scope="col" class="bg-background-primary-light dark:bg-background-primary-dark sticky top-0 z-10 text-left py-2 px-3 font-semibold text-sm">Email</th>
+                        <th scope="col" class="bg-background-primary-light dark:bg-background-primary-dark sticky top-0 z-10 text-left py-2 px-3 font-semibold text-sm">Hire Date</th>
+                    </tr>
                 </thead>
-                <tbody class="mt-4">
+                <tbody>
                 @foreach (var employee in Employees)
                 {
-                <tr class="hover:bg-dark-gray hover:cursor-pointer" @onclick="@(() => NavigationManager.NavigateTo($"/employees/{employee.Id}"))">
-                    <td class="hidden lg:table-cell border-t border-b border-dark-gray whitespace-nowrap text-sm py-2 pl-4">@employee.Id</td>
-                    <td class="border-t border-b border-dark-gray whitespace-nowrap text-sm py-2 pl-4 lg:pl-2">@employee.FirstName @employee.LastName</td>
-                    <td class="border-t border-b border-dark-gray whitespace-nowrap text-sm py-2 pl-2">@employee.Email</td>
-                    <td class="border-t border-b border-dark-gray whitespace-nowrap text-sm py-2 pl-2">@employee.HireDate.ToString()</td>
-                </tr>
+                    <tr class="hover:bg-background-secondary-light dark:hover:bg-background-secondary-dark transition duration-300 ease-in-out cursor-pointer border-b border-background-secondary-light dark:border-background-secondary-dark" @onclick="@(() => NavigateToEmployeeDetails(employee.Id))">
+                        <td class="hidden lg:table-cell py-2 px-3 text-xs">@employee.Id</td>
+                        <td class="py-2 px-3 text-sm font-medium">@($"{employee.FirstName} {employee.LastName}")</td>
+                        <td class="py-2 px-3 text-sm">
+                            <a href="mailto:@employee.Email" class="text-blue-primary hover:text-blue-secondary transition duration-300 ease-in-out" @onclick:stopPropagation>@employee.Email</a>
+                        </td>
+                        <td class="py-2 px-3 text-sm font-medium">@employee.HireDate.ToString("d")</td>
+                    </tr>
                 }
                 </tbody>
             </table>
         </div>
-    <div class="flex justify-between bg-darker-gray rounded-b h-[40px]">
-        <div class="flex items-center ml-4">
-            <p class="hidden md:flex">Showing @((_page - 1) * _pageSize + 1) to @Math.Min(_page * _pageSize, _total) of @_total results</p>
-            <p class="md:ml-4">Count</p>
-            <select class="ml-2 h-[40px] bg-table-gray" @onchange="OnPageSizeChanged">
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="50">100</option>
-            </select>
-        </div>
-        <div class="flex items-center justify-center">
-            <button class="hover:bg-blue-primary w-[100px] h-[40px] disabled:bg-light-gray disabled:text-darker-gray" @onclick="PreviousPage" disabled="@(!_hasPreviousPage)">Previous</button>
-            <button class="hover:bg-blue-primary w-[100px] h-[40px] rounded-br disabled:bg-light-gray disabled:text-darker-gray" @onclick="NextPage" disabled="@(!_hasNextPage)">Next</button>
-        </div>
+        <div class="flex flex-col sm:flex-row justify-between items-center bg-background-primary-light dark:bg-background-primary-dark rounded-b p-4">
+            <div class="flex flex-col sm:flex-row items-center mb-4 sm:mb-0">
+                <p class="text-sm mb-2 sm:mb-0 sm:mr-4">
+                    Showing @((_page - 1) * _pageSize + 1) to @Math.Min(_page * _pageSize, _total) of @_total results
+                </p>
+                <div class="hidden lg:flex items-center">
+                    <label for="pageSize" class="text-sm mr-2">Items per page:</label>
+                    <select id="pageSize" class="bg-background-secondary-light dark:bg-background-secondary-dark text-sm p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-primary transition duration-300 ease-in-out" @onchange="OnPageSizeChanged">
+                        @foreach (var size in new[] { 25, 50, 100 })
+                        {
+                        <option value="@size" selected="@(_pageSize == size)">@size</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <button class="bg-background-secondary-light dark:bg-background-secondary-dark text-text-primary-light dark:text-text-primary-dark hover:bg-blue-primary hover:text-text-primary-dark dark:hover:text-text-primary-dark py-2 px-4 rounded transition duration-300 ease-in-out disabled:cursor-not-allowed disabled:opacity-50 flex items-center" @onclick="PreviousPage" disabled="@(!_hasPreviousPage)">
+                    <i class="fas fa-chevron-left mr-2"></i>Previous
+                </button>
+                <span class="text-sm font-medium">Page @_page of @((_total + _pageSize - 1) / _pageSize)</span>
+                <button class="bg-background-secondary-light dark:bg-background-secondary-dark text-text-primary-light dark:text-text-primary-dark hover:bg-blue-primary hover:text-text-primary-dark dark:hover:text-text-primary-dark py-2 px-4 rounded transition duration-300 ease-in-out disabled:cursor-not-allowed disabled:opacity-50 flex items-center" @onclick="NextPage" disabled="@(!_hasNextPage)">
+                    Next<i class="fas fa-chevron-right ml-2"></i>
+                </button>
+            </div>
         </div>
     }
 </div>
 
 @code {
-    private List<EmployeeModel> Employees { get; set; } = [];
+    private List<EmployeeResponse> Employees { get; set; } = [];
     private string _searchTerm = string.Empty;
     private int _page = 1;
     private int _pageSize = 25;
     private int _total;
     private bool _hasNextPage;
     private bool _hasPreviousPage;
-    
+    private bool _isLoading = true;
+
     protected override async Task OnInitializedAsync()
     {
-        var employeesResponses = await EmployeesClient.Get(_searchTerm, _page, _pageSize);
+        await LoadEmployees();
+    }
 
-        _total = employeesResponses.TotalCount;
-        _hasNextPage = employeesResponses.HasNextPage;
-        _hasPreviousPage = employeesResponses.HasPreviousPage;
-        
-        Employees = [];
-        
-        // TODO: Add mapster to map the response to the model
-        foreach (var employee in employeesResponses.Items)
+    private async Task LoadEmployees()
+    {
+        try
         {
-            Employees.Add(new EmployeeModel
-            {
-                Id = employee.Id,
-                FirstName = employee.FirstName,
-                LastName = employee.LastName,
-                Email = employee.Email,
-                HireDate = employee.HireDate
-            });
+            _isLoading = true;
+            var employeesResponse = await EmployeesClient.Get(_searchTerm, _page, _pageSize);
+
+            _total = employeesResponse.TotalCount;
+            _hasNextPage = employeesResponse.HasNextPage;
+            _hasPreviousPage = employeesResponse.HasPreviousPage;
+            Employees = employeesResponse.Items.ToList();
+        }
+        catch (Exception ex)
+        {
+            await NotificationService.Show("Error", "Failed to load employees. Please try again.", Notification.NotificationType.Error);
+            Console.WriteLine($"Error loading employees: {ex.Message}");
+        }
+        finally
+        {
+            _isLoading = false;
         }
     }
-    
+
     private async Task PreviousPage()
     {
         if (_page > 1)
         {
             _page--;
-            await OnInitializedAsync();
+            await LoadEmployees();
         }
     }
 
     private async Task NextPage()
     {
-        if (_page * _pageSize < _total)
+        if (_hasNextPage)
         {
             _page++;
-            await OnInitializedAsync();
+            await LoadEmployees();
         }
     }
-    
+
+    private void NavigateToEmployeeDetails(Guid employeeId)
+    {
+        NavigationManager.NavigateTo($"/employees/{employeeId}");
+    }
+
     private async Task OnPageSizeChanged(ChangeEventArgs e)
     {
         _pageSize = int.Parse(e.Value!.ToString()!);
         _page = 1;
-        await OnInitializedAsync();
+        await LoadEmployees();
     }
     
     private async Task Search()
@@ -136,13 +176,25 @@
         _page = 1;
         await OnInitializedAsync();
     }
-    
-    private class EmployeeModel
+
+    private async Task HandleKeyPress(KeyboardEventArgs e)
     {
-        public Guid Id { get; init; }
-        public string Email { get; init; } = string.Empty;
-        public string FirstName { get; init; } = string.Empty;
-        public string LastName { get; init; } = string.Empty;
-        public DateOnly HireDate { get; init; }
+        if (e.Key == "Enter")
+        {
+            await Search();
+        }
+    }
+
+    private async Task ClearSearch()
+    {
+        _searchTerm = string.Empty;
+        _page = 1;
+        await OnInitializedAsync();
+    }
+
+    private async Task HandleSearchInput(ChangeEventArgs e)
+    {
+        _searchTerm = e.Value?.ToString() ?? string.Empty;
+        await Search();
     }
 }

@@ -1,52 +1,48 @@
 ﻿@page "/customers/create"
 
-@using Bogus
-@using ReSale.Api.Contracts.Requests.Customers
-
 @inject ICustomersClient CustomersClient
 @inject NavigationManager NavigationManager
+@inject NotificationService NotificationService
 
-<Notification @ref="_notificationComponent" />
-
-<div class="h-full flex flex-col bg-background-secondary p-4">
-    <h3 class="p-4 bg-background-primary rounded">Create Customer</h3>
+<div class="h-full flex flex-col bg-background-secondary-light dark:bg-background-secondary-dark p-4">
+    <h3 class="p-4 bg-background-primary-light dark:bg-background-primary-dark text-text-primary-light dark:text-text-primary-dark rounded">Create Customer</h3>
 
     <EditForm Model="_customer" id="create" class="w-full" OnValidSubmit="HandleValidSubmit">
         <DataAnnotationsValidator/>
         <div class="md:flex w-full block overflow-y-auto">
-            <div class="mt-4 p-4 flex-grow bg-background-primary rounded">
-                <h3>Contact Information</h3>
+            <div class="mt-4 p-4 flex-grow bg-background-primary-light dark:bg-background-primary-dark rounded">
+                <h3 class="text-text-primary-light dark:text-text-primary-dark">Contact Information</h3>
 
                 <div class="mb-4 mt-4">
-                    <label for="email" class="block">Email</label>
-                    <InputText id="email" @bind-Value="_customer.Email" class="bg-parchment text-background-secondary p-2 mt-2 rounded w-full"/>
+                    <label for="email" class="block text-text-primary-light dark:text-text-primary-dark">Email</label>
+                    <InputText id="email" @bind-Value="_customer.Email" class="bg-background-secondary-light dark:bg-background-secondary-dark text-text-primary-light dark:text-text-primary-dark p-2 mt-2 rounded w-full"/>
                     <ValidationMessage For="@(() => _customer.Email)" class="text-red-primary"/>
                 </div>
 
                 <div class="md:flex block mt-4">
                     <div class="flex-grow mr-2">
-                        <label for="firstName" class="block">First Name</label>
-                        <InputText id="firstName" @bind-Value="_customer.FirstName" class="bg-parchment text-background-secondary p-2 mt-2 rounded w-full"/>
+                        <label for="firstName" class="block text-text-primary-light dark:text-text-primary-dark">First Name</label>
+                        <InputText id="firstName" @bind-Value="_customer.FirstName" class="bg-background-secondary-light dark:bg-background-secondary-dark text-text-primary-light dark:text-text-primary-dark p-2 mt-2 rounded w-full"/>
                         <ValidationMessage For="@(() => _customer.FirstName)" class="text-red-primary"/>
                     </div>
 
                     <div class="flex-grow ml-2">
-                        <label for="lastName" class="block">Last Name</label>
-                        <InputText id="lastName" @bind-Value="_customer.LastName" class="bg-parchment text-background-secondary p-2 mt-2 rounded w-full"/>
+                        <label for="lastName" class="block text-text-primary-light dark:text-text-primary-dark">Last Name</label>
+                        <InputText id="lastName" @bind-Value="_customer.LastName" class="bg-background-secondary-light dark:bg-background-secondary-dark text-text-primary-light dark:text-text-primary-dark p-2 mt-2 rounded w-full"/>
                         <ValidationMessage For="@(() => _customer.LastName)" class="text-red-primary"/>
                     </div>
                 </div>
 
                 <div class="mb-4 mt-4">
-                    <label for="phoneNumber" class="block">Phone Number</label>
-                    <InputText id="phoneNumber" @bind-Value="_customer.PhoneNumber" class="bg-parchment text-background-secondary p-2 mt-2 rounded w-full"/>
+                    <label for="phoneNumber" class="block text-text-primary-light dark:text-text-primary-dark">Phone Number</label>
+                    <InputText id="phoneNumber" @bind-Value="_customer.PhoneNumber" class="bg-background-secondary-light dark:bg-background-secondary-dark text-text-primary-light dark:text-text-primary-dark p-2 mt-2 rounded w-full"/>
                     <ValidationMessage For="@(() => _customer.PhoneNumber)" class="text-red-primary"/>
                 </div>
             </div>
 
             <div class="flex-grow md:ml-4">
-                <div class="mt-4 p-4 flex-grow bg-background-primary rounded">
-                    <h3>Shipping Address</h3>
+                <div class="mt-4 p-4 flex-grow bg-background-primary-light dark:bg-background-primary-dark rounded">
+                    <h3 class="text-text-primary-light dark:text-text-primary-dark">Shipping Address</h3>
 
                     <AddressForm 
                         Street="@_customer.ShippingStreet"
@@ -58,11 +54,11 @@
                     />
                 </div>
 
-                <div class="mt-4 p-4 flex-grow bg-background-primary rounded">
-                    <h3 class="text-lg font-semibold mb-2">Billing Address</h3>
+                <div class="mt-4 p-4 flex-grow bg-background-primary-light dark:bg-background-primary-dark rounded">
+                    <h3 class="text-lg font-semibold mb-2 text-text-primary-light dark:text-text-primary-dark">Billing Address</h3>
                     <div class="mb-4 flex items-center">
                         <InputCheckbox @bind-Value="_useSameAddress" id="useSameAddress" class="mr-2" />
-                        <label for="useSameAddress" class="cursor-pointer select-none">
+                        <label for="useSameAddress" class="cursor-pointer select-none text-text-primary-light dark:text-text-primary-dark">
                             Use same as shipping address
                         </label>
                     </div>
@@ -83,21 +79,15 @@
         </div>
         
         <div class="flex mt-4">
-            <button type="submit" class="hover:bg-green-primary bg-background-primary rounded w-[100px] h-[40px]">Create</button>
-            <button type="button" class="hover:bg-red-primary bg-background-primary rounded w-[100px] h-[40px] ml-2" @onclick="@(() => NavigationManager.NavigateTo("/customers"))">Cancel</button>
+            <button type="submit" class="bg-green-primary hover:bg-green-secondary text-text-primary-dark rounded w-[100px] h-[40px]">Create</button>
+            <button type="button" class="bg-red-primary hover:bg-red-secondary text-text-primary-dark rounded w-[100px] h-[40px] ml-2" @onclick="@(() => NavigationManager.NavigateTo("/customers"))">Cancel</button>
         </div>
     </EditForm>
 </div>
 
 @code {
     private CreateCustomer _customer = new();
-    private Notification _notificationComponent = new();
     private bool _useSameAddress = true;
-    
-    private async Task ShowNotification(string title, string message, Notification.NotificationType notificationType)
-    { 
-        await _notificationComponent.Show(title, message, notificationType);
-    }
 
     protected override void OnInitialized()
     {
@@ -137,12 +127,12 @@
         {
             await CustomersClient.Create(request);
             _customer = new CreateCustomer();
-            _ = ShowNotification("Success", "Customer created successfully!", Notification.NotificationType.Success);
+            await NotificationService.Show("Success", "Customer created successfully!", Notification.NotificationType.Success);
             NavigationManager.NavigateTo("/customers");
         }
         catch (Exception)
         {
-            _ = ShowNotification("Error", "Failed to create customer, please try again!", Notification.NotificationType.Error);
+            await NotificationService.Show("Error", "Failed to create customer, please try again!", Notification.NotificationType.Error);
         }
     }
     

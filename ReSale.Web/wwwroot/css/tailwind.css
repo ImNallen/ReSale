@@ -881,10 +881,6 @@ html {
   align-items: center;
 }
 
-.justify-end {
-  justify-content: flex-end;
-}
-
 .justify-center {
   justify-content: center;
 }
@@ -1072,10 +1068,6 @@ html {
 
 .text-center {
   text-align: center;
-}
-
-.text-right {
-  text-align: right;
 }
 
 .text-2xl {
@@ -1296,16 +1288,6 @@ html {
   background-color: rgb(181 71 71 / var(--tw-bg-opacity));
 }
 
-.hover\:text-blue-600:hover {
-  --tw-text-opacity: 1;
-  color: rgb(37 99 235 / var(--tw-text-opacity));
-}
-
-.hover\:text-blue-primary:hover {
-  --tw-text-opacity: 1;
-  color: rgb(87 101 242 / var(--tw-text-opacity));
-}
-
 .hover\:text-blue-secondary:hover {
   --tw-text-opacity: 1;
   color: rgb(68 79 191 / var(--tw-text-opacity));
@@ -1319,10 +1301,6 @@ html {
 .hover\:text-text-primary-dark:hover {
   --tw-text-opacity: 1;
   color: rgb(239 239 239 / var(--tw-text-opacity));
-}
-
-.hover\:underline:hover {
-  text-decoration-line: underline;
 }
 
 .hover\:shadow-lg:hover {
@@ -1438,11 +1416,6 @@ html {
 .dark\:text-text-primary-dark:is(.dark *) {
   --tw-text-opacity: 1;
   color: rgb(239 239 239 / var(--tw-text-opacity));
-}
-
-.dark\:text-text-primary-light:is(.dark *) {
-  --tw-text-opacity: 1;
-  color: rgb(51 51 51 / var(--tw-text-opacity));
 }
 
 .dark\:hover\:bg-background-secondary-dark:hover:is(.dark *) {

@@ -23,11 +23,15 @@ public class GetEmployeesQueryHandler(
 
         if (!string.IsNullOrWhiteSpace(request.SearchTerm))
         {
+            string searchTermCapitalized = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(request.SearchTerm);
             employeesQuery = employeesQuery
                 .Where(c =>
                     ((string)c.Email).Contains(request.SearchTerm) ||
+                    ((string)c.Email).Contains(searchTermCapitalized) ||
                     ((string)c.FirstName).Contains(request.SearchTerm) ||
-                    ((string)c.LastName).Contains(request.SearchTerm));
+                    ((string)c.FirstName).Contains(searchTermCapitalized) ||
+                    ((string)c.LastName).Contains(request.SearchTerm) ||
+                    ((string)c.LastName).Contains(searchTermCapitalized));
         }
 
         Expression<Func<Employee, object>> keySelector = request.SortColumn?.ToLower(CultureInfo.CurrentCulture) switch

@@ -1,35 +1,40 @@
 @if (!string.IsNullOrWhiteSpace(Street))
 {
-    <div class="mb-2">
-        <span class="font-semibold">Street:</span> @Street
+    <div class="mb-4">
+        <label for="street" class="block text-sm font-medium text-text-primary-light dark:text-text-primary-dark">Street</label>
+        <InputText id="street" @bind-Value="Street" class="bg-background-secondary-light dark:bg-background-secondary-dark text-text-primary-light dark:text-text-primary-dark p-2 mt-1 rounded w-full" disabled />
     </div>
 }
 
 @if (!string.IsNullOrWhiteSpace(City))
 {
-    <div class="mb-2">
-        <span class="font-semibold">City:</span> @City
+    <div class="mb-4">
+        <label for="city" class="block text-sm font-medium text-text-primary-light dark:text-text-primary-dark">City</label>
+        <InputText id="city" @bind-Value="City" class="bg-background-secondary-light dark:bg-background-secondary-dark text-text-primary-light dark:text-text-primary-dark p-2 mt-1 rounded w-full" disabled />
     </div>
 }
 
 @if (!string.IsNullOrWhiteSpace(ZipCode))
 {
-    <div class="mb-2">
-        <span class="font-semibold">Zip Code:</span> @ZipCode
+    <div class="mb-4">
+        <label for="zipCode" class="block text-sm font-medium text-text-primary-light dark:text-text-primary-dark">Zip Code</label>
+        <InputText id="zipCode" @bind-Value="ZipCode" class="bg-background-secondary-light dark:bg-background-secondary-dark text-text-primary-light dark:text-text-primary-dark p-2 mt-1 rounded w-full" disabled />
     </div>
 }
 
 @if (!string.IsNullOrWhiteSpace(Country))
 {
-    <div class="mb-2">
-        <span class="font-semibold">Country:</span> @Country
+    <div class="mb-4">
+        <label for="country" class="block text-sm font-medium text-text-primary-light dark:text-text-primary-dark">Country</label>
+        <InputText id="country" @bind-Value="Country" class="bg-background-secondary-light dark:bg-background-secondary-dark text-text-primary-light dark:text-text-primary-dark p-2 mt-1 rounded w-full" disabled />
     </div>
 }
 
 @if (!string.IsNullOrWhiteSpace(State))
 {
-    <div class="mb-2">
-        <span class="font-semibold">State:</span> @State
+    <div class="mb-4">
+        <label for="state" class="block text-sm font-medium text-text-primary-light dark:text-text-primary-dark">State</label>
+        <InputText id="state" @bind-Value="State" class="bg-background-secondary-light dark:bg-background-secondary-dark text-text-primary-light dark:text-text-primary-dark p-2 mt-1 rounded w-full" disabled />
     </div>
 }
 

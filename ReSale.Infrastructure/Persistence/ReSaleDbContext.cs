@@ -5,6 +5,7 @@ using ReSale.Application.Abstractions.Persistence;
 using ReSale.Domain.Common;
 using ReSale.Domain.Customers;
 using ReSale.Domain.Employees;
+using ReSale.Domain.Messages;
 using ReSale.Domain.OrderDetails;
 using ReSale.Domain.Orders;
 using ReSale.Domain.Products;
@@ -28,6 +29,8 @@ public class ReSaleDbContext(
     public DbSet<Order> Orders => Set<Order>();
 
     public DbSet<OrderDetail> OrderDetails => Set<OrderDetail>();
+
+    public DbSet<Message> Messages => Set<Message>();
 
     public override async Task<int> SaveChangesAsync(
         CancellationToken cancellationToken = default)

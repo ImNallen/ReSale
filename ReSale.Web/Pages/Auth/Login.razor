@@ -9,44 +9,55 @@
 
 <PageTitle>ReSale | Login</PageTitle>
 
-<div class="min-h-screen flex items-center justify-center bg-background-primary-light dark:bg-background-primary-dark">
-    <div class="bg-background-secondary-light dark:bg-background-secondary-dark p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 class="text-3xl font-bold mb-6 text-center text-text-primary-light dark:text-text-primary-dark">ReSale</h2>
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-500 to-purple-500">
+    <div class="bg-background-primary-light dark:bg-background-primary-dark p-16 rounded-xl shadow-2xl w-full max-w-md">
+        <h2 class="text-4xl font-bold mb-12 text-center text-text-primary-light dark:text-text-primary-dark">ReSale</h2>
         <EditForm Model="@_loginModel" OnValidSubmit="HandleLogin">
             <DataAnnotationsValidator/>
 
             <div class="mb-6">
-                <label for="email" class="block text-sm font-medium mb-2 text-text-primary-light dark:text-text-primary-dark">Email</label>
-                <InputText id="email" class="w-full p-3 rounded-md bg-background-primary-light dark:bg-background-primary-dark text-text-primary-light dark:text-text-primary-dark focus:outline-none focus:ring-2 focus:ring-blue-primary" @bind-Value="_loginModel.Email"/>
+                <label for="email" class="block text-sm font-medium mb-2 text-text-primary-light dark:text-text-primary-dark">Email Address</label>
+                <InputText id="email" class="w-full p-3 rounded-lg bg-background-secondary-light dark:bg-background-secondary-dark text-text-primary-light dark:text-text-primary-dark focus:outline-none focus:ring-2 focus:ring-blue-primary transition duration-300" @bind-Value="_loginModel.Email" placeholder="you@example.com"/>
                 <ValidationMessage For="@(() => _loginModel.Email)" class="text-red-primary text-sm mt-1"/>
             </div>
 
             <div class="mb-6">
                 <label for="password" class="block text-sm font-medium mb-2 text-text-primary-light dark:text-text-primary-dark">Password</label>
-                <InputText id="password" type="password" class="w-full p-3 rounded-md bg-background-primary-light dark:bg-background-primary-dark text-text-primary-light dark:text-text-primary-dark focus:outline-none focus:ring-2 focus:ring-blue-primary" @bind-Value="_loginModel.Password"/>
+                <InputText id="password" type="password" class="w-full p-3 rounded-lg bg-background-secondary-light dark:bg-background-secondary-dark text-text-primary-light dark:text-text-primary-dark focus:outline-none focus:ring-2 focus:ring-blue-primary transition duration-300" @bind-Value="_loginModel.Password" placeholder="••••••••"/>
                 <ValidationMessage For="@(() => _loginModel.Password)" class="text-red-primary text-sm mt-1"/>
                 @if (!string.IsNullOrEmpty(_errorMessage))
                 {
-                    <p class="text-red-primary text-sm mt-1">@_errorMessage</p>
+                    <p class="text-red-500 text-sm mt-1">@_errorMessage</p>
                 }
             </div>
 
-            <div class="mb-6">
-                <a href="/forgot" class="inline-block text-text-primary-light dark:text-text-primary-dark text-sm font-medium transition duration-300 ease-in-out hover:scale-105">Forgot Password?</a>
+            <div class="flex items-center justify-between mb-12">
+                <div class="flex items-center">
+                    <input id="remember-me" type="checkbox" class="h-4 w-4 text-blue-primary focus:ring-blue-primary border-gray-300 rounded">
+                    <label for="remember-me" class="ml-2 block text-sm text-text-primary-light dark:text-text-primary-dark">Remember me</label>
+                </div>
+                <a href="/forgot" class="text-sm font-medium text-blue-primary hover:text-blue-secondary transition duration-300">Forgot Password?</a>
             </div>
 
-            <button type="submit" disabled="@_isBusy" class="w-full bg-blue-primary disabled:bg-gray-400 text-text-primary-dark p-3 rounded-md font-medium transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-primary focus:ring-opacity-50">
+            <button type="submit" disabled="@_isBusy" class="w-full bg-blue-primary text-text-primary-dark p-3 rounded-lg font-medium transition duration-300 ease-in-out transform hover:bg-blue-secondary focus:outline-none focus:ring-2 focus:ring-blue-primary focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed">
                 @if (_isBusy)
                 {
                     <span class="inline-block animate-spin mr-2">&#8635;</span>
+                    <span>Logging in...</span>
                 }
-                Login
+                else
+                {
+                    <span>Sign In</span>
+                }
             </button>
         </EditForm>
-        <div class="mt-4 text-center">
-            <a href="/register" class="inline-block text-text-primary-light dark:text-text-primary-dark font-medium text-sm transition duration-300 ease-in-out hover:scale-105">
-                Don't have an account? Register here
-            </a>
+        <div class="mt-8 text-center">
+            <p class="text-sm text-text-primary-light dark:text-text-primary-dark">
+                Don't have an account?
+                <a href="/register" class="font-medium text-blue-primary hover:text-blue-secondary transition duration-300">
+                    Sign up now
+                </a>
+            </p>
         </div>
     </div>
 </div>

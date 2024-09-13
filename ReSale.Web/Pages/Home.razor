@@ -2,10 +2,11 @@
 
 @inject NavigationManager NavigationManager
 @inject ICustomersClient CustomerClient
+@inject NotificationService NotificationService
 
 <PageTitle>ReSale | Dashboard</PageTitle>
 
-<div class="h-full bg-background-secondary-light dark:bg-background-secondary-dark p-4 md:p-8">
+<div class="h-full bg-background-primary-light dark:bg-background-primary-dark p-4 md:p-8">
     <h1 class="text-4xl font-bold mb-8 text-parchment">Dashboard</h1>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -16,7 +17,7 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div class="bg-background-primary-light dark:bg-background-primary-dark rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
+        <div class="bg-background-secondary-light dark:bg-background-secondary-dark rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
             <h2 class="text-2xl font-bold mb-4 text-parchment">Quick Actions</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <QuickActionButton Text="Create Customer" Icon="fas fa-user-plus" OnClick="@(() => NavigationManager.NavigateTo("/customers/create"))" />
@@ -26,7 +27,7 @@
             </div>
         </div>
 
-        <div class="bg-background-primary-light dark:bg-background-primary-dark rounded-lg shadow-lg p-6">
+        <div class="bg-background-secondary-light dark:bg-background-secondary-dark rounded-lg shadow-lg p-6">
             <h2 class="text-2xl font-bold mb-4 text-parchment">Recent Activity</h2>
             <ul class="space-y-4">
                 <RecentActivityItem Text="New order 3" Time="5 minutes ago" Icon="fas fa-shopping-cart" />
@@ -56,6 +57,7 @@
         catch (Exception ex)
         {
             Console.WriteLine($"An error occurred while getting customers: {ex.Message}");
+            await NotificationService.Show("Error", "Failed to retrieve customer data. Please try again later.", Notification.NotificationType.Error);
         }
     }
 }

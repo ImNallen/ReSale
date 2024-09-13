@@ -7,20 +7,20 @@
 <PageTitle>ReSale | Reset Password</PageTitle>
 
 <div class="min-h-screen flex items-center justify-center bg-background-primary-light dark:bg-background-primary-dark">
-    <div class="bg-background-secondary-light dark:bg-background-secondary-dark p-8 rounded-lg shadow-lg w-full max-w-md">
+    <div class="bg-background-primary-light dark:bg-background-primary-dark p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 class="text-3xl font-bold mb-6 text-center text-text-primary-light dark:text-text-primary-dark">Reset Password</h2>
         <EditForm Model="@_resetPasswordModel" OnValidSubmit="HandleResetPassword">
             <DataAnnotationsValidator/>
 
             <div class="mb-6">
                 <label for="password" class="block text-sm font-medium mb-2 text-text-primary-light dark:text-text-primary-dark">New Password</label>
-                <InputText id="password" type="password" class="w-full p-3 rounded-md bg-background-primary-light dark:bg-background-primary-dark text-text-primary-light dark:text-text-primary-dark focus:outline-none focus:ring-2 focus:ring-blue-primary" @bind-Value="_resetPasswordModel.Password"/>
+                <InputText id="password" type="password" class="w-full p-3 rounded-md bg-background-secondary-light dark:bg-background-secondary-dark text-text-primary-light dark:text-text-primary-dark focus:outline-none focus:ring-2 focus:ring-blue-primary" @bind-Value="_resetPasswordModel.Password"/>
                 <ValidationMessage For="@(() => _resetPasswordModel.Password)" class="text-red-primary text-sm mt-1"/>
             </div>
 
             <div class="mb-6">
                 <label for="confirmPassword" class="block text-sm font-medium mb-2 text-text-primary-light dark:text-text-primary-dark">Confirm Password</label>
-                <InputText id="confirmPassword" type="password" class="w-full p-3 rounded-md bg-background-primary-light dark:bg-background-primary-dark text-text-primary-light dark:text-text-primary-dark focus:outline-none focus:ring-2 focus:ring-blue-primary" @bind-Value="_resetPasswordModel.ConfirmPassword"/>
+                <InputText id="confirmPassword" type="password" class="w-full p-3 rounded-md bg-background-secondary-light dark:bg-background-secondary-dark text-text-primary-light dark:text-text-primary-dark focus:outline-none focus:ring-2 focus:ring-blue-primary" @bind-Value="_resetPasswordModel.ConfirmPassword"/>
                 <ValidationMessage For="@(() => _resetPasswordModel.ConfirmPassword)" class="text-red-primary text-sm mt-1"/>
             </div>
 

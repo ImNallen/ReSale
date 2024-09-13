@@ -27,7 +27,7 @@ public class Product : Entity
     public Money Price { get; private set; }
 
     // Navigation properties
-    public virtual ICollection<OrderDetail> OrderDetails { get; private set; } = [];
+    public virtual ICollection<OrderDetail> OrderDetails { get; init; } = [];
 
     public static Product Create(Name name, Description description, Money price) => new Product(Guid.NewGuid(), name, description, price);
 }

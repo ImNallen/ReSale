@@ -17,7 +17,7 @@ builder.Services.AddTransient<AuthenticationHandler>();
 
 builder.Services.AddBlazoredLocalStorage();
 
-const string apiUrl = $"https://localhost:5001";
+const string apiUrl = $"http://localhost:5000";
 
 builder.Services
     .AddRefitClient<IAuthenticationClient>()
@@ -31,6 +31,11 @@ builder.Services
 
 builder.Services
     .AddRefitClient<IEmployeesClient>()
+    .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiUrl))
+    .AddHttpMessageHandler<AuthenticationHandler>();
+
+builder.Services
+    .AddRefitClient<IMessagesClient>()
     .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiUrl))
     .AddHttpMessageHandler<AuthenticationHandler>();
 

@@ -3,6 +3,9 @@
 @inject ThemeService ThemeService
 @inject NavigationManager NavigationManager
 @inject ILocalStorageService LocalStorage
+@inject IMessagesClient MessagesClient
+@inject NotificationService NotificationService
+@using ReSale.Api.Contracts.Responses.Messages
 
 <div class="flex items-center h-[50px]">
     <button 
@@ -18,6 +21,40 @@
             <i class="fas fa-moon text-lg"></i>
         }
     </button>
+    <button @onclick="ToggleMessageDropdown" class="flex items-center text-text-primary-light dark:text-text-primary-dark hover:bg-blue-primary hover:text-text-primary-dark px-4 h-full transition duration-300 ease-in-out group focus:outline-none" aria-expanded="@_isMessageDropdownOpen" aria-haspopup="true">
+        <i class="fas fa-bell text-lg"></i>
+    </button>
+    @if (_isMessageDropdownOpen)
+    {
+        <div class="absolute top-[55px] right-2 bg-background-secondary-light dark:bg-background-secondary-dark shadow-lg rounded overflow-hidden w-96 z-50">
+            <div class="px-4 py-3 text-text-primary-light dark:text-text-primary-dark flex justify-between items-center">
+                <h3 class="font-semibold">Information</h3>
+            </div>
+            <div class="border-t border-background-secondary-light dark:border-background-secondary-dark"></div>
+            @if (_messages.Any())
+            {
+                @foreach (var message in _messages.Take(3))
+                {
+                    <div class="px-4 py-3 hover:bg-background-primary-light dark:hover:bg-background-primary-dark transition duration-300 ease-in-out cursor-pointer">
+                        <div class="flex justify-between items-center">
+                            <span class="font-semibold text-sm text-text-primary-light dark:text-text-primary-dark truncate max-w-[70%]" title="@message.Title">@message.Title</span>
+                            <span class="text-xs ml-2 flex-shrink-0">@message.CreatedAt.ToString("g")</span>
+                        </div>
+                        <div class="mt-1 text-sm overflow-y-auto">
+                            <p class="whitespace-pre-wrap">@message.Content</p>
+                        </div>
+                    </div>
+                    <div class="border-t border-background-primary-light dark:border-background-primary-dark"></div>
+                }
+            }
+            else
+            {
+                <div class="px-4 py-3 text-text-secondary-light dark:text-text-secondary-dark text-sm">
+                    No information
+                </div>
+            }
+        </div>
+    }
     <button @onclick="ToggleDropdown" class="flex items-center text-text-primary-light dark:text-text-primary-dark hover:bg-blue-primary hover:text-text-primary-dark px-4 h-full transition duration-300 ease-in-out group focus:outline-none" aria-expanded="@_isDropdownOpen" aria-haspopup="true">
         <div class="rounded-full w-[30px] h-[30px] bg-background-secondary-light dark:bg-background-secondary-dark flex items-center justify-center shadow-sm group-hover:bg-text-primary-light dark:group-hover:bg-text-primary-dark">
             <i class="fas fa-user text-sm group-hover:text-background-secondary-light dark:group-hover:text-background-secondary-dark" aria-hidden="true"></i>
@@ -26,7 +63,7 @@
     </button>
     @if (_isDropdownOpen)
     {
-        <div class="absolute top-[55px] right-2 bg-background-primary-light dark:bg-background-primary-dark shadow-lg rounded overflow-hidden w-64 z-50">
+        <div class="absolute top-[55px] right-2 bg-background-secondary-light dark:bg-background-secondary-dark shadow-lg rounded overflow-hidden w-64 z-50">
             <div class="px-4 py-3 text-text-primary-light dark:text-text-primary-dark flex flex-col items-center">
                 <div class="w-20 h-20 rounded-full bg-blue-primary flex items-center justify-center mb-3 transition-transform duration-300 hover:scale-110">
                     <span class="text-3xl text-text-primary-dark font-bold">@(_firstName.FirstOrDefault())@(_lastName.FirstOrDefault())</span>
@@ -58,9 +95,12 @@
 
 @code {
     private bool _isDropdownOpen;
+    private bool _isMessageDropdownOpen;
     private string _firstName = string.Empty;
     private string _email = string.Empty;
     private string _lastName = string.Empty;
+    private int _unreadMessageCount = 0;
+    private List<MessageResponse> _messages = new();
 
     private async Task ToggleTheme()
     {
@@ -75,11 +115,28 @@
         _firstName = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value ?? string.Empty;
         _lastName = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value ?? string.Empty;
         _email = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value ?? string.Empty;
+
+        try
+        {
+            var messagesResult = await MessagesClient.Get(sortColumn: "createdat", sortOrder: "desc", page: 1, pageSize: 5);
+            _messages = messagesResult.Items.ToList();
+        }
+        catch (Exception)
+        {
+            await NotificationService.Show("Failed to fetch messages", "Could not fetch messages from the server, please try again later.", Notification.NotificationType.Error);
+        }
+
+        _unreadMessageCount = _messages.Count;
     }
 
     private void ToggleDropdown()
     {
         _isDropdownOpen = !_isDropdownOpen;
+    }
+
+    private void ToggleMessageDropdown()
+    {
+        _isMessageDropdownOpen = !_isMessageDropdownOpen;
     }
     
     private async Task Logout()

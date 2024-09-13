@@ -15,11 +15,11 @@ module.exports = {
     extend: {
       colors: {
         'background-primary': {
-          light: '#efefef',
+          light: '#e4e4e4',
           dark: '#1c1c1c',
         },
         'background-secondary': {
-          light: '#dddddd',
+          light: '#d5d5d5',
           dark: '#2a2a2a',
         },
         'text-primary': {

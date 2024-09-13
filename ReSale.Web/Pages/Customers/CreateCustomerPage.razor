@@ -4,44 +4,44 @@
 @inject NavigationManager NavigationManager
 @inject NotificationService NotificationService
 
-<div class="h-full flex flex-col bg-background-secondary-light dark:bg-background-secondary-dark p-4">
+<div class="h-full flex flex-col bg-background-primary-light dark:bg-background-primary-dark p-4">
     <h3 class="p-4 bg-background-primary-light dark:bg-background-primary-dark text-text-primary-light dark:text-text-primary-dark rounded">Create Customer</h3>
 
     <EditForm Model="_customer" id="create" class="w-full" OnValidSubmit="HandleValidSubmit">
         <DataAnnotationsValidator/>
         <div class="md:flex w-full block overflow-y-auto">
-            <div class="mt-4 p-4 flex-grow bg-background-primary-light dark:bg-background-primary-dark rounded">
+            <div class="mt-4 p-4 flex-grow bg-background-secondary-light dark:bg-background-secondary-dark rounded">
                 <h3 class="text-text-primary-light dark:text-text-primary-dark">Contact Information</h3>
 
                 <div class="mb-4 mt-4">
-                    <label for="email" class="block text-text-primary-light dark:text-text-primary-dark">Email</label>
-                    <InputText id="email" @bind-Value="_customer.Email" class="bg-background-secondary-light dark:bg-background-secondary-dark text-text-primary-light dark:text-text-primary-dark p-2 mt-2 rounded w-full"/>
+                    <label for="email" class="block text-text-secondary-light dark:text-text-secondary-dark">Email</label>
+                    <InputText id="email" @bind-Value="_customer.Email" class="bg-background-primary-light dark:bg-background-primary-dark text-text-primary-light dark:text-text-primary-dark p-2 mt-2 rounded w-full"/>
                     <ValidationMessage For="@(() => _customer.Email)" class="text-red-primary"/>
                 </div>
 
                 <div class="md:flex block mt-4">
                     <div class="flex-grow mr-2">
-                        <label for="firstName" class="block text-text-primary-light dark:text-text-primary-dark">First Name</label>
-                        <InputText id="firstName" @bind-Value="_customer.FirstName" class="bg-background-secondary-light dark:bg-background-secondary-dark text-text-primary-light dark:text-text-primary-dark p-2 mt-2 rounded w-full"/>
+                        <label for="firstName" class="block text-text-secondary-light dark:text-text-secondary-dark">First Name</label>
+                        <InputText id="firstName" @bind-Value="_customer.FirstName" class="bg-background-primary-light dark:bg-background-primary-dark text-text-primary-light dark:text-text-primary-dark p-2 mt-2 rounded w-full"/>
                         <ValidationMessage For="@(() => _customer.FirstName)" class="text-red-primary"/>
                     </div>
 
                     <div class="flex-grow ml-2">
-                        <label for="lastName" class="block text-text-primary-light dark:text-text-primary-dark">Last Name</label>
-                        <InputText id="lastName" @bind-Value="_customer.LastName" class="bg-background-secondary-light dark:bg-background-secondary-dark text-text-primary-light dark:text-text-primary-dark p-2 mt-2 rounded w-full"/>
+                        <label for="lastName" class="block text-text-secondary-light dark:text-text-secondary-dark">Last Name</label>
+                        <InputText id="lastName" @bind-Value="_customer.LastName" class="bg-background-primary-light dark:bg-background-primary-dark text-text-primary-light dark:text-text-primary-dark p-2 mt-2 rounded w-full"/>
                         <ValidationMessage For="@(() => _customer.LastName)" class="text-red-primary"/>
                     </div>
                 </div>
 
                 <div class="mb-4 mt-4">
-                    <label for="phoneNumber" class="block text-text-primary-light dark:text-text-primary-dark">Phone Number</label>
-                    <InputText id="phoneNumber" @bind-Value="_customer.PhoneNumber" class="bg-background-secondary-light dark:bg-background-secondary-dark text-text-primary-light dark:text-text-primary-dark p-2 mt-2 rounded w-full"/>
+                    <label for="phoneNumber" class="block text-text-secondary-light dark:text-text-secondary-dark">Phone Number</label>
+                    <InputText id="phoneNumber" @bind-Value="_customer.PhoneNumber" class="bg-background-primary-light dark:bg-background-primary-dark text-text-primary-light dark:text-text-primary-dark p-2 mt-2 rounded w-full"/>
                     <ValidationMessage For="@(() => _customer.PhoneNumber)" class="text-red-primary"/>
                 </div>
             </div>
 
             <div class="flex-grow md:ml-4">
-                <div class="mt-4 p-4 flex-grow bg-background-primary-light dark:bg-background-primary-dark rounded">
+                <div class="mt-4 p-4 flex-grow bg-background-secondary-light dark:bg-background-secondary-dark rounded">
                     <h3 class="text-text-primary-light dark:text-text-primary-dark">Shipping Address</h3>
 
                     <AddressForm 
@@ -54,7 +54,7 @@
                     />
                 </div>
 
-                <div class="mt-4 p-4 flex-grow bg-background-primary-light dark:bg-background-primary-dark rounded">
+                <div class="mt-4 p-4 flex-grow bg-background-secondary-light dark:bg-background-secondary-dark rounded">
                     <h3 class="text-lg font-semibold mb-2 text-text-primary-light dark:text-text-primary-dark">Billing Address</h3>
                     <div class="mb-4 flex items-center">
                         <InputCheckbox @bind-Value="_useSameAddress" id="useSameAddress" class="mr-2" />

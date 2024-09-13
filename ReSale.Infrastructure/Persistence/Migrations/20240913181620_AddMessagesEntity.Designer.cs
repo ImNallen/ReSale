@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ReSale.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using ReSale.Infrastructure.Persistence;
 namespace ReSale.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ReSaleDbContext))]
-    partial class ReSaleDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240913181620_AddMessagesEntity")]
+    partial class AddMessagesEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

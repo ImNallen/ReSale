@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ReSale.Domain.Customers;
 using ReSale.Domain.Employees;
+using ReSale.Domain.Messages;
 using ReSale.Domain.OrderDetails;
 using ReSale.Domain.Orders;
 using ReSale.Domain.Products;
@@ -21,6 +22,8 @@ public interface IReSaleDbContext
     DbSet<Order> Orders { get; }
 
     DbSet<OrderDetail> OrderDetails { get; }
+
+    DbSet<Message> Messages { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

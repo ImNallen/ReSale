@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ReSale.Application.Abstractions.Persistence;
+using ReSale.Domain.Activities;
 using ReSale.Domain.Common;
 using ReSale.Domain.Customers;
 using ReSale.Domain.Employees;
@@ -31,6 +32,8 @@ public class ReSaleDbContext(
     public DbSet<OrderDetail> OrderDetails => Set<OrderDetail>();
 
     public DbSet<Message> Messages => Set<Message>();
+
+    public DbSet<Activity> Activities => Set<Activity>();
 
     public override async Task<int> SaveChangesAsync(
         CancellationToken cancellationToken = default)

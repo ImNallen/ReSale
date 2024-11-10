@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ReSale.Application.Abstractions.Messaging;
 using ReSale.Application.Abstractions.Persistence;
+using ReSale.Domain.Activities;
 using ReSale.Domain.Common;
 using ReSale.Domain.Customers;
 using ReSale.Domain.Shared;
@@ -23,6 +24,14 @@ public class DeleteCustomerCommandHandler(
         }
 
         context.Customers.Remove(customer);
+
+        await context.SaveChangesAsync(cancellationToken);
+
+        var description = new Description($"Customer '{customer.Id}' deleted");
+
+        var activity = Activity.Create(description, ActivityType.CustomerDeleted);
+
+        await context.Activities.AddAsync(activity, cancellationToken);
 
         await context.SaveChangesAsync(cancellationToken);
 

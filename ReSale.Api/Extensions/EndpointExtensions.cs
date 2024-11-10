@@ -1,4 +1,6 @@
 ﻿using System.Reflection;
+using Asp.Versioning;
+using Asp.Versioning.Builder;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using ReSale.Api.Endpoints;
 
@@ -21,12 +23,21 @@ public static class EndpointExtensions
     }
 
     public static IApplicationBuilder MapEndpoints(
-        this WebApplication app,
-        RouteGroupBuilder? routeGroupBuilder = null)
+        this WebApplication app)
     {
+        ApiVersionSet apiVersionSet = app.NewApiVersionSet()
+            .HasApiVersion(new ApiVersion(1))
+            .HasApiVersion(new ApiVersion(2))
+            .ReportApiVersions()
+            .Build();
+
+        RouteGroupBuilder? versionedGroupBuilder = app
+            .MapGroup("api/v{version:apiVersion}")
+            .WithApiVersionSet(apiVersionSet);
+
         IEnumerable<IEndpoint> endpoints = app.Services.GetRequiredService<IEnumerable<IEndpoint>>();
 
-        IEndpointRouteBuilder builder = routeGroupBuilder is null ? app : routeGroupBuilder;
+        IEndpointRouteBuilder builder = versionedGroupBuilder;
 
         foreach (IEndpoint endpoint in endpoints)
         {

@@ -1,4 +1,4 @@
-﻿namespace ReSale.Domain.Products;
+﻿namespace ReSale.Domain.Shared;
 
 public record Description(string Value)
 {

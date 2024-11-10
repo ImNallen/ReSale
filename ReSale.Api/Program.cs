@@ -27,17 +27,7 @@ app.UseCors(x => x
     .AllowAnyMethod()
     .AllowAnyHeader());
 
-ApiVersionSet apiVersionSet = app.NewApiVersionSet()
-    .HasApiVersion(new ApiVersion(1))
-    .HasApiVersion(new ApiVersion(2))
-    .ReportApiVersions()
-    .Build();
-
-RouteGroupBuilder versionedGroup = app
-    .MapGroup("api/v{version:apiVersion}")
-    .WithApiVersionSet(apiVersionSet);
-
-app.MapEndpoints(versionedGroup);
+app.MapEndpoints();
 
 if (app.Environment.IsDevelopment())
 {

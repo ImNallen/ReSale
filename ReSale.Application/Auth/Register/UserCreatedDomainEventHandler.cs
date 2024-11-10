@@ -1,16 +1,22 @@
 ﻿using MediatR;
+using ReSale.Application.Abstractions.Persistence;
 using ReSale.Application.Abstractions.Services;
+using ReSale.Domain.Activities;
+using ReSale.Domain.Shared;
 using ReSale.Domain.Users.Events;
 
 namespace ReSale.Application.Auth.Register;
 
 internal sealed class UserCreatedDomainEventHandler(
-    IEmailService emailService)
+    IEmailService emailService,
+    IReSaleDbContext context)
     : INotificationHandler<UserCreatedDomainEvent>
 {
     public async Task Handle(
         UserCreatedDomainEvent notification,
-        CancellationToken cancellationToken) => await emailService.SendAsync(
+        CancellationToken cancellationToken)
+        {
+            await emailService.SendAsync(
             notification.User.Email.Value,
             "Welcome to ReSale",
             string.Join(
@@ -24,4 +30,13 @@ internal sealed class UserCreatedDomainEventHandler(
                 "Best regards,",
                 "<br/><br/>",
                 "The ReSale Team"));
+
+            var description = new Description($"User '{notification.User.Email.Value}' created");
+
+            var activity = Activity.Create(description, ActivityType.UserCreated);
+
+            await context.Activities.AddAsync(activity, cancellationToken);
+
+            await context.SaveChangesAsync(cancellationToken);
+    }
 }
